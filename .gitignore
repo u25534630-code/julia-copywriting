@@ -1,0 +1,11 @@
+# OS / editor lock & temp files
+~$*
+*.tmp
+Thumbs.db
+.DS_Store
+
+# Working content documents — not part of the published site
+*.docx
+
+# Local dev / calibration pages
+_*.html

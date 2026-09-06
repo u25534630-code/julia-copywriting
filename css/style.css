@@ -1,0 +1,1143 @@
+/* ==========================================================================
+   Юлия Седышева — первый экран
+   Собран по assets/01-hero-final-approved.png
+   Коллаж, портрет, схема, красная нить, рукописные пометки и кнопка —
+   запечены в images/hero-bg.png (вырезаны из approved-макета).
+   Живым текстом отрисованы: шапка, заголовок, подзаголовок, лид, ссылки.
+   ========================================================================== */
+:root {
+  --bg: #EEE9DF;
+  --ink: #16110F;
+  --ink-soft: #262019;
+  --wine: #6E1B27;
+  --wine-ink: #2B1D1A;
+  --accent: #C21F2E;
+  --p8-red: #8B1219;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Manrope", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+h1, p { margin: 0; }
+
+/* ---- Stage: proportional 1536 x 1024 canvas ---------------------------- */
+.hero { background: var(--bg); }
+.hero-stage {
+  position: relative;
+  width: min(1536px, 100vw);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.hero-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ---- Header ----------------------------------------------------------- */
+.brand {
+  position: absolute;
+  left: 3.35%;
+  top: 2.95%;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.brand-name {
+  font-weight: 800;
+  font-size: clamp(11px, 1.15cqw, 19px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.brand-role {
+  font-weight: 500;
+  font-size: clamp(7px, 0.72cqw, 12px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 0.3cqw;
+}
+
+.nav {
+  position: absolute;
+  left: 49.6%;
+  top: 3.55%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: clamp(13px, 2.5cqw, 40px);
+  white-space: nowrap;
+}
+.nav a {
+  font-weight: 600;
+  font-size: clamp(9px, 1.04cqw, 17px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding-bottom: 0.2cqw;
+  position: relative;
+}
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 1.5px;
+  background: var(--wine);
+  transition: width .2s ease;
+}
+.nav a:hover::after { width: 100%; }
+
+.top-cta {
+  position: absolute;
+  right: 3%;
+  top: 3.4%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7cqw;
+  color: var(--wine);
+  font-weight: 700;
+  font-size: clamp(9px, 0.88cqw, 15px);
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.top-cta-arrow {
+  width: clamp(16px, 2.05cqw, 34px);
+  height: auto;
+  transition: transform .2s ease;
+}
+.top-cta:hover .top-cta-arrow { transform: translateX(3px); }
+.top-cta-underline {
+  position: absolute;
+  left: -1%;
+  right: 8%;
+  bottom: -0.5cqw;
+  width: auto;
+  height: 0.8cqw;
+  color: var(--wine-ink);
+}
+
+/* ---- Headline block ------------------------------------------------- */
+.headline {
+  position: absolute;
+  left: 3.45%;
+  top: 23.2%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 6.95cqw, 108px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  transform: scaleX(0.727);
+  transform-origin: left center;
+}
+.subhead {
+  position: absolute;
+  left: 3.5%;
+  top: 35%;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(13px, 3.45cqw, 54px);
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.lead {
+  position: absolute;
+  left: 3.65%;
+  top: 48.4%;
+  font-weight: 500;
+  font-size: clamp(9px, 1.32cqw, 21px);
+  line-height: 1.4;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ---- Live hit-area over the baked-in "Сверим мысли" button --------- */
+.btn-hotspot {
+  position: absolute;
+  left: 3.7%;
+  top: 66.6%;
+  width: 27.5%;
+  height: 13.2%;
+  border-radius: 4px 12px 12px 4px;
+  transform: rotate(-0.4deg);
+  transition: transform .15s ease, filter .15s ease;
+}
+.btn-hotspot:hover {
+  transform: rotate(-0.4deg) translateY(-2px);
+  filter: drop-shadow(0 8px 16px rgba(60, 6, 20, 0.28));
+}
+
+/* ==========================================================================
+   Экран 2 — «У вас много материала. Но это ещё не система.»
+   Коллаж, нить, рукописные пометки, фрагменты и заголовки-в-макете запечены
+   в images/problem-bg.png (вырезано из assets/02-problem-approved.png).
+   Живой текст: «02», заголовок, лид, финальная мысль.
+   ========================================================================== */
+.problem { background: var(--bg); }
+.problem-stage {
+  position: relative;
+  width: min(1536px, 100vw);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.problem-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p2-num {
+  position: absolute;
+  left: 3.2%;
+  top: 8%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(15px, 3.15cqw, 50px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #6b0a12;
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+
+.p2-title {
+  position: absolute;
+  left: 3.0%;
+  top: 13.8%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(18px, 4.1cqw, 64px);
+  line-height: 1.34;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p2-title span {
+  display: block;
+  transform: scaleX(0.8);
+  transform-origin: left center;
+}
+
+.p2-lead {
+  position: absolute;
+  left: 3.0%;
+  top: 33.0%;
+  font-weight: 500;
+  font-size: clamp(9px, 1.24cqw, 20px);
+  line-height: 1.47;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p2-lead p { margin: 0; }
+.p2-lead p + p { margin-top: 1.1em; }
+
+.p2-final {
+  position: absolute;
+  right: 9.9%;
+  bottom: 6.2%;
+  margin: 0;
+  text-align: right;
+  color: var(--ink);
+}
+.p2-final-strong {
+  display: block;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 5.1cqw, 80px);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: scaleX(0.6);
+  transform-origin: right center;
+}
+.p2-final-italic {
+  display: block;
+  margin-top: 0.06em;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(13px, 3.35cqw, 52px);
+  line-height: 1;
+  white-space: nowrap;
+}
+.p2-final-underline {
+  display: block;
+  margin-left: auto;
+  margin-top: 0.14em;
+  width: 66%;
+  height: 0.85cqw;
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   Экран 3 — «Что я называю системным контентом.»
+   Коллаж, цепочка из 8 карточек, нить, скотч, скрепки, рукописные пометки
+   и заметка справа запечены в images/system-bg.png (из assets/03-system-approved.png,
+   текстовые зоны заинпейнчены). Живой текст: «03», заголовок, лид-абзац.
+   ========================================================================== */
+.system { background: var(--bg); }
+.system-stage {
+  position: relative;
+  width: min(1536px, 100vw);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.system-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p3-num {
+  position: absolute;
+  left: 4.4%;
+  top: 12.6%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+.p3-num-underline {
+  position: absolute;
+  left: 4.55%;
+  top: 17.6%;
+  width: clamp(9px, 1.85cqw, 29px);
+  height: clamp(3px, 0.65cqw, 10px);
+  color: var(--wine);
+}
+
+.p3-title {
+  position: absolute;
+  left: 4.35%;
+  top: 19.3%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35cqw;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(21px, 4.75cqw, 73px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p3-title span {
+  display: block;
+  transform: scaleX(0.66);
+  transform-origin: left center;
+}
+.p3-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.p3-lead {
+  position: absolute;
+  left: 4.5%;
+  top: 44.8%;
+  font-weight: 500;
+  font-size: clamp(9px, 1.24cqw, 20px);
+  line-height: 1.48;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p3-lead p { margin: 0; }
+
+/* ==========================================================================
+   Экран 4 — «Как я работаю.»
+   Коллаж, цепочка из 8 карточек-этапов, иконки, нить, скотч, скрепки и все
+   рукописные пометки запечены в images/process-bg.png (из
+   assets/04-process-approved.png, текстовые зоны заинпейнчены).
+   Живой текст: «04», заголовок, главная фраза (со штрихом под «слышать»),
+   дополнительный текст.
+   ========================================================================== */
+.process { background: var(--bg); }
+.process-stage {
+  position: relative;
+  width: min(1536px, 100vw);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.process-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p4-num {
+  position: absolute;
+  left: 4.15%;
+  top: 13.4%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+.p4-num-underline {
+  position: absolute;
+  left: 4.3%;
+  top: 18.4%;
+  width: clamp(9px, 1.85cqw, 29px);
+  height: clamp(3px, 0.65cqw, 10px);
+  color: var(--wine);
+}
+
+.p4-title {
+  position: absolute;
+  left: 4.3%;
+  top: 20.5%;
+  margin: 0;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(30px, 7.05cqw, 108px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  transform: scaleX(0.66);
+  transform-origin: left center;
+}
+.p4-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.p4-phrase {
+  position: absolute;
+  left: 4.1%;
+  top: 31.9%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3cqw;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(10px, 1.72cqw, 26px);
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p4-hear {
+  position: relative;
+  display: inline-block;
+}
+.p4-hear-underline {
+  position: absolute;
+  left: -1.5%;
+  right: -1.5%;
+  bottom: -0.5em;
+  width: auto;
+  height: 0.4em;
+  color: var(--accent);
+}
+
+.p4-lead {
+  position: absolute;
+  left: 4.15%;
+  top: 40.7%;
+  font-weight: 500;
+  font-size: clamp(9px, 1.24cqw, 20px);
+  line-height: 1.48;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p4-lead p { margin: 0; }
+
+/* ==========================================================================
+   Экран 5 — «Что можно передать мне в работу.»
+   Собран по assets/05-services-approved.png. Шапка, правый плакат (плашка
+   «Контент-сопровождение эксперта», 8 карточек-направлений, нить, скотч,
+   скрепки, зажим, рукописные пометки) и декоративные мазки запечены в
+   images/services-bg.png (текстовые зоны левой колонки заинпейнчены).
+   Живой текст: «05», заголовок, лид-абзац, нижний смысловой блок.
+   ========================================================================== */
+.services { background: var(--bg); }
+.services-stage {
+  position: relative;
+  width: min(1536px, 100vw);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.services-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p5-num {
+  position: absolute;
+  left: 2.75%;
+  top: 10.7%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+.p5-num-underline {
+  position: absolute;
+  left: 2.7%;
+  top: 15.4%;
+  width: clamp(9px, 1.85cqw, 29px);
+  height: clamp(3px, 0.65cqw, 10px);
+  color: var(--wine);
+}
+
+.p5-title {
+  position: absolute;
+  left: 2.85%;
+  top: 17.8%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55cqw;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 4.35cqw, 67px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p5-title span {
+  display: block;
+  transform: scaleX(0.66);
+  transform-origin: left center;
+}
+.p5-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.p5-lead {
+  position: absolute;
+  left: 2.8%;
+  top: 38.5%;
+  font-weight: 500;
+  font-size: clamp(9px, 1.32cqw, 21px);
+  line-height: 1.42;
+  white-space: nowrap;
+}
+.p5-lead p { margin: 0; color: var(--ink-soft); }
+.p5-lead p + p { margin-top: 0.8em; }
+.p5-lead-strong { color: var(--ink); font-weight: 700; }
+
+.p5-bottom {
+  position: absolute;
+  left: 2.75%;
+  top: 53.8%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(9px, 1.32cqw, 21px);
+  line-height: 1.3;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Экран 6 — «Кейсы.»
+   Собран по assets/06-cases-approved.png. Шапка, 3 бумажные карточки-кейса
+   (иконки, стрелки схемы, разделители), верхние/нижние рукописные пометки,
+   коллаж с глазом, красная нить, скотч и скрепки запечены в
+   images/cases-bg.png (текстовые зоны затёрты локальной медианной заливкой
+   по образцу текстуры бумаги вокруг — см. scratchpad build_bg2.py).
+   Живой текст: «06», заголовок, лид-абзацы, номера/заголовки/подписи схемы/
+   описания/ссылки «Смотреть кейс →» в каждой из 3 карточек.
+   ========================================================================== */
+.cases { background: var(--bg); }
+.cases-stage {
+  position: relative;
+  width: min(1536px, 100vw);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.cases-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p6-num {
+  position: absolute;
+  left: 3.65%;
+  top: 14.35%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+.p6-num-underline {
+  position: absolute;
+  left: 3.5%;
+  top: 19.15%;
+  width: clamp(9px, 1.85cqw, 29px);
+  height: clamp(3px, 0.65cqw, 10px);
+  color: var(--wine);
+}
+
+.p6-title {
+  position: absolute;
+  left: 3.35%;
+  top: 19.9%;
+  margin: 0;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 6.05cqw, 93px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  transform: scaleX(0.84);
+  transform-origin: left center;
+}
+.p6-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.p6-lead1, .p6-lead2 {
+  position: absolute;
+  left: 3.75%;
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(8px, 1.09cqw, 17.6px);
+  line-height: 1.62;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p6-lead1 { top: 33.4%; }
+.p6-lead2 { top: 45.6%; }
+
+/* ---- Case cards (3x) ---------------------------------------------- */
+.p6-cnum {
+  position: absolute;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(11px, 2.3cqw, 36px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+}
+.p6-cnum.c1 { left: 27.7%; top: 26.3%; }
+.p6-cnum.c2 { left: 51.3%; top: 25.7%; }
+.p6-cnum.c3 { left: 74.0%; top: 25.8%; }
+
+.p6-ctitle {
+  position: absolute;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05em;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(9px, 1.81cqw, 27.7px);
+  line-height: 1.12;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p6-ctitle span {
+  display: block;
+  transform: scaleX(0.9);
+  transform-origin: left center;
+}
+.p6-ctitle.c1 { left: 27.55%; top: 34.75%; }
+.p6-ctitle.c2 { left: 51.2%; top: 34.15%; }
+.p6-ctitle.c3 { left: 74.05%; top: 34.15%; }
+
+.p6-cscheme {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(6px, 0.62cqw, 9.5px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p6-cscheme.c1 { left: 26.7%; top: 46.9%; width: 19.1%; }
+.p6-cscheme.c2 { left: 50.65%; top: 46.9%; width: 18.55%; }
+.p6-cscheme.c3 { left: 73.7%; top: 46.9%; width: 19.25%; }
+
+.p6-cdesc {
+  position: absolute;
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(7px, 0.92cqw, 14.3px);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p6-cdesc.c1 { left: 26.8%; top: 59.6%; }
+.p6-cdesc.c2 { left: 50.75%; top: 59.8%; }
+.p6-cdesc.c3 { left: 73.55%; top: 59.9%; }
+
+.p6-clink {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5cqw;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(13px, 2.05cqw, 32px);
+  color: var(--wine);
+  white-space: nowrap;
+}
+.p6-clink-arrow {
+  width: clamp(14px, 1.7cqw, 27px);
+  height: auto;
+  transition: transform .2s ease;
+}
+.p6-clink:hover .p6-clink-arrow { transform: translateX(3px); }
+.p6-clink.c1 { left: 29.7%; top: 75.2%; }
+.p6-clink.c2 { left: 53.3%; top: 75.5%; }
+.p6-clink.c3 { left: 76.5%; top: 75.7%; }
+
+/* ==========================================================================
+   Экран 7 — «Что меняется, когда контент собран в систему.»
+   Собран по assets/07-system-effect-approved.png. Шапка, обе бумажные
+   карточки (ДО / ПОСЛЕ, значки крестиков/галочек, чёрная стрелка), скрепка,
+   скотч, глаз, красная нить, чёрные чернильные точки, чёрный мазок и жёлтый
+   бумажный акцент запечены в images/system-effect-bg.png (текстовые зоны
+   затёрты локальной медианной заливкой — см. scratchpad s7_build_bg.py).
+   Живой текст: «07», заголовок (с рукописным обводом «в систему»), лид,
+   пункты и заметки карточек ДО/ПОСЛЕ, левая рукописная заметка, жёлтая
+   заметка. Стили полностью изолированы классами p7-*.
+   ========================================================================== */
+.system-effect { background: var(--bg); }
+.system-effect-stage {
+  position: relative;
+  width: min(1536px, 100vw);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.system-effect-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p7-num {
+  position: absolute;
+  left: 2.6%;
+  top: 12.45%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+}
+
+.p7-title {
+  position: absolute;
+  left: 2.6%;
+  top: 24.0%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35cqw;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(21px, 4.75cqw, 73px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p7-title > span {
+  display: block;
+  transform: scaleX(0.66);
+  transform-origin: left center;
+}
+.p7-circle-wrap {
+  position: relative;
+  display: inline-block;
+}
+.p7-circle {
+  position: absolute;
+  left: -0.55em;
+  right: -0.3em;
+  top: -0.04em;
+  bottom: -0.42em;
+  width: auto;
+  height: auto;
+  color: var(--accent);
+  pointer-events: none;
+}
+
+.p7-lead {
+  position: absolute;
+  left: 2.6%;
+  top: 50.0%;
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(9px, 1.24cqw, 20px);
+  line-height: 1.47;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.p7-leftnote {
+  position: absolute;
+  left: 8.5%;
+  top: 67.15%;
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(11px, 1.7cqw, 26px);
+  line-height: 1.12;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p7-leftnote-heart {
+  position: absolute;
+  left: 20.6%;
+  top: 73.6%;
+  width: clamp(16px, 2.1cqw, 32px);
+  height: auto;
+  color: var(--accent);
+}
+
+/* ---- ДО / ПОСЛЕ tabs ------------------------------------------------ */
+.p7-tab {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 800;
+  font-size: clamp(9px, 1.1cqw, 17px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #F4EFE6;
+  white-space: nowrap;
+}
+.p7-tab.do { left: 36.9%; top: 17.85%; width: 6.3%; height: 3.0%; }
+.p7-tab.posle { left: 67.95%; top: 18.25%; width: 6.15%; height: 3.0%; }
+
+/* ---- Card items (ДО / ПОСЛЕ) ---------------------------------------- */
+.p7-item {
+  position: absolute;
+  width: 16.5%;
+}
+.p7-item p {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(8px, 1.02cqw, 15.7px);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p7-item.do p strong { color: var(--ink); font-weight: 700; }
+.p7-item.posle p strong { color: var(--ink); font-weight: 700; }
+
+.p7-item.do.i1 { left: 37.2%; top: 25.6%; }
+.p7-item.do.i2 { left: 37.2%; top: 32.9%; }
+.p7-item.do.i3 { left: 37.2%; top: 40.3%; }
+.p7-item.do.i4 { left: 37.2%; top: 47.7%; }
+.p7-item.do.i5 { left: 37.2%; top: 55.0%; }
+
+.p7-item.posle.i1 { left: 68.3%; top: 25.6%; }
+.p7-item.posle.i2 { left: 68.3%; top: 32.9%; }
+.p7-item.posle.i3 { left: 68.3%; top: 40.3%; }
+.p7-item.posle.i4 { left: 68.3%; top: 47.7%; }
+.p7-item.posle.i5 { left: 68.3%; top: 55.0%; }
+
+/* ---- Bottom notes inside cards --------------------------------------- */
+.p7-note {
+  position: absolute;
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(10px, 1.35cqw, 21px);
+  line-height: 1.55;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p7-note.do { left: 36.3%; top: 63.4%; }
+.p7-note.posle { left: 67.0%; top: 63.4%; }
+.p7-note .p7-underline {
+  text-decoration: none;
+  border-bottom: 0.09em solid var(--accent);
+  padding-bottom: 0.03em;
+}
+
+/* ---- Yellow accent note ---------------------------------------------- */
+.p7-yellownote {
+  position: absolute;
+  left: 36.2%;
+  top: 75.3%;
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(16px, 2.28cqw, 35px);
+  line-height: 1.40;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p7-yellownote .p7-underline {
+  text-decoration: none;
+  border-bottom: 0.08em solid var(--ink);
+  padding-bottom: 0.02em;
+}
+
+/* ==========================================================================
+   Экран 8 — «Что делаю и как помогаю.»
+   Собран по assets/08-what-i-do-approved.png. Шапка, четыре бумажные карточки
+   с иконками и красными подчёркиваниями, рука с бордовым маркером, красная
+   нить с пинами, скотч, скрепка, бордовые фактурные пятна, чёрный мазок,
+   кляксы и все рукописные фразы («сначала слышу, потом собираю», «из мыслей —
+   в систему», «ваши смыслы в правильной форме») запечены в
+   images/what-i-do-bg.png — текстовые зоны стёрты по маске самих букв
+   (см. scratchpad s8_build_bg.py).
+   Живой текст: «08», заголовок с бордовой точкой, левый лид, заголовки и
+   описания четырёх карточек. Карточки в макете лежат под разными углами,
+   поэтому каждый блок повёрнут отдельно. Стили изолированы классами p8-*.
+   ========================================================================== */
+.what-i-do { background: var(--bg); }
+.what-i-do-stage {
+  position: relative;
+  width: min(1536px, 100vw);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.what-i-do-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p8-num {
+  position: absolute;
+  left: 4.232%;
+  top: 17.70%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 3.4505cqw;
+  line-height: 1;
+  color: var(--p8-red);
+  transform: scaleX(0.62);
+  transform-origin: left top;
+}
+
+.p8-title {
+  position: absolute;
+  left: 4.297%;
+  top: 25.63%;
+  margin: 0;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 6.30cqw;
+  line-height: 5.75cqw;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p8-title > span {
+  display: block;
+  transform: scaleX(0.5);
+  transform-origin: left center;
+}
+.p8-title em {
+  font-style: normal;
+  color: var(--p8-red);
+}
+
+.p8-lead {
+  position: absolute;
+  left: 4.688%;
+  top: 48.83%;
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.7253cqw;
+  line-height: 2.2461cqw;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ---- Карточки: заголовки ---------------------------------------------- */
+.p8-ctitle {
+  position: absolute;
+  margin: 0;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  transform-origin: left top;
+}
+.p8-ctitle > span {
+  display: block;
+  transform: scaleX(0.85);
+  transform-origin: left center;
+}
+
+.p8-ctitle.c1 {
+  left: 35.547%; top: 23.28%;
+  font-size: 2.1875cqw; line-height: 2.6693cqw;
+  transform: rotate(-6.2deg);
+}
+.p8-ctitle.c2 {
+  left: 78.125%; top: 23.61%;
+  font-size: 2.4089cqw; line-height: 2.6693cqw;
+  transform: rotate(4.6deg);
+}
+.p8-ctitle.c3 {
+  left: 36.914%; top: 57.14%;
+  font-size: 2.4609cqw; line-height: 2.5781cqw;
+  transform: rotate(0.3deg);
+}
+.p8-ctitle.c4 {
+  left: 77.174%; top: 59.02%;
+  font-size: 2.1745cqw; line-height: 2.4089cqw;
+  transform: rotate(-0.5deg);
+}
+
+/* ---- Карточки: описания ----------------------------------------------- */
+.p8-cdesc {
+  position: absolute;
+  margin: 0;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  transform-origin: left top;
+}
+.p8-cdesc.c1 {
+  left: 37.031%; top: 34.51%;
+  font-size: 1.2044cqw; line-height: 2.0182cqw;
+  transform: rotate(-5deg);
+}
+.p8-cdesc.c2 {
+  left: 77.832%; top: 34.64%;
+  font-size: 1.1719cqw; line-height: 2.1484cqw;
+  transform: rotate(5.25deg);
+}
+.p8-cdesc.c3 {
+  left: 36.719%; top: 68.36%;
+  font-size: 1.5169cqw; line-height: 1.7578cqw;
+  transform: rotate(0deg);
+}
+.p8-cdesc.c4 {
+  left: 77.507%; top: 70.82%;
+  font-size: 1.5365cqw; line-height: 1.7253cqw;
+  transform: rotate(-0.2deg);
+}
+
+/* ---- Wider than the artwork: just center it on cream -------------- */
+@media (min-width: 1537px) {
+  .hero-stage,
+  .problem-stage,
+  .system-stage,
+  .process-stage,
+  .services-stage,
+  .cases-stage,
+  .system-effect-stage,
+  .what-i-do-stage { box-shadow: 0 0 0 100vmax var(--bg); }
+}
