@@ -29,7 +29,7 @@
         <a href="#">Обо&nbsp;мне</a>
       </nav>
 
-      <a href="#" class="top-cta">
+      <a href="https://t.me/neuro_julia11" target="_blank" rel="noopener noreferrer" class="top-cta">
         <span class="top-cta-text">Обсудить задачу</span>
         <svg class="top-cta-arrow" viewBox="0 0 34 16" aria-hidden="true">
           <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -200,11 +200,11 @@
         в систему смыслов и понятный текст,<br>
         который помогает клиенту говорить<br>
         о своей практике уверенно и по делу.</p>
-      <a href="#" class="p6-clink c1">Смотреть кейс
+      <button type="button" class="p6-clink p6-clink-active c1" data-case-trigger="psych-practice" aria-expanded="false" aria-controls="case-psych-practice">Смотреть кейс
         <svg class="p6-clink-arrow" viewBox="0 0 34 16" aria-hidden="true">
           <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-      </a>
+      </button>
 
       <!-- Карточка 02 — экспертный B2B-контент -->
       <span class="p6-cnum c2">02</span>
@@ -215,15 +215,18 @@
       <div class="p6-cscheme c2">
         <span>Было</span><span>Увидела</span><span>Спросила</span><span>Нашла</span><span>Сделала</span>
       </div>
-      <p class="p6-cdesc c2">Собрала сложную экспертизу в ясную<br>
-        структуру и убедительный текст,<br>
-        который работает на доверие<br>
-        и поддержку решения.</p>
-      <a href="#" class="p6-clink c2">Смотреть кейс
+      <p class="p6-cdesc c2 p6-cdesc-case">
+        <span class="p6-cdesc-name">ASPEX</span>
+        Сложная экспертиза без сухого<br>
+        B2B-языка. Собрала текст вокруг<br>
+        состояния руководителя: хаос,<br>
+        потеря ясности, потребность<br>
+        в опоре.</p>
+      <button type="button" class="p6-clink p6-clink-active c2" data-case-trigger="aspex" aria-expanded="false" aria-controls="case-aspex">Смотреть кейс
         <svg class="p6-clink-arrow" viewBox="0 0 34 16" aria-hidden="true">
           <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-      </a>
+      </button>
 
       <!-- Карточка 03 — премиальный продукт -->
       <span class="p6-cnum c3">03</span>
@@ -238,13 +241,275 @@
         для аудитории, создала текст, который<br>
         подчёркивает уровень и закрывает<br>
         ключевые возражения.</p>
-      <a href="#" class="p6-clink c3">Смотреть кейс
+      <button type="button" class="p6-clink p6-clink-active c3" data-case-trigger="delonghi" aria-expanded="false" aria-controls="case-delonghi">Смотреть кейс
         <svg class="p6-clink-arrow" viewBox="0 0 34 16" aria-hidden="true">
           <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-      </a>
+      </button>
     </div>
   </section>
+
+  <!-- ============ Раскрывающийся кейс «Психологическая практика» (карточка 01) ====
+       Композиция по референсу assets/01-psychological-practice-approved.png:
+       заголовок вверху слева, текстовые блоки в левой колонке, справа —
+       утверждённый коллаж (глаз, фигура человека в красном круге, бумажные
+       карточки с рукописными заметками, стопка слов, символ Ψ, красная нить),
+       вставленный как готовый PNG-asset images/psychological-practice-collage.png —
+       без пересборки средствами CSS/SVG. ------------------------------------- -->
+  <div class="p6-case-wrap" id="case-psych-practice">
+    <div class="p6-case-inner">
+      <div class="p6-case">
+
+        <div class="p6-case-head">
+          <h3 class="p6-case-title">Психологическая практика<em>.</em></h3>
+          <p class="p6-case-tags">Позиционирование&nbsp;·&nbsp;смыслы&nbsp;·&nbsp;голос&nbsp;·&nbsp;структура</p>
+        </div>
+
+        <div class="p6-case-grid">
+          <div class="p6-case-main">
+
+            <div class="p6-case-block">
+              <h4>Было</h4>
+              <p>Много опыта, методов, образования и клиентских историй, но всё это существовало отдельно и не складывалось в ясное представление о специалисте.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Увидела</h4>
+              <p>Главная ценность не в перечне техник. Сильнее работает отношение к человеку: бережность, внимание к его истории и честный подход без обещаний волшебной таблетки.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Исследовала</h4>
+              <p>Разобрала опыт специалиста, запросы клиентов, сомнения перед консультацией, образование, методы и то, как сам эксперт говорит о своей работе.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Нашла</h4>
+              <p>Не продавать специалиста через количество дипломов.<br>
+                Сначала показать человека и его подход, а уже потом подтверждать это опытом и квалификацией.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Сделала</h4>
+              <ul class="p6-case-list">
+                <li>собрала позиционирование;</li>
+                <li>выделила основные клиентские запросы;</li>
+                <li>выстроила структуру смыслов;</li>
+                <li>подготовила тексты для сайта;</li>
+                <li>связала опыт, подход и услуги в одну историю.</li>
+              </ul>
+            </div>
+
+            <div class="p6-case-fragment">
+              <span class="p6-case-frag-label">Фрагмент</span>
+              <p class="p6-case-quote">«Здесь важно не обещать быстрые ответы,<br>
+                а дать человеку пространство, в котором<br>
+                он сможет услышать себя.»</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Результат</h4>
+              <p>Получилась понятная структура, в которой человек сначала узнаёт свой запрос, затем понимает подход специалиста и только после этого видит методы, опыт и услуги.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Что здесь показываю</h4>
+              <p>Умение услышать эксперта и собрать его опыт в ясное позиционирование, не придумывая ему чужой голос.</p>
+            </div>
+
+            <button type="button" class="p6-case-close" data-case-close>
+              Закрыть кейс
+              <svg class="p6-case-close-x" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 2l12 12M14 2L2 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="p6-case-visual" aria-hidden="true">
+            <div class="p6-case-visual-stage p6-case-visual-stage-psych">
+              <img class="p6-case-visual-img" src="images/psychological-practice-collage.png" alt="">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Раскрывающийся кейс ASPEX (карточка 02) ============
+       Композиция по референсу assets/a_clean_editorial_infographic_case_study_page_layo.png:
+       заголовок вверху слева, текстовые блоки в левой колонке, справа —
+       бумажный коллаж (маяк, обведённый рукописным кругом, скотч, стикеры
+       со словами, рукописные пометки со стрелкой). ----------------------- -->
+  <div class="p6-case-wrap" id="case-aspex">
+    <div class="p6-case-inner">
+      <div class="p6-case">
+
+        <div class="p6-case-head">
+          <h3 class="p6-case-title">ASPEX<em>.</em></h3>
+          <p class="p6-case-tags">B2B&nbsp;·&nbsp;данные&nbsp;·&nbsp;аналитика&nbsp;·&nbsp;технологии</p>
+        </div>
+
+        <div class="p6-case-grid">
+          <div class="p6-case-main">
+
+            <div class="p6-case-block">
+              <h4>Было</h4>
+              <p>Сильная экспертиза, данные и аналитика, но тексты звучали слишком рационально и отстранённо.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Увидела</h4>
+              <p>Проблема была не в нехватке фактов, а в том, что коммуникация почти не отражала состояние руководителя: усталость, тревогу, ощущение хаоса и потерю ясности.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Исследовала</h4>
+              <p>Изучила сайт и соцсети ASPEX, тон коммуникации, визуальные и смысловые опоры бренда.<br>
+                Выделила метафору маяка и ключевые ценности: ясность, структура, честность данных.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Нашла</h4>
+              <p>Не говорить напрямую о продукте.<br>
+                Говорить о состоянии, в котором человеку начинает быть нужна структура.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Сделала</h4>
+              <ul class="p6-case-list">
+                <li>написала новый смысловой пост для Telegram;</li>
+                <li>переработала брендовый пост «Кто мы — и почему нам доверяют»;</li>
+                <li>сохранила факты и экспертизу, но сместила акцент на ощущение опоры и ясности.</li>
+              </ul>
+            </div>
+
+            <div class="p6-case-fragment">
+              <span class="p6-case-frag-label">Фрагмент</span>
+              <p class="p6-case-quote">«Цифр много, но смысла мало.<br>
+                Отчёты есть, но решений нет.»</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Результат</h4>
+              <p>Заказчик получил экспертный контент без прямой продажи, но с чётким ценностным посылом.<br>
+                Текст усиливает образ ASPEX как спокойной, структурной опоры для бизнеса.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Что здесь показываю</h4>
+              <p>Не просто написание текста, а работу со смыслом, позиционированием и голосом бренда.</p>
+            </div>
+
+            <button type="button" class="p6-case-close" data-case-close>
+              Закрыть кейс
+              <svg class="p6-case-close-x" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 2l12 12M14 2L2 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Утверждённый коллаж — готовый графический asset, вырезанный
+               из assets/a_clean_editorial_infographic_case_study_page_layo.png
+               (правая часть approved-макета: маяк, рукописный круг, скотч,
+               стикеры-теги, карточка-записка со скрепкой, рукописные пометки).
+               Не пересобирается средствами CSS/SVG — только готовое изображение. -->
+          <div class="p6-case-visual" aria-hidden="true">
+            <div class="p6-case-visual-stage">
+              <img class="p6-case-visual-img" src="images/aspex-collage.png" alt="">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Раскрывающийся кейс DE'LONGHI (карточка 03) ============
+       Композиция по референсу assets/delonghi-case-approved.png:
+       заголовок вверху слева, текстовые блоки в левой колонке, справа —
+       утверждённый коллаж (чашка кофе, ч/б фрагмент кофемашины, техническая
+       схема, кофейное кольцо, красная нить, бумажные заметки), вставленный
+       как готовый PNG-asset images/delonghi-case-collage.png — без
+       пересборки средствами CSS/SVG. ----------------------------------- -->
+  <div class="p6-case-wrap" id="case-delonghi">
+    <div class="p6-case-inner">
+      <div class="p6-case">
+
+        <div class="p6-case-head">
+          <h3 class="p6-case-title">DE&rsquo;LONGHI<em>.</em></h3>
+          <p class="p6-case-tags">Премиальный&nbsp;продукт&nbsp;&nbsp;·&nbsp;&nbsp;кофе&nbsp;·&nbsp;ритуал&nbsp;·&nbsp;точность</p>
+          <p class="p6-case-testnote">Тестовое задание</p>
+        </div>
+
+        <div class="p6-case-grid">
+          <div class="p6-case-main">
+
+            <div class="p6-case-block">
+              <h4>Было</h4>
+              <p>Нужно было рассказать о кофемашине так, чтобы человек увидел не прибор, а качество утреннего ритуала.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Увидела</h4>
+              <p>Для аудитории важны не режимы сами по себе, а ощущение тишины, предсказуемости и вкуса без лотереи.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Исследовала</h4>
+              <p>Изучила tone of voice бренда, продукт Magnifica Evo, боли аудитории и то, как вкус, тишина и стабильность собирают ощущение хорошего утра.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Нашла</h4>
+              <p>Говорить не о функциях напрямую.<br>
+                Показывать, как точность, температура и мягкая автоматизация превращают кофе в ритуал.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Сделала</h4>
+              <ul class="p6-case-list">
+                <li>собрала мини-исследование и портрет ЦА;</li>
+                <li>сформулировала УТП в человеческом языке;</li>
+                <li>написала статью в tone of voice бренда;</li>
+                <li>собрала каркас карточки товара и ключевые клеймы.</li>
+              </ul>
+            </div>
+
+            <div class="p6-case-fragment">
+              <span class="p6-case-frag-label">Фрагмент</span>
+              <p class="p6-case-quote">«Точность и тишина, которые<br>
+                формируют вкус и ритм утра.»</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Результат</h4>
+              <p>Получился премиальный текст, который раскрывает продукт через опыт человека: вкус, тишину, стабильность и ощущение собранного утра.</p>
+            </div>
+
+            <div class="p6-case-block">
+              <h4>Что здесь показываю</h4>
+              <p>Не просто описание товара, а соединение маркетинга, tone of voice и продуктового смысла.</p>
+            </div>
+
+            <button type="button" class="p6-case-close" data-case-close>
+              Закрыть кейс
+              <svg class="p6-case-close-x" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 2l12 12M14 2L2 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="p6-case-visual" aria-hidden="true">
+            <div class="p6-case-visual-stage p6-case-visual-stage-delonghi">
+              <img class="p6-case-visual-img" src="images/delonghi-case-collage.png" alt="">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- ============ Экран 7 — что меняется, когда контент собран в систему ============ -->
   <section class="system-effect" id="system-effect">
@@ -338,6 +603,26 @@
       <!-- Карточка 4 — корректировка и развитие -->
       <h3 class="p8-ctitle c4"><span>Корректировка</span><span>и развитие</span></h3>
       <p class="p8-cdesc c4">Смотрю на реакцию<br>и развиваю то,<br>что работает.</p>
+    </div>
+
+    <!-- ============ Контактный блок (низ экрана 08) ============ -->
+    <div class="p8-contact">
+      <p class="p8-contact-text">Есть задача, но пока непонятно, с чего начать?<br>
+        Расскажите, что у вас уже есть. Посмотрим, чего не хватает<br>
+        и что имеет смысл делать дальше.</p>
+
+      <a class="p8-contact-btn" href="https://t.me/neuro_julia11" target="_blank" rel="noopener noreferrer">
+        Написать в Telegram
+        <svg class="p8-contact-btn-arrow" viewBox="0 0 34 16" aria-hidden="true">
+          <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <ul class="p8-contact-list">
+        <li>Телефон: <a href="tel:+79120369815">8-912-036-98-15</a></li>
+        <li>E-mail: <a href="mailto:sedstylus06@mail.ru">sedstylus06@mail.ru</a></li>
+        <li>Telegram: <a href="https://t.me/neuro_julia11" target="_blank" rel="noopener noreferrer">@neuro_julia11</a></li>
+      </ul>
     </div>
   </section>
 </main>

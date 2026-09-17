@@ -783,6 +783,247 @@ h1, p { margin: 0; }
 .p6-clink.c2 { left: 53.3%; top: 75.5%; }
 .p6-clink.c3 { left: 76.5%; top: 75.7%; }
 
+/* Кейс пока не опубликован: та же подпись, но не кликабельна --------- */
+.p6-clink-soon {
+  color: var(--ink-soft);
+  opacity: 0.55;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Карточка 02: имя кейса над описанием -------------------------------- */
+.p6-cdesc-name {
+  display: block;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.25em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--wine);
+  margin-bottom: 0.4em;
+}
+
+/* Карточка 02: активная ссылка «Смотреть кейс →» (кнопка) ------------- */
+button.p6-clink {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.p6-clink-active:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: 3px;
+}
+
+/* ---- Раскрывающийся кейс ASPEX (под секцией «Кейсы») ----------------
+   Обычный flow-блок вне cases-stage: плавно раскрывается через
+   grid-template-rows (0fr → 1fr), поэтому соседние секции просто
+   сдвигаются вниз — страница не ломается, JS только переключает класс
+   is-open (см. js/main.js).
+
+   Композиция левой/правой колонки построена по референсу
+   assets/a_clean_editorial_infographic_case_study_page_layo.png:
+   слева — живой HTML-текст кейса (БЫЛО/УВИДЕЛА/…), справа —
+   утверждённый коллаж (маяк в рукописном круге, скотч, стикеры-теги,
+   рукописные пометки), вставленный как готовый PNG-asset
+   images/aspex-collage.png — без пересборки средствами CSS/SVG. ------ */
+.p6-case-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  background: var(--bg);
+  transition: grid-template-rows .45s ease;
+}
+.p6-case-wrap.is-open { grid-template-rows: 1fr; }
+.p6-case-inner { overflow: hidden; min-height: 0; }
+
+.p6-case {
+  width: min(1180px, 100% - 40px);
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 56px) 0 clamp(48px, 7vw, 88px);
+  border-top: 1px solid rgba(22, 17, 15, 0.14);
+}
+
+.p6-case-head { margin-bottom: clamp(20px, 3vw, 34px); }
+.p6-case-title {
+  margin: 0;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(30px, 3.4vw, 46px);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.p6-case-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+.p6-case-tags {
+  margin: 0.4em 0 0;
+  font-weight: 600;
+  font-size: clamp(11px, 1.05vw, 14px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+.p6-case-testnote {
+  margin: 0.6em 0 0;
+  font-weight: 500;
+  font-size: clamp(10px, 0.9vw, 12px);
+  font-style: italic;
+  color: var(--ink-soft);
+  opacity: 0.6;
+}
+
+/* ---- Двухколоночная сетка: текст слева, коллаж справа ---------------- */
+.p6-case-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+
+.p6-case-block { margin: 0 0 clamp(20px, 2.2vw, 28px); }
+.p6-case-block h4 {
+  margin: 0 0 0.55em;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(13px, 1.2vw, 15px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+.p6-case-block h4::after {
+  content: "";
+  display: block;
+  width: 2.6em;
+  height: 2px;
+  margin-top: 0.14em;
+  background: var(--wine);
+}
+.p6-case-block p,
+.p6-case-block li {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.p6-case-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.p6-case-list li {
+  position: relative;
+  padding-left: 1.3em;
+}
+.p6-case-list li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  top: -0.05em;
+  font-weight: 700;
+  color: var(--wine);
+}
+
+/* ---- «Фрагмент»: врезка-цитата с красной линией слева ---------------- */
+.p6-case-fragment {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 2vw, 26px);
+  margin: 0 0 clamp(24px, 2.6vw, 32px);
+  padding-left: clamp(14px, 1.8vw, 20px);
+  border-left: 2.5px solid var(--wine);
+}
+.p6-case-frag-label {
+  flex: 0 0 auto;
+  padding-top: 0.15em;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(12px, 1.05vw, 14px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wine);
+  white-space: nowrap;
+}
+.p6-case-quote {
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(19px, 1.9vw, 25px);
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.p6-case-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: clamp(12px, 2vw, 20px) 0 0;
+  padding: 0.85em 1.5em;
+  border: none;
+  border-radius: 3px;
+  background: var(--wine);
+  color: #fff;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(12px, 1.05vw, 14px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.p6-case-close:hover { background: var(--wine-ink); }
+.p6-case-close-x { width: 12px; height: auto; }
+
+/* ---- Правая колонка: утверждённый коллаж как готовый PNG-asset -------
+   images/aspex-collage.png — вырезан из правой части approved-макета
+   (assets/a_clean_editorial_infographic_case_study_page_layo.png).
+   Не пересобирается средствами CSS/SVG. -------------------------------- */
+.p6-case-visual-stage {
+  position: relative;
+  aspect-ratio: 595 / 1100;
+  max-width: 460px;
+  margin-left: auto;
+}
+/* images/delonghi-case-collage.png — вырезан из assets/delonghi-case-approved.png,
+   пропорции крупнее и шире, чем у коллажа ASPEX. */
+.p6-case-visual-stage-delonghi {
+  aspect-ratio: 783 / 1086;
+  max-width: 520px;
+}
+/* images/psychological-practice-collage.png — вырезан из
+   assets/01-psychological-practice-approved.png. */
+.p6-case-visual-stage-psych {
+  aspect-ratio: 630 / 1086;
+  max-width: 460px;
+}
+.p6-case-visual-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: top right;
+}
+
+@media (max-width: 860px) {
+  .p6-case-grid { grid-template-columns: 1fr; }
+  .p6-case-visual { margin-top: clamp(16px, 4vw, 28px); }
+  .p6-case-visual-stage { max-width: 380px; margin: 0 auto; }
+}
+
+@media (max-width: 640px) {
+  .p6-case-block { max-width: 100%; }
+  .p6-case-close { width: 100%; justify-content: center; }
+}
+
 /* ==========================================================================
    Экран 7 — «Что меняется, когда контент собран в систему.»
    Собран по assets/07-system-effect-approved.png. Шапка, обе бумажные
@@ -1129,6 +1370,68 @@ h1, p { margin: 0; }
   font-size: 1.5365cqw; line-height: 1.7253cqw;
   transform: rotate(-0.2deg);
 }
+
+/* ---- Контактный блок в нижней зоне экрана 08 (добавлено) --------------
+   Живёт вне .what-i-do-stage (вне масштабируемого «постера»), обычным
+   flow-блоком — поэтому на мобильных строки естественно идут друг под
+   другом и не выходят за экран, без отдельных media-запросов. -------- */
+.p8-contact {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 56px) 20px clamp(40px, 6vw, 72px);
+  text-align: center;
+}
+.p8-contact-text {
+  font-weight: 500;
+  font-size: clamp(14px, 1.6vw, 18px);
+  line-height: 1.5;
+  color: var(--ink);
+}
+.p8-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(18px, 2.4vw, 28px);
+  padding: 0.85em 1.6em;
+  border-radius: 999px;
+  background: var(--wine);
+  color: #fff;
+  font-weight: 700;
+  font-size: clamp(13px, 1.15vw, 16px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background .2s ease, transform .2s ease;
+}
+.p8-contact-btn:hover {
+  background: var(--wine-ink);
+  transform: translateY(-1px);
+}
+.p8-contact-btn-arrow {
+  width: 20px;
+  height: auto;
+  transition: transform .2s ease;
+}
+.p8-contact-btn:hover .p8-contact-btn-arrow { transform: translateX(3px); }
+
+.p8-contact-list {
+  list-style: none;
+  margin: clamp(20px, 2.6vw, 28px) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(12px, 1.05vw, 14px);
+  color: var(--ink-soft);
+}
+.p8-contact-list a {
+  color: var(--wine);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-word;
+}
+.p8-contact-list a:hover { color: var(--wine-ink); }
 
 /* ---- Wider than the artwork: just center it on cream -------------- */
 @media (min-width: 1537px) {
