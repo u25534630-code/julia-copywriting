@@ -32,7 +32,7 @@ h1, p { margin: 0; }
 .hero { background: var(--bg); }
 .hero-stage {
   position: relative;
-  width: min(1536px, 100vw);
+  width: min(1536px, 100%);
   margin-inline: auto;
   aspect-ratio: 1536 / 1024;
   container-type: inline-size;
@@ -61,6 +61,9 @@ h1, p { margin: 0; }
    шапка попиксельно совпадает с прежней шапкой экрана 01.
    ------------------------------------------------------------------------ */
 :root {
+  /* --stage-w намеренно на 100vw: используется ТОЛЬКО для высоты полосы.
+     Ширины задаются через 100%, иначе на Windows полоса прокрутки
+     занимает место, а 100vw её не учитывает — и появляется скролл. */
   --stage-w: min(1536px, 100vw);
   --bar-h: calc(var(--stage-w) * 0.0611979);   /* 94 / 1536 */
 }
@@ -78,7 +81,7 @@ h1, p { margin: 0; }
 }
 .site-header-inner {
   position: relative;
-  width: var(--stage-w);
+  width: min(1536px, 100%);
   height: 100%;
   margin-inline: auto;
   container-type: inline-size;
@@ -255,7 +258,7 @@ h1, p { margin: 0; }
 .problem { background: var(--bg); }
 .problem-stage {
   position: relative;
-  width: min(1536px, 100vw);
+  width: min(1536px, 100%);
   margin-inline: auto;
   aspect-ratio: 1536 / 1024;
   container-type: inline-size;
@@ -368,7 +371,7 @@ h1, p { margin: 0; }
 .system { background: var(--bg); }
 .system-stage {
   position: relative;
-  width: min(1536px, 100vw);
+  width: min(1536px, 100%);
   margin-inline: auto;
   aspect-ratio: 1536 / 1024;
   container-type: inline-size;
@@ -457,7 +460,7 @@ h1, p { margin: 0; }
 .process { background: var(--bg); }
 .process-stage {
   position: relative;
-  width: min(1536px, 100vw);
+  width: min(1536px, 100%);
   margin-inline: auto;
   aspect-ratio: 1536 / 1024;
   container-type: inline-size;
@@ -570,7 +573,7 @@ h1, p { margin: 0; }
 .services { background: var(--bg); }
 .services-stage {
   position: relative;
-  width: min(1536px, 100vw);
+  width: min(1536px, 100%);
   margin-inline: auto;
   aspect-ratio: 1536 / 1024;
   container-type: inline-size;
@@ -678,7 +681,7 @@ h1, p { margin: 0; }
 .cases { background: var(--bg); }
 .cases-stage {
   position: relative;
-  width: min(1536px, 100vw);
+  width: min(1536px, 100%);
   margin-inline: auto;
   aspect-ratio: 1536 / 1024;
   container-type: inline-size;
@@ -1096,7 +1099,7 @@ button.p6-clink {
 .system-effect { background: var(--bg); }
 .system-effect-stage {
   position: relative;
-  width: min(1536px, 100vw);
+  width: min(1536px, 100%);
   margin-inline: auto;
   aspect-ratio: 1536 / 1024;
   container-type: inline-size;
@@ -1296,7 +1299,7 @@ button.p6-clink {
 .what-i-do { background: var(--bg); }
 .what-i-do-stage {
   position: relative;
-  width: min(1536px, 100vw);
+  width: min(1536px, 100%);
   margin-inline: auto;
   aspect-ratio: 1536 / 1024;
   container-type: inline-size;
