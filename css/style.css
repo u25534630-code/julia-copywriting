@@ -48,11 +48,69 @@ h1, p { margin: 0; }
   pointer-events: none;
 }
 
-/* ---- Header ----------------------------------------------------------- */
+/* ---- Единая живая шапка ------------------------------------------------
+   Одна шапка на весь сайт, position: fixed.
+
+   Высота полосы = 94 / 1536 от ширины «сцены» (min(1536px, 100vw)).
+   Это ровно та пустая полоса бумаги, в которой шапка нарисована на всех
+   утверждённых макетах: когда верх любого экрана совмещён с верхом окна,
+   живая шапка ложится точно в неё и ничего из композиции не перекрывает.
+
+   Внутренние координаты логотипа / меню / CTA пересчитаны из процентов
+   сцены в проценты полосы (2.95% / 9.1797% = 32.14% и т. д.), поэтому
+   шапка попиксельно совпадает с прежней шапкой экрана 01.
+   ------------------------------------------------------------------------ */
+:root {
+  --stage-w: min(1536px, 100vw);
+  --bar-h: calc(var(--stage-w) * 0.0611979);   /* 94 / 1536 */
+}
+
+.site-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: var(--bar-h);
+  z-index: 100;
+  /* Цвет бумаги текущего экрана — подставляется из js/main.js */
+  background: var(--header-paper, var(--bg));
+  transition: background-color .25s linear;
+}
+.site-header-inner {
+  position: relative;
+  width: var(--stage-w);
+  height: 100%;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+/* ---- Маска старых растровых шапок (экраны 03–08) -----------------------
+   Шапки впечатаны в подложки в строках y = 25…90 из 1024. Ближайший
+   элемент композиции — скрепка на экране 06 в строке y = 101.
+   Полоса кроет 0…96 вплотную и гаснет к 100: растровая шапка уходит
+   полностью, композиция не задета. Цвет --paper взят пипеткой из самой
+   подложки, поэтому стыка не видно.
+   ------------------------------------------------------------------------ */
+.plate-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 9.7656%;             /* 100 / 1024 */
+  background: var(--paper, var(--bg));
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 96%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0%, #000 96%, transparent 100%);
+}
+
+/* Якорь контактов — обычный блок в потоке, его нужно опустить из-под шапки.
+   Секциям-экранам отступ не нужен: их верх и должен совпадать с верхом окна. */
+#contact { scroll-margin-top: calc(var(--bar-h) + 1.5vw); }
+
 .brand {
   position: absolute;
   left: 3.35%;
-  top: 2.95%;
+  top: 32.14%;                 /* было 2.95% высоты сцены */
   display: flex;
   flex-direction: column;
   line-height: 1.15;
@@ -77,7 +135,7 @@ h1, p { margin: 0; }
 .nav {
   position: absolute;
   left: 49.6%;
-  top: 3.55%;
+  top: 38.67%;                 /* было 3.55% высоты сцены */
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -106,7 +164,7 @@ h1, p { margin: 0; }
 .top-cta {
   position: absolute;
   right: 3%;
-  top: 3.4%;
+  top: 37.04%;                 /* было 3.4% высоты сцены */
   display: inline-flex;
   align-items: center;
   gap: 0.7cqw;

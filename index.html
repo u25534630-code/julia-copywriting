@@ -11,33 +11,38 @@
 </head>
 <body>
 
-<main>
-  <section class="hero">
+<!-- ============ Единая живая шапка сайта ============
+     Одна на весь сайт. Растровые шапки, впечатанные в подложки экранов
+     03–08, закрываются полосой .plate-mask в цвет бумаги своего экрана. -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="#top">
+      <span class="brand-name">Юлия&nbsp;Седышева</span>
+      <span class="brand-role">Контент-стратег</span>
+    </a>
+
+    <nav class="nav">
+      <a href="#cases">Кейсы</a>
+      <a href="#approach">Подход</a>
+      <a href="#services">Услуги</a>
+    </nav>
+
+    <a href="#contact" class="top-cta">
+      <span class="top-cta-text">Обсудить задачу</span>
+      <svg class="top-cta-arrow" viewBox="0 0 34 16" aria-hidden="true">
+        <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg class="top-cta-underline" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M2 7 C 40 3, 70 10, 104 6 C 140 2, 168 9, 198 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" data-paper="#EDE6DD">
     <div class="hero-stage">
       <img class="hero-plate" src="images/hero-bg.png" alt="" aria-hidden="true">
-
-      <!-- Header -->
-      <div class="brand">
-        <span class="brand-name">Юлия&nbsp;Седышева</span>
-        <span class="brand-role">Контент-стратег</span>
-      </div>
-
-      <nav class="nav">
-        <a href="#">Кейсы</a>
-        <a href="#">Подход</a>
-        <a href="#">Услуги</a>
-        <a href="#">Обо&nbsp;мне</a>
-      </nav>
-
-      <a href="https://t.me/neuro_julia11" target="_blank" rel="noopener noreferrer" class="top-cta">
-        <span class="top-cta-text">Обсудить задачу</span>
-        <svg class="top-cta-arrow" viewBox="0 0 34 16" aria-hidden="true">
-          <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <svg class="top-cta-underline" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M2 7 C 40 3, 70 10, 104 6 C 140 2, 168 9, 198 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-        </svg>
-      </a>
 
       <!-- Headline -->
       <h1 class="headline">Знания видят.</h1>
@@ -49,12 +54,12 @@
         и способ думать.</p>
 
       <!-- Button (visual is baked into the plate; this is the live hit-area) -->
-      <a href="#" class="btn-hotspot" aria-label="Сверим мысли"></a>
+      <a href="#contact" class="btn-hotspot" aria-label="Сверим мысли"></a>
     </div>
   </section>
 
   <!-- ============ Экран 2 — узнавание проблемы ============ -->
-  <section class="problem">
+  <section class="problem" data-paper="#E8E1DB">
     <div class="problem-stage">
       <img class="problem-plate" src="images/problem-bg.png" alt="" aria-hidden="true">
 
@@ -83,9 +88,10 @@
   </section>
 
   <!-- ============ Экран 3 — что я называю системным контентом ============ -->
-  <section class="system">
+  <section class="system" data-paper="#E7DFD9">
     <div class="system-stage">
       <img class="system-plate" src="images/system-bg.png" alt="" aria-hidden="true">
+      <div class="plate-mask" style="--paper: #E7DFD9" aria-hidden="true"></div>
 
       <span class="p3-num">03</span>
       <svg class="p3-num-underline" viewBox="0 0 60 10" preserveAspectRatio="none" aria-hidden="true">
@@ -108,9 +114,10 @@
   </section>
 
   <!-- ============ Экран 4 — как я работаю ============ -->
-  <section class="process">
+  <section class="process" id="approach" data-paper="#E7DFDA">
     <div class="process-stage">
       <img class="process-plate" src="images/process-bg.png" alt="" aria-hidden="true">
+      <div class="plate-mask" style="--paper: #E7DFDA" aria-hidden="true"></div>
 
       <span class="p4-num">04</span>
       <svg class="p4-num-underline" viewBox="0 0 60 10" preserveAspectRatio="none" aria-hidden="true">
@@ -139,9 +146,10 @@
   </section>
 
   <!-- ============ Экран 5 — что можно передать мне в работу ============ -->
-  <section class="services">
+  <section class="services" id="services" data-paper="#F3EEE9">
     <div class="services-stage">
       <img class="services-plate" src="images/services-bg.png" alt="" aria-hidden="true">
+      <div class="plate-mask" style="--paper: #F3EEE9" aria-hidden="true"></div>
 
       <span class="p5-num">05</span>
       <svg class="p5-num-underline" viewBox="0 0 60 10" preserveAspectRatio="none" aria-hidden="true">
@@ -169,9 +177,10 @@
   </section>
 
   <!-- ============ Экран 6 — кейсы ============ -->
-  <section class="cases" id="cases">
+  <section class="cases" id="cases" data-paper="#EEE4DC">
     <div class="cases-stage">
       <img class="cases-plate" src="images/cases-bg.png" alt="" aria-hidden="true">
+      <div class="plate-mask" style="--paper: #EEE4DC" aria-hidden="true"></div>
 
       <span class="p6-num">06</span>
       <svg class="p6-num-underline" viewBox="0 0 60 10" preserveAspectRatio="none" aria-hidden="true">
@@ -512,9 +521,10 @@
   </div>
 
   <!-- ============ Экран 7 — что меняется, когда контент собран в систему ============ -->
-  <section class="system-effect" id="system-effect">
+  <section class="system-effect" id="system-effect" data-paper="#F2ECE2">
     <div class="system-effect-stage">
       <img class="system-effect-plate" src="images/system-effect-bg.png" alt="" aria-hidden="true">
+      <div class="plate-mask" style="--paper: #F2ECE2" aria-hidden="true"></div>
 
       <span class="p7-num">07</span>
 
@@ -573,9 +583,10 @@
   </section>
 
   <!-- ============ Экран 8 — что делаю и как помогаю ============ -->
-  <section class="what-i-do" id="what-i-do">
+  <section class="what-i-do" id="what-i-do" data-paper="#ECE4DC">
     <div class="what-i-do-stage">
       <img class="what-i-do-plate" src="images/what-i-do-bg.png" alt="" aria-hidden="true">
+      <div class="plate-mask" style="--paper: #ECE4DC" aria-hidden="true"></div>
 
       <span class="p8-num">08</span>
 
@@ -606,7 +617,7 @@
     </div>
 
     <!-- ============ Контактный блок (низ экрана 08) ============ -->
-    <div class="p8-contact">
+    <div class="p8-contact" id="contact">
       <p class="p8-contact-text">Есть задача, но пока непонятно, с чего начать?<br>
         Расскажите, что у вас уже есть. Посмотрим, чего не хватает<br>
         и что имеет смысл делать дальше.</p>

@@ -59,3 +59,40 @@
     }
   });
 })();
+
+/* Единая шапка: подставляем под неё цвет бумаги того экрана, над которым
+   она сейчас находится. Подложки экранов отличаются оттенком (#E7DFD9 …
+   #F3EEE9), и без этого на стыке полосы с бумагой была бы видна ступенька. */
+(function () {
+  var header = document.querySelector('.site-header');
+  if (!header) return;
+
+  var sections = Array.prototype.slice.call(document.querySelectorAll('[data-paper]'));
+  if (!sections.length) return;
+
+  var ticking = false;
+
+  function update() {
+    ticking = false;
+    var probe = header.offsetHeight / 2;
+    var paper = '';
+    for (var i = 0; i < sections.length; i++) {
+      var box = sections[i].getBoundingClientRect();
+      if (box.top <= probe && box.bottom > probe) {
+        paper = sections[i].getAttribute('data-paper');
+        break;
+      }
+    }
+    header.style.setProperty('--header-paper', paper);
+  }
+
+  function schedule() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(update);
+  }
+
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  update();
+})();
