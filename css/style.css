@@ -1505,3 +1505,409 @@ button.p6-clink {
   .system-effect-stage,
   .what-i-do-stage { box-shadow: 0 0 0 100vmax var(--bg); }
 }
+
+/* ==========================================================================
+   МОБИЛЬНАЯ ВЕРСИЯ (<= 700px)
+   ==========================================================================
+   Десктоп не затрагивается: все правила ниже живут внутри медиазапроса,
+   а мобильная разметка (.m-screen) на десктопе скрыта правилом ниже.
+
+   Подход: вместо того чтобы сжимать десктопный постер 3:2 целиком, на
+   телефоне «сцена» экрана прячется, а контент выкладывается обычным
+   вертикальным потоком. Изображения не перерисовывались — нужные фрагменты
+   утверждённых подложек вырезаются средствами CSS (background-position).
+   ========================================================================== */
+
+.m-screen { display: none; }
+
+/* На десктопе бургера нет, а обёртка меню не создаёт собственного бокса —
+   .nav и .top-cta остаются прямыми потомками .site-header-inner. */
+.nav-toggle { display: none; }
+.site-nav-panel { display: contents; }
+
+@media (max-width: 700px) {
+
+  /* ---- Шапка: 56px, логотип слева, бургер справа ---------------------- */
+  :root { --bar-h: 56px; }
+
+  .site-header {
+    height: 56px;
+    border-bottom: 1px solid rgba(22, 17, 15, 0.08);
+    transition: background-color .25s linear, transform .28s ease;
+  }
+  /* Прокрутка вниз — шапка уезжает, вверх — возвращается (js/main.js).
+     В самом верху страницы всегда видна. */
+  .site-header.is-hidden { transform: translateY(-100%); }
+
+  .site-header-inner { container-type: normal; }
+
+  .brand { left: 16px; top: 50%; transform: translateY(-50%); }
+  .brand-name { font-size: 14px; letter-spacing: 0.12em; }
+  .brand-role { font-size: 9px; letter-spacing: 0.09em; margin-top: 2px; }
+
+  /* Бургер — зона нажатия 48x48 */
+  .nav-toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-toggle-bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--wine);
+    border-radius: 2px;
+    transition: transform .25s ease, opacity .2s ease;
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ---- Выпадающее меню ------------------------------------------------ */
+  .site-nav-panel {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 56px;
+    z-index: 120;
+    padding: 6px 0 14px;
+    background: var(--header-paper, var(--bg));
+    box-shadow: 0 16px 28px rgba(22, 17, 15, 0.16);
+    transform: translateY(-115%);
+    transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+    visibility: hidden;
+  }
+  .site-nav-panel.is-open { transform: none; visibility: visible; }
+
+  .nav {
+    position: static;
+    transform: none;
+    display: block;
+    gap: 0;
+  }
+  .nav a {
+    display: block;
+    padding: 15px 20px;
+    font-size: 17px;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(22, 17, 15, 0.07);
+  }
+  .nav a::after { display: none; }
+
+  .top-cta {
+    position: static;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px 20px 15px;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+  }
+  .top-cta-arrow { width: 30px; }
+  .top-cta-underline { display: none; }
+
+  /* Затемнение под панелью — закрывает меню по тапу вне её.
+     z-index строго меньше, чем у .site-header (100): шапка создаёт свой
+     контекст наложения, поэтому z-index панели внутри неё не может
+     перебить слой, лежащий выше шапки — затемнение перекрыло бы меню. */
+  .nav-scrim {
+    position: fixed;
+    inset: 56px 0 0;
+    z-index: 90;
+    background: rgba(22, 17, 15, 0.32);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .28s ease, visibility .28s;
+  }
+  .nav-scrim.is-open { opacity: 1; visibility: visible; }
+
+  /* ---- Переключение раскладок ---------------------------------------- */
+  .hero-stage,
+  .cases-stage { display: none; }
+
+  .m-screen {
+    display: block;
+    padding: 28px 20px 44px;
+  }
+  /* Первый экран — единственный, который открывается «из-под» шапки,
+     поэтому ему нужен отступ на её высоту. */
+  .hero .m-screen  { background: #EDE6DD; padding-top: 80px; }
+  .cases .m-screen { background: #EEE4DC; }
+
+  /* Переходы из меню: верх секции не должен уезжать под шапку. */
+  .hero, .problem, .system, .process,
+  .services, .cases, .system-effect, .what-i-do { scroll-margin-top: 56px; }
+  #contact { scroll-margin-top: 68px; }
+
+  /* Общая типографика мобильной раскладки */
+  .m-lead {
+    margin: 0 0 14px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .m-lead-strong { color: var(--ink); font-weight: 600; }
+
+  /* ---- Экран 01 -------------------------------------------------------- */
+  .m-hero-title {
+    margin: 0;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: clamp(40px, 12.4vw, 60px);
+    line-height: 0.98;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  .m-hero-sub {
+    margin: 6px 0 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(21px, 6.4vw, 31px);
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  /* Кадр с портретным коллажем, вырезан из подложки первого экрана */
+  .m-hero-visual {
+    position: relative;
+    margin: 18px 0 20px;
+    aspect-ratio: 3 / 4.5;
+    overflow: hidden;
+    border-radius: 2px;
+  }
+  .m-hero-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 50%;
+  }
+
+  .m-hero-lead {
+    margin: 0 0 24px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  /* Кнопка «Сверим мысли» — оригинальный бордовый мазок с надписью
+     и стрелкой, вырезанный из images/hero-bg.webp (x 46-432, y 676-826
+     из 1536x1024, с полями вокруг мазка). Ссылка живая, вся площадь
+     кликабельна. */
+  .m-btn {
+    display: block;
+    width: min(348px, 100%);
+    aspect-ratio: 386 / 150;
+    background-image: url(../images/hero-bg.webp);
+    background-repeat: no-repeat;
+    background-size: 397.93% auto;      /* 1536 / 386 */
+    background-position: 4.0% 77.35%;   /* 46/(1536-386), 676/(1024-150) */
+    transition: transform .15s ease, filter .15s ease;
+  }
+  .m-btn:active {
+    transform: translateY(1px);
+    filter: drop-shadow(0 6px 14px rgba(60, 6, 20, 0.28));
+  }
+
+  /* ---- Экран 06 -------------------------------------------------------- */
+  .m-sec-head { display: flex; align-items: baseline; gap: 12px; }
+  .m-sec-num {
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--wine);
+    border-bottom: 2px solid var(--wine);
+    padding-bottom: 2px;
+  }
+  .m-sec-title {
+    margin: 0;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: clamp(34px, 10.5vw, 48px);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .m-sec-title em { color: var(--accent); font-style: normal; }
+  .m-sec-head + .m-lead { margin-top: 18px; }
+
+  /* Рукописная пометка «смысл — в связях, а не в словах» с глазом:
+     фрагмент images/cases-bg.webp, вырезан по координатам 25,575 - 300,745
+     из исходных 1536x1024. */
+  .m-note {
+    width: 190px;
+    height: 100px;
+    margin: 4px 0 26px -6px;
+    transform: rotate(-1.6deg);
+    background-image: url(../images/cases-bg.webp);
+    background-repeat: no-repeat;
+    background-size: 558.5% auto;
+    background-position: 1.98% 65.4%;
+  }
+
+  /* Карточка кейса — бумага, лёгкий наклон, как в утверждённом коллаже */
+  /* Карточка кейса. Фон — бумага своей карточки из images/cases-bg.webp
+     (чистая полоса y 600-730, растянутая на высоту карточки; боковые
+     рваные срезы входят в кадр). Сверху и снизу — настоящие рваные
+     кромки той же карточки (y 214-246 и y 830-862). Ничего не
+     дорисовывалось: все три фрагмента взяты из утверждённой подложки. */
+  .m-card {
+    position: relative;
+    margin: 0 0 26px;
+    padding: 40px 26px 12px;
+    background: #F1E9E0;
+    box-shadow: 0 14px 26px rgba(22, 17, 15, 0.13);
+  }
+  .m-card > *:not(.m-card-paper) { position: relative; z-index: 2; }
+
+  .m-card-paper {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .m-card-paper img {
+    position: absolute;
+    max-width: none;
+    width: 457.14%;    /* 1536 / 336 — ширина карточки в подложке */
+    height: 787.69%;   /* 1024 / 130 — полоса чистой бумаги на всю высоту */
+  }
+
+  /* Рваные кромки — поверх бумаги, под текстом */
+  .m-card::before,
+  .m-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    aspect-ratio: 336 / 32;
+    z-index: 1;
+    background-image: url(../images/cases-bg.webp);
+    background-repeat: no-repeat;
+    background-size: 457.14% auto;
+    pointer-events: none;
+  }
+  .m-card::before { top: 0;    background-position-y: 21.57%; }  /* y 214 */
+  .m-card::after  { bottom: 0; background-position-y: 83.67%; }  /* y 830 */
+
+  /* Каждая карточка берёт бумагу и кромки своей карточки из подложки */
+  .m-card-1 { transform: rotate(-0.5deg); }
+  .m-card-2 { transform: rotate(0.45deg); }
+  .m-card-3 { transform: rotate(-0.35deg); }
+  .m-card-1 .m-card-paper img { left: -116.67%; top: -461.54%; }  /* x 392, y 600 */
+  .m-card-2 .m-card-paper img { left: -223.21%; top: -461.54%; }  /* x 750 */
+  .m-card-3 .m-card-paper img { left: -327.38%; top: -461.54%; }  /* x 1100 */
+  .m-card-1::before, .m-card-1::after { background-position-x: 32.67%; }
+  .m-card-2::before, .m-card-2::after { background-position-x: 62.50%; }
+  .m-card-3::before, .m-card-3::after { background-position-x: 91.67%; }
+
+  .m-card-num {
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--wine);
+  }
+  .m-card-title {
+    margin: 8px 0 16px;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 1.12;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  /* Иконки схемы «Было · Увидела · Спросила · Нашла · Сделала» —
+     фрагменты images/cases-bg.webp (полоса y 468-586, своя для каждой
+     карточки). Новых изображений не создавалось. */
+  .m-scheme {
+    aspect-ratio: 316 / 118;
+    background-image: url(../images/cases-bg.webp);
+    background-repeat: no-repeat;
+    background-size: 486.08% auto;
+    background-position-y: 51.66%;
+  }
+  .m-scheme-1 { background-position-x: 32.79%; }
+  .m-scheme-2 { background-position-x: 62.62%; }
+  .m-scheme-3 { background-position-x: 91.97%; }
+
+  /* Подписи схемы: 13px и перенос по словам. На 360px строка ложится
+     в две строки — все пять подписей сохранены и читаемы. */
+  .m-card-scheme-words {
+    margin: 8px 0 16px;
+    font-size: 13px;
+    line-height: 1.45;
+    text-wrap: balance;       /* перенос делит подписи поровну, без сироты */
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: rgba(22, 17, 15, 0.66);
+  }
+
+  .m-card-desc {
+    margin: 0 0 6px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .m-card-name {
+    display: block;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    color: var(--wine);
+    margin-bottom: 4px;
+  }
+
+  .m-card-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 52px;
+    margin-top: 10px;
+    padding: 0;
+    border: 0;
+    border-top: 1px solid rgba(110, 27, 39, 0.28);
+    background: none;
+    cursor: pointer;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--wine);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .m-card-link svg { width: 28px; height: auto; }
+
+  /* ---- Раскрытый кейс: читаемые размеры ------------------------------- */
+  .p6-case { padding: 26px 0 40px; }
+  .p6-case-title { font-size: 30px; }
+  .p6-case-tags { font-size: 13px; }
+  .p6-case-block h4 { font-size: 15px; }
+  .p6-case-block p,
+  .p6-case-list { font-size: 16px; line-height: 1.55; }
+  .p6-case-quote { font-size: 19px; line-height: 1.5; }
+  .p6-case-frag-label { font-size: 13px; }
+  .p6-case-close { min-height: 52px; font-size: 15px; }
+  .p6-case-visual-stage,
+  .p6-case-visual-stage-psych,
+  .p6-case-visual-stage-delonghi { max-width: 100%; margin: 0 auto; }
+}

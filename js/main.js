@@ -28,7 +28,15 @@
     entry.panel.classList.remove('is-open');
     entry.trigger.setAttribute('aria-expanded', 'false');
     if (scrollBack) {
-      entry.trigger.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      /* Один и тот же кейс открывается двумя кнопками — десктопной и
+         мобильной; вторая скрыта. Возвращаемся к той, что сейчас видна. */
+      var target = entry.trigger;
+      entries.forEach(function (other) {
+        if (other.panel === entry.panel && other.trigger.offsetParent !== null) {
+          target = other.trigger;
+        }
+      });
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
@@ -95,4 +103,122 @@
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);
   update();
+})();
+
+/* Мобильное меню (<=700px): бургер открывает панель с четырьмя пунктами.
+   Закрывается выбором пункта, тапом вне панели и клавишей Esc.
+   Плюс автоскрытие шапки: вниз — уезжает, вверх — возвращается,
+   в самом верху страницы всегда видна. */
+(function () {
+  var header = document.querySelector('.site-header');
+  var toggle = document.querySelector('.nav-toggle');
+  var panel  = document.getElementById('site-nav');
+  if (!header || !toggle || !panel) return;
+
+  var scrim = document.createElement('div');
+  scrim.className = 'nav-scrim';
+  document.body.appendChild(scrim);
+
+  function isMobile() {
+    return window.matchMedia('(max-width: 700px)').matches;
+  }
+
+  /* Пока меню открыто, страница под ним не должна прокручиваться.
+     position: fixed на body надёжнее, чем overflow: hidden: последний
+     не удерживает прокрутку на iOS. Позицию запоминаем и возвращаем. */
+  var savedY = 0;
+  var locked = false;
+
+  function lockPage() {
+    if (locked) return;
+    savedY = window.scrollY;
+    /* Зафиксированная страница перестаёт прокручиваться, и полоса
+       прокрутки исчезает. Там, где она занимает место (Windows), окно
+       становится шире, контент перевёрстывается и «прыгает». Возвращаем
+       эту ширину отступом — и странице, и шапке. */
+    var gutter = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.position = 'fixed';
+    document.body.style.top = -savedY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    if (gutter > 0) {
+      document.body.style.paddingRight = gutter + 'px';
+      header.style.paddingRight = gutter + 'px';
+    }
+    locked = true;
+  }
+
+  function unlockPage() {
+    if (!locked) return;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.paddingRight = '';
+    header.style.paddingRight = '';
+    locked = false;
+    window.scrollTo({ top: savedY, behavior: 'instant' });
+  }
+
+  function setOpen(open) {
+    panel.classList.toggle('is-open', open);
+    scrim.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      header.classList.remove('is-hidden');   // пока меню открыто, шапка видна
+      if (isMobile()) lockPage();
+    } else {
+      unlockPage();
+    }
+  }
+
+  function close() { setOpen(false); }
+
+  toggle.addEventListener('click', function () {
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  scrim.addEventListener('click', close);
+
+  panel.addEventListener('click', function (e) {
+    if (e.target.closest('a')) close();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.key === 'Esc') close();
+  });
+
+  window.addEventListener('resize', function () {
+    if (!isMobile()) close();
+  });
+
+  /* ---- Автоскрытие шапки ---------------------------------------------- */
+  var lastY = window.scrollY;
+  var ticking = false;
+
+  function onScroll() {
+    ticking = false;
+    var y = window.scrollY;
+
+    if (!isMobile() || panel.classList.contains('is-open')) {
+      header.classList.remove('is-hidden');
+      lastY = y;
+      return;
+    }
+
+    if (y <= 8) {
+      header.classList.remove('is-hidden');           // самый верх — всегда видна
+    } else if (y > lastY + 6) {
+      header.classList.add('is-hidden');              // вниз — прячем
+    } else if (y < lastY - 6) {
+      header.classList.remove('is-hidden');           // вверх — показываем
+    }
+    lastY = y;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(onScroll);
+  }, { passive: true });
 })();

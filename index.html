@@ -21,6 +21,14 @@
       <span class="brand-role">Контент-стратег</span>
     </a>
 
+    <button class="nav-toggle" type="button" aria-label="Меню"
+            aria-expanded="false" aria-controls="site-nav">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+
+    <div class="site-nav-panel" id="site-nav">
     <nav class="nav">
       <a href="#cases">Кейсы</a>
       <a href="#approach">Подход</a>
@@ -36,6 +44,7 @@
         <path d="M2 7 C 40 3, 70 10, 104 6 C 140 2, 168 9, 198 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
       </svg>
     </a>
+    </div>
   </div>
 </header>
 
@@ -56,6 +65,26 @@
 
       <!-- Button (visual is baked into the plate; this is the live hit-area) -->
       <a href="#contact" class="btn-hotspot" aria-label="Сверим мысли"></a>
+    </div>
+
+    <!-- Мобильная раскладка экрана 01 (<=700px). Тексты те же, что на
+         десктопе. Визуал — кадр из images/hero-bg.webp, обрезанный по
+         портретному коллажу средствами CSS; новых изображений нет. -->
+    <div class="m-screen m-hero">
+      <h1 class="m-hero-title">Знания видят.</h1>
+      <p class="m-hero-sub">Человека запоминают.</p>
+
+      <div class="m-hero-visual" aria-hidden="true">
+        <img src="images/hero-bg.webp" alt="" fetchpriority="high" decoding="async">
+      </div>
+
+      <p class="m-hero-lead">Помогаю сделать видимым то, что обычно
+        остаётся за вашей экспертностью: собственный взгляд, характер,
+        опыт и способ думать.</p>
+
+      <!-- Живая ссылка поверх оригинального бордового мазка: фрагмент
+           images/hero-bg.webp (x 60-416, y 686-820 из 1536x1024). -->
+      <a href="#contact" class="m-btn" aria-label="Сверим мысли"></a>
     </div>
   </section>
 
@@ -261,6 +290,68 @@
         </svg>
       </button>
     </div>
+
+    <!-- Мобильная раскладка экрана 06 (<=700px). Карточки собраны на CSS;
+         иконки схемы и рукописная пометка обрезаны из images/cases-bg.webp
+         средствами CSS — новых изображений нет. Тексты и порядок карточек
+         те же, что на десктопе. -->
+    <div class="m-screen m-cases">
+      <div class="m-sec-head">
+        <span class="m-sec-num">06</span>
+        <h2 class="m-sec-title">Кейсы<em>.</em></h2>
+      </div>
+
+      <p class="m-lead">Здесь не просто готовые тексты. Показываю, как из
+        материала рождается смысл: что заметила, какое решение нашла
+        и почему выбрала именно его.</p>
+      <p class="m-lead m-lead-strong">Важен не только результат,
+        но и ход мысли.</p>
+
+      <div class="m-note" aria-hidden="true"></div>
+
+      <article class="m-card m-card-1">
+        <span class="m-card-paper" aria-hidden="true"><img src="images/cases-bg.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="m-card-num">01</span>
+        <h3 class="m-card-title">Психологическая<br>практика</h3>
+        <div class="m-scheme m-scheme-1" aria-hidden="true"></div>
+        <p class="m-card-scheme-words">Было · Увидела · Спросила · Нашла · Сделала</p>
+        <p class="m-card-desc">Превратила разрозненные идеи и заметки в систему смыслов и понятный текст, который помогает клиенту говорить о своей практике уверенно и по делу.</p>
+        <button type="button" class="m-card-link" data-case-trigger="psych-practice"
+                aria-expanded="false" aria-controls="case-psych-practice">Смотреть кейс
+          <svg viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </article>
+      <article class="m-card m-card-2">
+        <span class="m-card-paper" aria-hidden="true"><img src="images/cases-bg.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="m-card-num">02</span>
+        <h3 class="m-card-title">Экспертный<br>B2B-контент</h3>
+        <div class="m-scheme m-scheme-2" aria-hidden="true"></div>
+        <p class="m-card-scheme-words">Было · Увидела · Спросила · Нашла · Сделала</p>
+        <p class="m-card-desc"><span class="m-card-name">ASPEX</span> Сложная экспертиза без сухого B2B-языка. Собрала текст вокруг состояния руководителя: хаос, потеря ясности, потребность в опоре.</p>
+        <button type="button" class="m-card-link" data-case-trigger="aspex"
+                aria-expanded="false" aria-controls="case-aspex">Смотреть кейс
+          <svg viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </article>
+      <article class="m-card m-card-3">
+        <span class="m-card-paper" aria-hidden="true"><img src="images/cases-bg.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="m-card-num">03</span>
+        <h3 class="m-card-title">Премиальный<br>продукт</h3>
+        <div class="m-scheme m-scheme-3" aria-hidden="true"></div>
+        <p class="m-card-scheme-words">Было · Увидела · Спросила · Нашла · Сделала</p>
+        <p class="m-card-desc">Выделила суть продукта и ценность для аудитории, создала текст, который подчёркивает уровень и закрывает ключевые возражения.</p>
+        <button type="button" class="m-card-link" data-case-trigger="delonghi"
+                aria-expanded="false" aria-controls="case-delonghi">Смотреть кейс
+          <svg viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </article>
+    </div>
   </section>
 
   <!-- ============ Раскрывающийся кейс «Психологическая практика» (карточка 01) ====
@@ -276,7 +367,7 @@
 
         <div class="p6-case-head">
           <h3 class="p6-case-title">Психологическая практика<em>.</em></h3>
-          <p class="p6-case-tags">Позиционирование&nbsp;·&nbsp;смыслы&nbsp;·&nbsp;голос&nbsp;·&nbsp;структура</p>
+          <p class="p6-case-tags">Позиционирование · смыслы · голос · структура</p>
         </div>
 
         <div class="p6-case-grid">
@@ -361,7 +452,7 @@
 
         <div class="p6-case-head">
           <h3 class="p6-case-title">ASPEX<em>.</em></h3>
-          <p class="p6-case-tags">B2B&nbsp;·&nbsp;данные&nbsp;·&nbsp;аналитика&nbsp;·&nbsp;технологии</p>
+          <p class="p6-case-tags">B2B · данные · аналитика · технологии</p>
         </div>
 
         <div class="p6-case-grid">
@@ -452,7 +543,7 @@
 
         <div class="p6-case-head">
           <h3 class="p6-case-title">DE&rsquo;LONGHI<em>.</em></h3>
-          <p class="p6-case-tags">Премиальный&nbsp;продукт&nbsp;&nbsp;·&nbsp;&nbsp;кофе&nbsp;·&nbsp;ритуал&nbsp;·&nbsp;точность</p>
+          <p class="p6-case-tags">Премиальный продукт &nbsp;·&nbsp; кофе · ритуал · точность</p>
           <p class="p6-case-testnote">Тестовое задание</p>
         </div>
 
