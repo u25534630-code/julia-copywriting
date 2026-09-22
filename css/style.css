@@ -1897,6 +1897,196 @@ button.p6-clink {
   }
   .m-card-link svg { width: 28px; height: auto; }
 
+
+  /* ======================================================================
+     Экраны 02, 03, 04 — мобильная раскладка (этап 2)
+     ====================================================================== */
+  .problem-stage,
+  .system-stage,
+  .process-stage { display: none; }
+
+  .problem .m-screen { background: #E8E1DB; }
+  .system  .m-screen { background: #E7DFD9; }
+  .process .m-screen { background: #E7DFDA; }
+
+  /* Заголовок в две-три строки — чуть мельче основного */
+  .m-sec-title-sm { font-size: clamp(27px, 8.2vw, 38px); line-height: 1.08; }
+  .m-sec-title span { display: block; }
+  .m-sec-head + .m-sec-title { margin-top: 10px; }
+  .m-sec-title + .m-lead { margin-top: 18px; }
+
+  /* Общие фрагменты подложек */
+  .m-collage, .m-hand, .m-paper-note {
+    background-repeat: no-repeat;
+    width: 100%;
+  }
+  .m-collage { margin: 22px 0 20px; }
+  .m-hand    { margin: 2px 0 22px; }
+  .m-paper-note { margin: 22px 0 4px; }
+
+  /* Рукописные пометки — уже полной ширины, с лёгким наклоном */
+  .m-hand-02 { width: 78%; transform: rotate(-1.2deg); }
+  .m-hand-03a { width: 62%; margin-left: auto; margin-right: 6%; transform: rotate(-1.5deg); }
+  .m-hand-03b { width: 74%; transform: rotate(-1deg); }
+  .m-hand-04 { width: 88%; transform: rotate(-1deg); }
+  .m-paper-note-03 { width: 100%; }
+
+  /* Финальная мысль экрана 02 */
+  .m-final {
+    margin: 4px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .m-final-strong {
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: clamp(19px, 5.6vw, 26px);
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .m-final-italic {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(18px, 5.2vw, 25px);
+    color: var(--ink);
+  }
+
+  /* Ведущая фраза экрана 04 */
+  .m-phrase {
+    margin: 16px 0 18px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .m-phrase-hear {
+    white-space: nowrap;
+    border-bottom: 2.5px solid var(--accent);
+    padding-bottom: 1px;
+  }
+
+  /* ---- Цепочка / шаги: восемь пунктов сверху вниз ------------------- */
+  .m-chain {
+    list-style: none;
+    margin: 24px 0 8px;
+    padding: 0;
+  }
+  .m-chain-item,
+  .m-step-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+  }
+  /* Красная нить между пунктами — как на утверждённом макете */
+  .m-chain-item::after,
+  .m-step-item::after {
+    content: "";
+    position: absolute;
+    left: 33px;
+    top: calc(50% + 34px);
+    width: 2px;
+    height: calc(100% - 68px);
+    background: var(--accent);
+    opacity: 0.55;
+  }
+  .m-chain-item:last-child::after,
+  .m-step-item:last-child::after { display: none; }
+
+  .m-chain-ico,
+  .m-step-ico {
+    flex: 0 0 auto;
+    width: 68px;
+    height: 68px;
+    border-radius: 2px;
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 10px rgba(22, 17, 15, 0.12);
+  }
+  .m-chain-text,
+  .m-step-text {
+    display: block;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .m-chain-num,
+  .m-step-num {
+    display: block;
+    font-size: 14px;
+    color: var(--wine);
+    margin-bottom: 3px;
+  }
+
+  /* Иконки цепочки экрана 03 — фрагменты images/system-bg.webp */
+  .m-chain-ico { background-image: url(../images/system-bg.webp);
+    background-size: 1324.14% auto; background-position-y: 75.11%; }
+  .m-chain-ico-1 { background-position-x: 2.11%; }
+  .m-chain-ico-2 { background-position-x: 13.87%; }
+  .m-chain-ico-3 { background-position-x: 27.96%; }
+  .m-chain-ico-4 { background-position-x: 41.48%; }
+  .m-chain-ico-5 { background-position-x: 53.24%; }
+  .m-chain-ico-6 { background-position-x: 65.92%; }
+  .m-chain-ico-7 { background-position-x: 78.59%; }
+  .m-chain-ico-8 { background-position-x: 93.94%; }
+
+  /* Иконки шагов экрана 04 — фрагменты images/process-bg.webp */
+  .m-step-ico { background-image: url(../images/process-bg.webp);
+    background-size: 1371.43% auto; background-position-y: 76.75%; }
+  .m-step-ico-1 { background-position-x: 3.51%; }
+  .m-step-ico-2 { background-position-x: 18.26%; }
+  .m-step-ico-3 { background-position-x: 30.13%; }
+  .m-step-ico-4 { background-position-x: 42.63%; }
+  .m-step-ico-5 { background-position-x: 54.85%; }
+  .m-step-ico-6 { background-position-x: 69.45%; }
+  .m-step-ico-7 { background-position-x: 79.78%; }
+  .m-step-ico-8 { background-position-x: 91.08%; }
+
+  .m-collage-02 {
+    aspect-ratio: 830 / 505;
+    background-image: url(../images/problem-bg.webp);
+    background-size: 185.06% auto;
+    background-position: 52.41% 56.84%;
+  }
+  .m-hand-02 {
+    aspect-ratio: 235 / 105;
+    background-image: url(../images/problem-bg.webp);
+    background-size: 653.62% auto;
+    background-position: 7.30% 85.96%;
+  }
+  .m-hand-03a {
+    aspect-ratio: 195 / 117;
+    background-image: url(../images/system-bg.webp);
+    background-size: 787.69% auto;
+    background-position: 50.34% 41.35%;
+  }
+  .m-hand-03b {
+    aspect-ratio: 270 / 95;
+    background-image: url(../images/system-bg.webp);
+    background-size: 568.89% auto;
+    background-position: 46.60% 91.50%;
+  }
+  .m-paper-note-03 {
+    aspect-ratio: 355 / 165;
+    background-image: url(../images/system-bg.webp);
+    background-size: 432.68% auto;
+    background-position: 92.29% 25.61%;
+  }
+  .m-hand-04 {
+    aspect-ratio: 220 / 105;
+    background-image: url(../images/process-bg.webp);
+    background-size: 698.18% auto;
+    background-position: 15.20% 93.04%;
+  }
+
   /* ---- Раскрытый кейс: читаемые размеры ------------------------------- */
   .p6-case { padding: 26px 0 40px; }
   .p6-case-title { font-size: 30px; }
