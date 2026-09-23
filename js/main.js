@@ -222,3 +222,31 @@
     window.requestAnimationFrame(onScroll);
   }, { passive: true });
 })();
+
+/* Подложки мобильных экранов подключаются, когда экран подходит к окну.
+   Фрагменты подложек выводятся через CSS background-image, а фоны
+   не подчиняются loading="lazy": браузер запрашивает их сразу, как
+   только элемент отрисован. Поэтому адрес картинки держим в переменной
+   --plate, а класс is-near ставим наблюдателем за видимостью.
+   Размеры всех фрагментов заданы через aspect-ratio, так что появление
+   картинки не меняет высоту блоков и не сдвигает страницу. */
+(function () {
+  var screens = document.querySelectorAll('.m-screen');
+  if (!screens.length) return;
+
+  function showAll() {
+    Array.prototype.forEach.call(screens, function (s) { s.classList.add('is-near'); });
+  }
+
+  if (!('IntersectionObserver' in window)) { showAll(); return; }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-near');
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '700px 0px' });
+
+  Array.prototype.forEach.call(screens, function (s) { io.observe(s); });
+})();

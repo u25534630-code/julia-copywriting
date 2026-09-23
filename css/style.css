@@ -1641,11 +1641,27 @@ button.p6-clink {
 
   .m-screen {
     display: block;
-    padding: 28px 20px 44px;
+    /* Верхний отступ 58px: номер экрана начинается ниже 56-пиксельной
+       шапки и не уходит под неё при ручной прокрутке вверх. Нижний
+       уменьшен с 44 до 20, поэтому промежуток между экранами почти
+       не изменился: было 44+28=72px, стало 20+58=78px. */
+    padding: 58px 20px 20px;
+    /* Подложка экрана подключается, когда экран подходит к окну
+       (класс is-near ставит js/main.js). Размеры всех фрагментов
+       заданы через aspect-ratio, поэтому появление картинки не меняет
+       вёрстку и не сдвигает страницу. */
+    --plate: none;
   }
+  .problem       .m-screen.is-near { --plate: url(../images/problem-bg.webp); }
+  .system        .m-screen.is-near { --plate: url(../images/system-bg.webp); }
+  .process       .m-screen.is-near { --plate: url(../images/process-bg.webp); }
+  .services      .m-screen.is-near { --plate: url(../images/services-bg.webp); }
+  .cases         .m-screen.is-near { --plate: url(../images/cases-bg.webp); }
+  .system-effect .m-screen.is-near { --plate: url(../images/system-effect-bg.webp); }
+  .what-i-do     .m-screen.is-near { --plate: url(../images/what-i-do-bg.webp); }
   /* Первый экран — единственный, который открывается «из-под» шапки,
      поэтому ему нужен отступ на её высоту. */
-  .hero .m-screen  { background: #EDE6DD; padding-top: 80px; }
+  .hero .m-screen  { background: #EDE6DD; padding: 80px 20px 44px; }
   .cases .m-screen { background: #EEE4DC; }
 
   /* Переходы из меню: верх секции не должен уезжать под шапку. */
@@ -1754,7 +1770,7 @@ button.p6-clink {
     height: 100px;
     margin: 4px 0 26px -6px;
     transform: rotate(-1.6deg);
-    background-image: url(../images/cases-bg.webp);
+    background-image: var(--plate);
     background-repeat: no-repeat;
     background-size: 558.5% auto;
     background-position: 1.98% 65.4%;
@@ -1797,7 +1813,7 @@ button.p6-clink {
     width: 100%;
     aspect-ratio: 336 / 32;
     z-index: 1;
-    background-image: url(../images/cases-bg.webp);
+    background-image: var(--plate);
     background-repeat: no-repeat;
     background-size: 457.14% auto;
     pointer-events: none;
@@ -1838,7 +1854,7 @@ button.p6-clink {
      карточки). Новых изображений не создавалось. */
   .m-scheme {
     aspect-ratio: 316 / 118;
-    background-image: url(../images/cases-bg.webp);
+    background-image: var(--plate);
     background-repeat: no-repeat;
     background-size: 486.08% auto;
     background-position-y: 51.66%;
@@ -2027,7 +2043,7 @@ button.p6-clink {
   }
 
   /* Иконки цепочки экрана 03 — фрагменты images/system-bg.webp */
-  .m-chain-ico { background-image: url(../images/system-bg.webp);
+  .m-chain-ico { background-image: var(--plate);
     background-size: 1324.14% auto; background-position-y: 75.11%; }
   .m-chain-ico-1 { background-position-x: 2.11%; }
   .m-chain-ico-2 { background-position-x: 13.87%; }
@@ -2039,7 +2055,7 @@ button.p6-clink {
   .m-chain-ico-8 { background-position-x: 93.94%; }
 
   /* Иконки шагов экрана 04 — фрагменты images/process-bg.webp */
-  .m-step-ico { background-image: url(../images/process-bg.webp);
+  .m-step-ico { background-image: var(--plate);
     background-size: 1371.43% auto; background-position-y: 76.75%; }
   .m-step-ico-1 { background-position-x: 3.51%; }
   .m-step-ico-2 { background-position-x: 18.26%; }
@@ -2052,37 +2068,37 @@ button.p6-clink {
 
   .m-collage-02 {
     aspect-ratio: 830 / 505;
-    background-image: url(../images/problem-bg.webp);
+    background-image: var(--plate);
     background-size: 185.06% auto;
     background-position: 52.41% 56.84%;
   }
   .m-hand-02 {
     aspect-ratio: 235 / 105;
-    background-image: url(../images/problem-bg.webp);
+    background-image: var(--plate);
     background-size: 653.62% auto;
     background-position: 7.30% 85.96%;
   }
   .m-hand-03a {
     aspect-ratio: 195 / 117;
-    background-image: url(../images/system-bg.webp);
+    background-image: var(--plate);
     background-size: 787.69% auto;
     background-position: 50.34% 41.35%;
   }
   .m-hand-03b {
     aspect-ratio: 270 / 95;
-    background-image: url(../images/system-bg.webp);
+    background-image: var(--plate);
     background-size: 568.89% auto;
     background-position: 46.60% 91.50%;
   }
   .m-paper-note-03 {
     aspect-ratio: 355 / 165;
-    background-image: url(../images/system-bg.webp);
+    background-image: var(--plate);
     background-size: 432.68% auto;
     background-position: 92.29% 25.61%;
   }
   .m-hand-04 {
     aspect-ratio: 220 / 105;
-    background-image: url(../images/process-bg.webp);
+    background-image: var(--plate);
     background-size: 698.18% auto;
     background-position: 15.20% 93.04%;
   }
@@ -2229,82 +2245,82 @@ button.p6-clink {
 
   .m-banner-05 {
     aspect-ratio: 735 / 80;
-    background-image: url(../images/services-bg.webp);
+    background-image: var(--plate);
     background-size: 208.84% auto;
     background-position: 76.88% 15.36%;
     background-repeat: no-repeat;
   }
   .m-hand-05a {
     aspect-ratio: 270 / 50;
-    background-image: url(../images/services-bg.webp);
+    background-image: var(--plate);
     background-size: 568.52% auto;
     background-position: 67.19% 24.13%;
     background-repeat: no-repeat;
   }
   .m-hand-05b {
     aspect-ratio: 190 / 120;
-    background-image: url(../images/services-bg.webp);
+    background-image: var(--plate);
     background-size: 807.89% auto;
     background-position: 8.18% 74.12%;
     background-repeat: no-repeat;
   }
   .m-hand-05c {
     aspect-ratio: 310 / 70;
-    background-image: url(../images/services-bg.webp);
+    background-image: var(--plate);
     background-size: 495.16% auto;
     background-position: 63.67% 91.72%;
     background-repeat: no-repeat;
   }
   .m-vs-x {
     aspect-ratio: 48 / 48;
-    background-image: url(../images/system-effect-bg.webp);
+    background-image: var(--plate);
     background-size: 3197.92% auto;
     background-position: 34.63% 25.92%;
     background-repeat: no-repeat;
   }
   .m-vs-v {
     aspect-ratio: 48 / 48;
-    background-image: url(../images/system-effect-bg.webp);
+    background-image: var(--plate);
     background-size: 3197.92% auto;
     background-position: 66.78% 25.92%;
     background-repeat: no-repeat;
   }
   .m-collage-08 {
     aspect-ratio: 390 / 460;
-    background-image: url(../images/what-i-do-bg.webp);
+    background-image: var(--plate);
     background-size: 393.85% auto;
     background-position: 64.57% 67.38%;
     background-repeat: no-repeat;
   }
   .m-hand-08a {
     aspect-ratio: 265 / 125;
-    background-image: url(../images/what-i-do-bg.webp);
+    background-image: var(--plate);
     background-size: 579.62% auto;
     background-position: 70.42% 13.90%;
     background-repeat: no-repeat;
   }
   .m-hand-08b {
     aspect-ratio: 305 / 115;
-    background-image: url(../images/what-i-do-bg.webp);
+    background-image: var(--plate);
     background-size: 503.61% auto;
     background-position: 8.53% 73.16%;
     background-repeat: no-repeat;
   }
   .m-vs-tab-do {
     aspect-ratio: 175 / 44;
-    background-image: url(../images/system-effect-bg.webp);
+    background-image: var(--plate);
     background-size: 877.14% auto;
     background-position: 38.60% 18.16%;
     background-repeat: no-repeat;
   }
   .m-vs-tab-posle {
     aspect-ratio: 185 / 44;
-    background-image: url(../images/system-effect-bg.webp);
+    background-image: var(--plate);
     background-size: 829.73% auto;
     background-position: 73.70% 18.16%;
     background-repeat: no-repeat;
   }
-  .m-svc-ico { background-image: url(../images/services-bg.webp);
+  .m-svc-ico { background-image: var(--plate);
     background-size: 1598.96% auto; }
   .m-svc-ico-1 { background-position: 40.10% 47.95%; }
   .m-svc-ico-2 { background-position: 55.66% 47.95%; }
@@ -2314,7 +2330,7 @@ button.p6-clink {
   .m-svc-ico-6 { background-position: 55.59% 78.45%; }
   .m-svc-ico-7 { background-position: 72.55% 78.45%; }
   .m-svc-ico-8 { background-position: 87.77% 78.45%; }
-  .m-do-ico { background-image: url(../images/what-i-do-bg.webp);
+  .m-do-ico { background-image: var(--plate);
     background-size: 1476.92% auto; }
   .m-do-ico-1 { background-position: 49.44% 22.83%; }
   .m-do-ico-2 { background-position: 93.85% 26.52%; }
