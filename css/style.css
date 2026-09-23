@@ -2087,6 +2087,246 @@ button.p6-clink {
     background-position: 15.20% 93.04%;
   }
 
+
+  /* ======================================================================
+     Экраны 05, 07, 08 — мобильная раскладка (этап 3)
+     ====================================================================== */
+  .services-stage,
+  .system-effect-stage,
+  .what-i-do-stage { display: none; }
+
+  .services      .m-screen { background: #F3EEE9; }
+  .system-effect .m-screen { background: #F2ECE2; }
+  .what-i-do     .m-screen { background: #ECE4DC; padding-bottom: 20px; }
+
+  /* Плашка «Контент-сопровождение эксперта» */
+  .m-banner { width: 100%; margin: 20px 0 22px; }
+
+  .m-bottom {
+    margin: 4px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+
+  .m-hand-05a { width: 74%; margin-left: auto; margin-right: 2%; transform: rotate(-1.4deg); }
+  .m-hand-05b { width: 54%; transform: rotate(-1.5deg); }
+  .m-hand-05c { width: 86%; transform: rotate(-1deg); }
+  .m-hand-08a { width: 70%; margin-left: auto; margin-right: 4%; transform: rotate(-1.5deg); }
+  .m-hand-08b { width: 84%; transform: rotate(-1.2deg); }
+
+  /* Карточки услуг — тот же приём, что у цепочки экранов 03 и 04 */
+  .m-svc-item { position: relative; display: flex; align-items: center; gap: 16px; padding: 12px 0; }
+  .m-svc-item::after {
+    content: ""; position: absolute; left: 33px; top: calc(50% + 34px);
+    width: 2px; height: calc(100% - 68px); background: var(--accent); opacity: 0.5;
+  }
+  .m-svc-item:last-child::after { display: none; }
+  .m-svc-ico {
+    flex: 0 0 auto; width: 68px; height: 68px; border-radius: 2px;
+    background-repeat: no-repeat; box-shadow: 0 4px 10px rgba(22, 17, 15, 0.12);
+  }
+  .m-svc-text {
+    display: block; font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700; font-size: 17px; line-height: 1.2; letter-spacing: 0.02em;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .m-svc-num { display: block; font-size: 14px; color: var(--wine); margin-bottom: 3px; }
+
+  /* ---- Экран 07: «До» и «После» друг под другом -------------------- */
+  .m-sidenote {
+    margin: 18px 0 26px;
+    padding-left: 16px;
+    border-left: 3px solid var(--wine);
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic; font-weight: 700;
+    font-size: 18px; line-height: 1.45; color: var(--ink);
+  }
+
+  .m-vs {
+    position: relative;
+    margin: 0 0 26px;
+    padding: 22px 20px 4px;
+    background: #F6F1E9;
+    box-shadow: 0 12px 24px rgba(22, 17, 15, 0.10);
+  }
+  .m-vs-do    { border-left: 4px solid var(--ink); }
+  .m-vs-posle { border-left: 4px solid var(--accent); }
+
+  /* Плашка-заголовок: бордовый и чёрный мазки из подложки */
+  .m-vs-tab {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 116px; height: 38px; margin-bottom: 16px;
+    background-repeat: no-repeat; background-size: 100% 100%;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700; font-size: 16px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #F6F1E9;
+  }
+  .m-vs-tab-do,
+  .m-vs-tab-posle { background-size: 100% 100%; }
+
+  .m-vs-list { list-style: none; margin: 0; padding: 0; }
+  .m-vs-list li {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 0 0 16px;
+  }
+  .m-vs-mark {
+    flex: 0 0 auto; width: 26px; height: 26px; margin-top: 1px;
+    background-repeat: no-repeat; background-size: contain;
+  }
+  .m-vs-list p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink-soft); }
+  .m-vs-list strong { color: var(--ink); font-weight: 700; }
+
+  .m-vs-note {
+    margin: 4px 0 0;
+    padding: 14px 0 18px;
+    border-top: 1px solid rgba(22, 17, 15, 0.12);
+    font-weight: 700; font-size: 16px; line-height: 1.5; color: var(--ink);
+  }
+  .m-u { border-bottom: 2px solid var(--accent); padding-bottom: 1px; }
+
+  /* Жёлтая заметка — настоящая бумага из подложки, растянутая под текст */
+  .m-yellow { position: relative; margin: 4px 0 0; padding: 20px 20px 22px; }
+  .m-yellow-paper { position: absolute; inset: 0; overflow: hidden; z-index: 0; }
+  .m-yellow-paper img { position: absolute; max-width: none; }
+  .m-yellow p {
+    position: relative; z-index: 1; margin: 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700; font-size: 18px; line-height: 1.45; color: var(--ink);
+  }
+
+  /* ---- Экран 08 ------------------------------------------------------ */
+  .m-collage-08 { width: 100%; margin: 6px 0 24px; }
+
+  .m-do { list-style: none; margin: 8px 0 22px; padding: 0; }
+  .m-do-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(22, 17, 15, 0.10);
+  }
+  .m-do-item:last-child { border-bottom: 0; }
+  .m-do-ico {
+    flex: 0 0 auto; width: 62px; height: 62px; border-radius: 2px;
+    background-repeat: no-repeat;
+  }
+  .m-do-title {
+    margin: 0 0 6px;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700; font-size: 19px; line-height: 1.15;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .m-do-desc { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink-soft); }
+
+  /* Контактный блок — общий с десктопом, поджимаем поля */
+  .p8-contact { padding: 30px 20px 44px; }
+  .p8-contact-text { font-size: 17px; line-height: 1.55; }
+  .p8-contact-btn { min-height: 54px; font-size: 15px; }
+  .p8-contact-list { font-size: 15px; line-height: 1.9; }
+
+  .m-banner-05 {
+    aspect-ratio: 735 / 80;
+    background-image: url(../images/services-bg.webp);
+    background-size: 208.84% auto;
+    background-position: 76.88% 15.36%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-05a {
+    aspect-ratio: 270 / 50;
+    background-image: url(../images/services-bg.webp);
+    background-size: 568.52% auto;
+    background-position: 67.19% 24.13%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-05b {
+    aspect-ratio: 190 / 120;
+    background-image: url(../images/services-bg.webp);
+    background-size: 807.89% auto;
+    background-position: 8.18% 74.12%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-05c {
+    aspect-ratio: 310 / 70;
+    background-image: url(../images/services-bg.webp);
+    background-size: 495.16% auto;
+    background-position: 63.67% 91.72%;
+    background-repeat: no-repeat;
+  }
+  .m-vs-x {
+    aspect-ratio: 48 / 48;
+    background-image: url(../images/system-effect-bg.webp);
+    background-size: 3197.92% auto;
+    background-position: 34.63% 25.92%;
+    background-repeat: no-repeat;
+  }
+  .m-vs-v {
+    aspect-ratio: 48 / 48;
+    background-image: url(../images/system-effect-bg.webp);
+    background-size: 3197.92% auto;
+    background-position: 66.78% 25.92%;
+    background-repeat: no-repeat;
+  }
+  .m-collage-08 {
+    aspect-ratio: 390 / 460;
+    background-image: url(../images/what-i-do-bg.webp);
+    background-size: 393.85% auto;
+    background-position: 64.57% 67.38%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-08a {
+    aspect-ratio: 265 / 125;
+    background-image: url(../images/what-i-do-bg.webp);
+    background-size: 579.62% auto;
+    background-position: 70.42% 13.90%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-08b {
+    aspect-ratio: 305 / 115;
+    background-image: url(../images/what-i-do-bg.webp);
+    background-size: 503.61% auto;
+    background-position: 8.53% 73.16%;
+    background-repeat: no-repeat;
+  }
+  .m-vs-tab-do {
+    aspect-ratio: 175 / 44;
+    background-image: url(../images/system-effect-bg.webp);
+    background-size: 877.14% auto;
+    background-position: 38.60% 18.16%;
+    background-repeat: no-repeat;
+  }
+  .m-vs-tab-posle {
+    aspect-ratio: 185 / 44;
+    background-image: url(../images/system-effect-bg.webp);
+    background-size: 829.73% auto;
+    background-position: 73.70% 18.16%;
+    background-repeat: no-repeat;
+  }
+  .m-svc-ico { background-image: url(../images/services-bg.webp);
+    background-size: 1598.96% auto; }
+  .m-svc-ico-1 { background-position: 40.10% 47.95%; }
+  .m-svc-ico-2 { background-position: 55.66% 47.95%; }
+  .m-svc-ico-3 { background-position: 72.62% 47.95%; }
+  .m-svc-ico-4 { background-position: 87.77% 47.95%; }
+  .m-svc-ico-5 { background-position: 40.24% 78.45%; }
+  .m-svc-ico-6 { background-position: 55.59% 78.45%; }
+  .m-svc-ico-7 { background-position: 72.55% 78.45%; }
+  .m-svc-ico-8 { background-position: 87.77% 78.45%; }
+  .m-do-ico { background-image: url(../images/what-i-do-bg.webp);
+    background-size: 1476.92% auto; }
+  .m-do-ico-1 { background-position: 49.44% 22.83%; }
+  .m-do-ico-2 { background-position: 93.85% 26.52%; }
+  .m-do-ico-3 { background-position: 49.44% 59.35%; }
+  .m-do-ico-4 { background-position: 93.65% 62.50%; }
+  .m-yellow-paper img {
+    width: 216.20%;
+    height: 640.00%;
+    left: -73.24%;
+    top: -493.75%;
+  }
+
   /* ---- Раскрытый кейс: читаемые размеры ------------------------------- */
   .p6-case { padding: 26px 0 40px; }
   .p6-case-title { font-size: 30px; }
