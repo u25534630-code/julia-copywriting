@@ -1494,18 +1494,6 @@ button.p6-clink {
 }
 .p8-contact-list a:hover { color: var(--wine-ink); }
 
-/* ---- Wider than the artwork: just center it on cream -------------- */
-@media (min-width: 1537px) {
-  .hero-stage,
-  .problem-stage,
-  .system-stage,
-  .process-stage,
-  .services-stage,
-  .cases-stage,
-  .system-effect-stage,
-  .what-i-do-stage { box-shadow: 0 0 0 100vmax var(--bg); }
-}
-
 /* ==========================================================================
    МОБИЛЬНАЯ ВЕРСИЯ (<= 700px)
    ==========================================================================
