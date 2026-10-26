@@ -1,0 +1,109 @@
+/* ==========================================================================
+   ЭКРАН 01 — редакция с услугами (прототип)
+   Поверх стилей основного сайта: строка услуг над заголовком, новый лид,
+   живая надпись «Обсудить задачу →» на мазке кнопки. Мазок — на подложке
+   fragments/hero-bg-v2.webp, старая надпись с него стёрта
+   (tools/build_hero_plate.py). Основной сайт не меняется.
+   ========================================================================== */
+
+/* ---- Строка услуг: над заголовком, тише его --------------------------- */
+.hero-services {
+  position: absolute;
+  left: 3.65%;
+  top: 17.4%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.62cqw;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(9px, 0.94cqw, 15px);
+  line-height: 1;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--wine);
+  white-space: nowrap;
+}
+.hero-services i {
+  font-style: normal;
+  color: var(--accent);
+  letter-spacing: 0;
+}
+
+/* ---- Лид: два абзаца -------------------------------------------------- */
+.lead p { margin: 0; }
+.lead p + p { margin-top: 0.55em; }
+.lead p:first-child { color: var(--ink); font-weight: 600; }
+
+/* ---- Кнопка: живая надпись на мазке ------------------------------------ */
+.btn-hotspot,
+.m-btn {
+  color: #FBF4EE;
+  text-decoration: none;
+}
+.btn-label {
+  position: absolute;
+  left: 47.5%;
+  top: 58%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-family: "Caveat", "Manrope", cursive;
+  font-weight: 700;
+  font-size: clamp(13px, 1.95cqw, 30px);
+  line-height: 1;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translate(-50%, -50%) rotate(-7deg);
+}
+.btn-label-arrow {
+  width: 1.3em;
+  height: auto;
+  flex: 0 0 auto;
+  transition: transform .2s ease;
+}
+.btn-hotspot:hover .btn-label-arrow,
+.m-btn:hover .btn-label-arrow { transform: translateX(3px); }
+.btn-label-underline {
+  /* штрих под первым словом, как на прежней кнопке */
+  position: absolute;
+  left: 2%;
+  top: 100%;
+  width: 52%;
+  height: 0.32em;
+  margin-top: 0.08em;
+}
+
+/* ---- Телефон ------------------------------------------------------------ */
+@media (max-width: 700px) {
+  .m-hero-services {
+    margin: 14px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 6px;
+    font-family: "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    /* одна строка на телефонах от 360 px; на совсем узких переносится
+       по разделителям */
+    font-size: min(11px, 2.82vw);
+    line-height: 1.3;
+    letter-spacing: 0.065em;
+    text-transform: uppercase;
+    color: var(--wine);
+  }
+  .m-hero-services i { font-style: normal; color: var(--accent); }
+  .m-hero-services + .m-hero-visual { margin-top: 16px; }
+
+  .m-hero-lead p { margin: 0; }
+  .m-hero-lead p + p { margin-top: 0.6em; }
+  .m-hero-lead p:first-child { color: var(--ink); font-weight: 600; }
+
+  /* Мазок — с новой подложки, где надпись уже стёрта */
+  .m-btn {
+    position: relative;
+    background-image: url(fragments/hero-bg-v2.webp);
+  }
+  .m-btn .btn-label { left: 53%; top: 58%; font-size: min(27px, 7.2vw); }
+}

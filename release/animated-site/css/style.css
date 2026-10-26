@@ -1,0 +1,2397 @@
+/* ==========================================================================
+   Юлия Седышева — первый экран
+   Собран по assets/01-hero-final-approved.png
+   Коллаж, портрет, схема, красная нить, рукописные пометки и кнопка —
+   запечены в images/hero-bg.png (вырезаны из approved-макета).
+   Живым текстом отрисованы: шапка, заголовок, подзаголовок, лид, ссылки.
+   ========================================================================== */
+:root {
+  --bg: #EEE9DF;
+  --ink: #16110F;
+  --ink-soft: #262019;
+  --wine: #6E1B27;
+  --wine-ink: #2B1D1A;
+  --accent: #C21F2E;
+  --p8-red: #8B1219;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Manrope", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+h1, p { margin: 0; }
+
+/* ---- Stage: proportional 1536 x 1024 canvas ---------------------------- */
+.hero { background: var(--bg); }
+.hero-stage {
+  position: relative;
+  width: min(1536px, 100%);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.hero-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ---- Единая живая шапка ------------------------------------------------
+   Одна шапка на весь сайт, position: fixed.
+
+   Высота полосы = 94 / 1536 от ширины «сцены» (min(1536px, 100vw)).
+   Это ровно та пустая полоса бумаги, в которой шапка нарисована на всех
+   утверждённых макетах: когда верх любого экрана совмещён с верхом окна,
+   живая шапка ложится точно в неё и ничего из композиции не перекрывает.
+
+   Внутренние координаты логотипа / меню / CTA пересчитаны из процентов
+   сцены в проценты полосы (2.95% / 9.1797% = 32.14% и т. д.), поэтому
+   шапка попиксельно совпадает с прежней шапкой экрана 01.
+   ------------------------------------------------------------------------ */
+:root {
+  /* --stage-w намеренно на 100vw: используется ТОЛЬКО для высоты полосы.
+     Ширины задаются через 100%, иначе на Windows полоса прокрутки
+     занимает место, а 100vw её не учитывает — и появляется скролл. */
+  --stage-w: min(1536px, 100vw);
+  --bar-h: calc(var(--stage-w) * 0.0611979);   /* 94 / 1536 */
+}
+
+.site-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: var(--bar-h);
+  z-index: 100;
+  /* Цвет бумаги текущего экрана — подставляется из js/main.js */
+  background: var(--header-paper, var(--bg));
+  transition: background-color .25s linear;
+}
+.site-header-inner {
+  position: relative;
+  width: min(1536px, 100%);
+  height: 100%;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+/* ---- Маска старых растровых шапок (экраны 03–08) -----------------------
+   Шапки впечатаны в подложки в строках y = 25…90 из 1024. Ближайший
+   элемент композиции — скрепка на экране 06 в строке y = 101.
+   Полоса кроет 0…96 вплотную и гаснет к 100: растровая шапка уходит
+   полностью, композиция не задета. Цвет --paper взят пипеткой из самой
+   подложки, поэтому стыка не видно.
+   ------------------------------------------------------------------------ */
+.plate-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 9.7656%;             /* 100 / 1024 */
+  background: var(--paper, var(--bg));
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 96%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0%, #000 96%, transparent 100%);
+}
+
+/* Якорь контактов — обычный блок в потоке, его нужно опустить из-под шапки.
+   Секциям-экранам отступ не нужен: их верх и должен совпадать с верхом окна. */
+#contact { scroll-margin-top: calc(var(--bar-h) + 1.5vw); }
+
+.brand {
+  position: absolute;
+  left: 3.35%;
+  top: 32.14%;                 /* было 2.95% высоты сцены */
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.brand-name {
+  font-weight: 800;
+  font-size: clamp(11px, 1.15cqw, 19px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.brand-role {
+  font-weight: 500;
+  font-size: clamp(7px, 0.72cqw, 12px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 0.3cqw;
+}
+
+.nav {
+  position: absolute;
+  left: 49.6%;
+  top: 38.67%;                 /* было 3.55% высоты сцены */
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: clamp(13px, 2.5cqw, 40px);
+  white-space: nowrap;
+}
+.nav a {
+  font-weight: 600;
+  font-size: clamp(9px, 1.04cqw, 17px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding-bottom: 0.2cqw;
+  position: relative;
+}
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 1.5px;
+  background: var(--wine);
+  transition: width .2s ease;
+}
+.nav a:hover::after { width: 100%; }
+
+.top-cta {
+  position: absolute;
+  right: 3%;
+  top: 37.04%;                 /* было 3.4% высоты сцены */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7cqw;
+  color: var(--wine);
+  font-weight: 700;
+  font-size: clamp(9px, 0.88cqw, 15px);
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.top-cta-arrow {
+  width: clamp(16px, 2.05cqw, 34px);
+  height: auto;
+  transition: transform .2s ease;
+}
+.top-cta:hover .top-cta-arrow { transform: translateX(3px); }
+.top-cta-underline {
+  position: absolute;
+  left: -1%;
+  right: 8%;
+  bottom: -0.5cqw;
+  width: auto;
+  height: 0.8cqw;
+  color: var(--wine-ink);
+}
+
+/* ---- Headline block ------------------------------------------------- */
+.headline {
+  position: absolute;
+  left: 3.45%;
+  top: 23.2%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 6.95cqw, 108px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  transform: scaleX(0.727);
+  transform-origin: left center;
+}
+.subhead {
+  position: absolute;
+  left: 3.5%;
+  top: 35%;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(13px, 3.45cqw, 54px);
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.lead {
+  position: absolute;
+  left: 3.65%;
+  top: 48.4%;
+  font-weight: 500;
+  font-size: clamp(9px, 1.32cqw, 21px);
+  line-height: 1.4;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ---- Live hit-area over the baked-in "Сверим мысли" button --------- */
+.btn-hotspot {
+  position: absolute;
+  left: 3.7%;
+  top: 66.6%;
+  width: 27.5%;
+  height: 13.2%;
+  border-radius: 4px 12px 12px 4px;
+  transform: rotate(-0.4deg);
+  transition: transform .15s ease, filter .15s ease;
+}
+.btn-hotspot:hover {
+  transform: rotate(-0.4deg) translateY(-2px);
+  filter: drop-shadow(0 8px 16px rgba(60, 6, 20, 0.28));
+}
+
+/* ==========================================================================
+   Экран 2 — «У вас много материала. Но это ещё не система.»
+   Коллаж, нить, рукописные пометки, фрагменты и заголовки-в-макете запечены
+   в images/problem-bg.png (вырезано из assets/02-problem-approved.png).
+   Живой текст: «02», заголовок, лид, финальная мысль.
+   ========================================================================== */
+.problem { background: var(--bg); }
+.problem-stage {
+  position: relative;
+  width: min(1536px, 100%);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.problem-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p2-num {
+  position: absolute;
+  left: 3.2%;
+  top: 8%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(15px, 3.15cqw, 50px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #6b0a12;
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+
+.p2-title {
+  position: absolute;
+  left: 3.0%;
+  top: 13.8%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(18px, 4.1cqw, 64px);
+  line-height: 1.34;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p2-title span {
+  display: block;
+  transform: scaleX(0.8);
+  transform-origin: left center;
+}
+
+.p2-lead {
+  position: absolute;
+  left: 3.0%;
+  top: 33.0%;
+  font-weight: 500;
+  font-size: clamp(9px, 1.24cqw, 20px);
+  line-height: 1.47;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p2-lead p { margin: 0; }
+.p2-lead p + p { margin-top: 1.1em; }
+
+.p2-final {
+  position: absolute;
+  right: 9.9%;
+  bottom: 6.2%;
+  margin: 0;
+  text-align: right;
+  color: var(--ink);
+}
+.p2-final-strong {
+  display: block;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(20px, 5.1cqw, 80px);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: scaleX(0.6);
+  transform-origin: right center;
+}
+.p2-final-italic {
+  display: block;
+  margin-top: 0.06em;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(13px, 3.35cqw, 52px);
+  line-height: 1;
+  white-space: nowrap;
+}
+.p2-final-underline {
+  display: block;
+  margin-left: auto;
+  margin-top: 0.14em;
+  width: 66%;
+  height: 0.85cqw;
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   Экран 3 — «Что я называю системным контентом.»
+   Коллаж, цепочка из 8 карточек, нить, скотч, скрепки, рукописные пометки
+   и заметка справа запечены в images/system-bg.png (из assets/03-system-approved.png,
+   текстовые зоны заинпейнчены). Живой текст: «03», заголовок, лид-абзац.
+   ========================================================================== */
+.system { background: var(--bg); }
+.system-stage {
+  position: relative;
+  width: min(1536px, 100%);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.system-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p3-num {
+  position: absolute;
+  left: 4.4%;
+  top: 12.6%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+.p3-num-underline {
+  position: absolute;
+  left: 4.55%;
+  top: 17.6%;
+  width: clamp(9px, 1.85cqw, 29px);
+  height: clamp(3px, 0.65cqw, 10px);
+  color: var(--wine);
+}
+
+.p3-title {
+  position: absolute;
+  left: 4.35%;
+  top: 19.3%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35cqw;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(21px, 4.75cqw, 73px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p3-title span {
+  display: block;
+  transform: scaleX(0.66);
+  transform-origin: left center;
+}
+.p3-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.p3-lead {
+  position: absolute;
+  left: 4.5%;
+  top: 44.8%;
+  font-weight: 500;
+  font-size: clamp(9px, 1.24cqw, 20px);
+  line-height: 1.48;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p3-lead p { margin: 0; }
+
+/* ==========================================================================
+   Экран 4 — «Сначала слышу. Потом собираю.»
+   Цепочка из 4 карточек-этапов, иконки, нить, скотч и скрепки запечены
+   в images/process-bg.png. Карточки взяты из прежней подложки (8 этапов,
+   assets/04-process-approved.png), увеличены в 1,25 раза, старый текст
+   с них стёрт.
+   Живой текст: «04», заголовок, главная фраза (со штрихом под «слышать»),
+   номера и названия этапов на карточках, пояснения под карточками.
+   ========================================================================== */
+.process { background: var(--bg); }
+.process-stage {
+  position: relative;
+  width: min(1536px, 100%);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.process-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p4-num {
+  position: absolute;
+  left: 4.15%;
+  top: 13.4%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+.p4-num-underline {
+  position: absolute;
+  left: 4.3%;
+  top: 18.4%;
+  width: clamp(9px, 1.85cqw, 29px);
+  height: clamp(3px, 0.65cqw, 10px);
+  color: var(--wine);
+}
+
+.p4-title {
+  position: absolute;
+  left: 4.3%;
+  top: 20.5%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 5.6cqw, 86px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  transform: scaleX(0.66);
+  transform-origin: left center;
+}
+.p4-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.p4-phrase {
+  position: absolute;
+  left: 41.5%;
+  top: 27.6%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3cqw;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(10px, 1.72cqw, 26px);
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p4-hear {
+  position: relative;
+  display: inline-block;
+}
+.p4-hear-underline {
+  position: absolute;
+  left: -1.5%;
+  right: -1.5%;
+  bottom: -0.5em;
+  width: auto;
+  height: 0.4em;
+  color: var(--accent);
+}
+
+.p4-phrase { gap: 0.55cqw; }
+
+/* Этапы: номер и название — на карточке (в зоне, где на прежней
+   подложке был текст), пояснение — под карточкой, на столе. */
+.p4-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.p4-step-num,
+.p4-step-name,
+.p4-step-text { position: absolute; }
+.p4-step-num {
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(12px, 2.2cqw, 34px);
+  line-height: 1;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+}
+.p4-step-name {
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(10px, 1.5cqw, 23px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p4-step-text {
+  /* Пояснения — по одной линии под всей цепочкой: ниже стрелки петли
+     (её низ — 86% высоты) и выше мазка кисти слева внизу */
+  top: 89.3%;
+  width: 15.2%;
+  font-weight: 600;
+  font-size: clamp(9px, 1.08cqw, 17px);
+  line-height: 1.38;
+  color: var(--ink-soft);
+}
+/* Координаты — по раскладке подложки 1536×1024 */
+.p4-step-1 .p4-step-num  { left: 8.2%;  top: 54.3%; }
+.p4-step-1 .p4-step-name { left: 8.2%;  top: 60.4%; }
+.p4-step-1 .p4-step-text { left: 7.4%; }
+.p4-step-2 .p4-step-num  { left: 32.7%; top: 54.1%; }
+.p4-step-2 .p4-step-name { left: 32.7%; top: 60.2%; }
+.p4-step-2 .p4-step-text { left: 31.9%; }
+.p4-step-3 .p4-step-num  { left: 58.4%; top: 54.9%; }
+.p4-step-3 .p4-step-name { left: 58.4%; top: 61.0%; }
+.p4-step-3 .p4-step-text { left: 57.0%; }
+.p4-step-4 .p4-step-num  { left: 82.6%; top: 55.6%; }
+.p4-step-4 .p4-step-name { left: 82.6%; top: 61.5%; }
+.p4-step-4 .p4-step-text { left: 81.6%; }
+
+/* ==========================================================================
+   Экран 5 — «Что можно передать мне в работу.»
+   Собран по assets/05-services-approved.png. Шапка, правый плакат (плашка
+   «Контент-сопровождение эксперта», 8 карточек-направлений, нить, скотч,
+   скрепки, зажим, рукописные пометки) и декоративные мазки запечены в
+   images/services-bg.png (текстовые зоны левой колонки заинпейнчены).
+   Живой текст: «05», заголовок, лид-абзац, нижний смысловой блок.
+   ========================================================================== */
+.services { background: var(--bg); }
+.services-stage {
+  position: relative;
+  width: min(1536px, 100%);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.services-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p5-num {
+  position: absolute;
+  left: 2.75%;
+  top: 10.7%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+.p5-num-underline {
+  position: absolute;
+  left: 2.7%;
+  top: 15.4%;
+  width: clamp(9px, 1.85cqw, 29px);
+  height: clamp(3px, 0.65cqw, 10px);
+  color: var(--wine);
+}
+
+.p5-title {
+  position: absolute;
+  left: 2.85%;
+  top: 18.8%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85cqw;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(15px, 3.26cqw, 50px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p5-title span {
+  display: block;
+  transform: scaleX(0.88);
+  transform-origin: left center;
+}
+.p5-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.p5-lead {
+  position: absolute;
+  left: 2.8%;
+  top: 39.3%;
+  font-weight: 500;
+  font-size: clamp(8px, 1.12cqw, 17px);
+  line-height: 1.68;
+  white-space: nowrap;
+}
+.p5-lead p { margin: 0; color: var(--ink-soft); }
+.p5-lead p + p { margin-top: 0.8em; }
+.p5-lead-strong { color: var(--ink); font-weight: 700; }
+
+.p5-bottom {
+  position: absolute;
+  left: 2.75%;
+  top: 53.8%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(9px, 1.32cqw, 21px);
+  line-height: 1.3;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Экран 6 — «Кейсы.»
+   Собран по assets/06-cases-approved.png. Шапка, 3 бумажные карточки-кейса
+   (иконки, стрелки схемы, разделители), верхние/нижние рукописные пометки,
+   коллаж с глазом, красная нить, скотч и скрепки запечены в
+   images/cases-bg.png (текстовые зоны затёрты локальной медианной заливкой
+   по образцу текстуры бумаги вокруг — см. scratchpad build_bg2.py).
+   Живой текст: «06», заголовок, лид-абзацы, номера/заголовки/подписи схемы/
+   описания/ссылки «Смотреть кейс →» в каждой из 3 карточек.
+   ========================================================================== */
+.cases { background: var(--bg); }
+.cases-stage {
+  position: relative;
+  width: min(1536px, 100%);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.cases-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p6-num {
+  position: absolute;
+  left: 3.65%;
+  top: 14.35%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+  text-shadow: 0.11em 0.09em 0 rgba(20, 10, 10, 0.16);
+}
+.p6-num-underline {
+  position: absolute;
+  left: 3.5%;
+  top: 19.15%;
+  width: clamp(9px, 1.85cqw, 29px);
+  height: clamp(3px, 0.65cqw, 10px);
+  color: var(--wine);
+}
+
+.p6-title {
+  position: absolute;
+  left: 3.35%;
+  top: 19.9%;
+  margin: 0;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 6.05cqw, 93px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  transform: scaleX(0.84);
+  transform-origin: left center;
+}
+.p6-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.p6-lead1, .p6-lead2 {
+  position: absolute;
+  left: 3.75%;
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(8px, 1.09cqw, 17.6px);
+  line-height: 1.62;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p6-lead1 { top: 33.4%; }
+.p6-lead2 { top: 45.6%; }
+
+/* ---- Case cards (3x) ---------------------------------------------- */
+.p6-cnum {
+  position: absolute;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(11px, 2.3cqw, 36px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--wine);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+}
+.p6-cnum.c1 { left: 27.7%; top: 26.3%; }
+.p6-cnum.c2 { left: 51.3%; top: 25.7%; }
+.p6-cnum.c3 { left: 74.0%; top: 25.8%; }
+
+.p6-ctitle {
+  position: absolute;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05em;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(9px, 1.81cqw, 27.7px);
+  line-height: 1.12;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p6-ctitle span {
+  display: block;
+  transform: scaleX(0.9);
+  transform-origin: left center;
+}
+.p6-ctitle.c1 { left: 27.55%; top: 34.75%; }
+.p6-ctitle.c2 { left: 51.2%; top: 34.15%; }
+.p6-ctitle.c3 { left: 74.05%; top: 34.15%; }
+
+.p6-cscheme {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(6px, 0.62cqw, 9.5px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p6-cscheme.c1 { left: 26.7%; top: 46.9%; width: 19.1%; }
+.p6-cscheme.c2 { left: 50.65%; top: 46.9%; width: 18.55%; }
+.p6-cscheme.c3 { left: 73.7%; top: 46.9%; width: 19.25%; }
+
+.p6-cdesc {
+  position: absolute;
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(7px, 0.92cqw, 14.3px);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p6-cdesc.c1 { left: 26.8%; top: 59.6%; }
+.p6-cdesc.c2 { left: 50.75%; top: 59.8%; }
+.p6-cdesc.c3 { left: 73.55%; top: 59.9%; }
+
+.p6-clink {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5cqw;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(13px, 2.05cqw, 32px);
+  color: var(--wine);
+  white-space: nowrap;
+}
+.p6-clink-arrow {
+  width: clamp(14px, 1.7cqw, 27px);
+  height: auto;
+  transition: transform .2s ease;
+}
+.p6-clink:hover .p6-clink-arrow { transform: translateX(3px); }
+.p6-clink.c1 { left: 29.7%; top: 75.2%; }
+.p6-clink.c2 { left: 53.3%; top: 75.5%; }
+.p6-clink.c3 { left: 76.5%; top: 75.7%; }
+
+/* Кейс пока не опубликован: та же подпись, но не кликабельна --------- */
+.p6-clink-soon {
+  color: var(--ink-soft);
+  opacity: 0.55;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Карточка 02: имя кейса над описанием -------------------------------- */
+.p6-cdesc-name {
+  display: block;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.25em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--wine);
+  margin-bottom: 0.4em;
+}
+
+/* Карточка 02: активная ссылка «Смотреть кейс →» (кнопка) ------------- */
+button.p6-clink {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.p6-clink-active:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: 3px;
+}
+
+/* ---- Раскрывающийся кейс ASPEX (под секцией «Кейсы») ----------------
+   Обычный flow-блок вне cases-stage: плавно раскрывается через
+   grid-template-rows (0fr → 1fr), поэтому соседние секции просто
+   сдвигаются вниз — страница не ломается, JS только переключает класс
+   is-open (см. js/main.js).
+
+   Композиция левой/правой колонки построена по референсу
+   assets/a_clean_editorial_infographic_case_study_page_layo.png:
+   слева — живой HTML-текст кейса (БЫЛО/УВИДЕЛА/…), справа —
+   утверждённый коллаж (маяк в рукописном круге, скотч, стикеры-теги,
+   рукописные пометки), вставленный как готовый PNG-asset
+   images/aspex-collage.png — без пересборки средствами CSS/SVG. ------ */
+.p6-case-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  background: var(--bg);
+  transition: grid-template-rows .45s ease;
+}
+.p6-case-wrap.is-open { grid-template-rows: 1fr; }
+.p6-case-inner { overflow: hidden; min-height: 0; }
+
+.p6-case {
+  width: min(1180px, 100% - 40px);
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 56px) 0 clamp(48px, 7vw, 88px);
+  border-top: 1px solid rgba(22, 17, 15, 0.14);
+}
+
+.p6-case-head { margin-bottom: clamp(20px, 3vw, 34px); }
+.p6-case-title {
+  margin: 0;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(30px, 3.4vw, 46px);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.p6-case-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+.p6-case-tags {
+  margin: 0.4em 0 0;
+  font-weight: 600;
+  font-size: clamp(11px, 1.05vw, 14px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+.p6-case-testnote {
+  margin: 0.6em 0 0;
+  font-weight: 500;
+  font-size: clamp(10px, 0.9vw, 12px);
+  font-style: italic;
+  color: var(--ink-soft);
+  opacity: 0.6;
+}
+
+/* ---- Двухколоночная сетка: текст слева, коллаж справа ---------------- */
+.p6-case-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+
+.p6-case-block { margin: 0 0 clamp(20px, 2.2vw, 28px); }
+.p6-case-block h4 {
+  margin: 0 0 0.55em;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(13px, 1.2vw, 15px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+.p6-case-block h4::after {
+  content: "";
+  display: block;
+  width: 2.6em;
+  height: 2px;
+  margin-top: 0.14em;
+  background: var(--wine);
+}
+.p6-case-block p,
+.p6-case-block li {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.p6-case-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.p6-case-list li {
+  position: relative;
+  padding-left: 1.3em;
+}
+.p6-case-list li::before {
+  content: "+";
+  position: absolute;
+  left: 0;
+  top: -0.05em;
+  font-weight: 700;
+  color: var(--wine);
+}
+
+/* ---- «Фрагмент»: врезка-цитата с красной линией слева ---------------- */
+.p6-case-fragment {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 2vw, 26px);
+  margin: 0 0 clamp(24px, 2.6vw, 32px);
+  padding-left: clamp(14px, 1.8vw, 20px);
+  border-left: 2.5px solid var(--wine);
+}
+.p6-case-frag-label {
+  flex: 0 0 auto;
+  padding-top: 0.15em;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(12px, 1.05vw, 14px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wine);
+  white-space: nowrap;
+}
+.p6-case-quote {
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(19px, 1.9vw, 25px);
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.p6-case-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: clamp(12px, 2vw, 20px) 0 0;
+  padding: 0.85em 1.5em;
+  border: none;
+  border-radius: 3px;
+  background: var(--wine);
+  color: #fff;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(12px, 1.05vw, 14px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.p6-case-close:hover { background: var(--wine-ink); }
+.p6-case-close-x { width: 12px; height: auto; }
+
+/* ---- Правая колонка: утверждённый коллаж как готовый PNG-asset -------
+   images/aspex-collage.png — вырезан из правой части approved-макета
+   (assets/a_clean_editorial_infographic_case_study_page_layo.png).
+   Не пересобирается средствами CSS/SVG. -------------------------------- */
+.p6-case-visual-stage {
+  position: relative;
+  aspect-ratio: 595 / 1100;
+  max-width: 460px;
+  margin-left: auto;
+}
+/* images/delonghi-case-collage.png — вырезан из assets/delonghi-case-approved.png,
+   пропорции крупнее и шире, чем у коллажа ASPEX. */
+.p6-case-visual-stage-delonghi {
+  aspect-ratio: 783 / 1086;
+  max-width: 520px;
+}
+/* images/psychological-practice-collage.png — вырезан из
+   assets/01-psychological-practice-approved.png. */
+.p6-case-visual-stage-psych {
+  aspect-ratio: 630 / 1086;
+  max-width: 460px;
+}
+.p6-case-visual-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: top right;
+}
+
+@media (max-width: 860px) {
+  .p6-case-grid { grid-template-columns: 1fr; }
+  .p6-case-visual { margin-top: clamp(16px, 4vw, 28px); }
+  .p6-case-visual-stage { max-width: 380px; margin: 0 auto; }
+}
+
+@media (max-width: 640px) {
+  .p6-case-block { max-width: 100%; }
+  .p6-case-close { width: 100%; justify-content: center; }
+}
+
+/* ==========================================================================
+   Экран 7 — «Что меняется, когда контент собран в систему.»
+   Собран по assets/07-system-effect-approved.png. Шапка, обе бумажные
+   карточки (ДО / ПОСЛЕ, значки крестиков/галочек, чёрная стрелка), скрепка,
+   скотч, глаз, красная нить, чёрные чернильные точки, чёрный мазок и жёлтый
+   бумажный акцент запечены в images/system-effect-bg.png (текстовые зоны
+   затёрты локальной медианной заливкой — см. scratchpad s7_build_bg.py).
+   Живой текст: «07», заголовок (с рукописным обводом «в систему»), лид,
+   пункты и заметки карточек ДО/ПОСЛЕ, левая рукописная заметка, жёлтая
+   заметка. Стили полностью изолированы классами p7-*.
+   ========================================================================== */
+.system-effect { background: var(--bg); }
+.system-effect-stage {
+  position: relative;
+  width: min(1536px, 100%);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.system-effect-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p7-num {
+  position: absolute;
+  left: 2.6%;
+  top: 12.45%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(14px, 2.95cqw, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  transform: scaleX(0.85);
+  transform-origin: left center;
+}
+
+.p7-title {
+  position: absolute;
+  left: 2.6%;
+  top: 24.0%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35cqw;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(21px, 4.75cqw, 73px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p7-title > span {
+  display: block;
+  transform: scaleX(0.66);
+  transform-origin: left center;
+}
+.p7-circle-wrap {
+  position: relative;
+  display: inline-block;
+}
+.p7-circle {
+  position: absolute;
+  left: -0.55em;
+  right: -0.3em;
+  top: -0.04em;
+  bottom: -0.42em;
+  width: auto;
+  height: auto;
+  color: var(--accent);
+  pointer-events: none;
+}
+
+.p7-lead {
+  position: absolute;
+  left: 2.6%;
+  top: 50.0%;
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(9px, 1.24cqw, 20px);
+  line-height: 1.47;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.p7-leftnote {
+  position: absolute;
+  left: 8.5%;
+  top: 67.15%;
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(11px, 1.7cqw, 26px);
+  line-height: 1.12;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p7-leftnote-heart {
+  position: absolute;
+  left: 20.6%;
+  top: 73.6%;
+  width: clamp(16px, 2.1cqw, 32px);
+  height: auto;
+  color: var(--accent);
+}
+
+/* ---- ДО / ПОСЛЕ tabs ------------------------------------------------ */
+.p7-tab {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 800;
+  font-size: clamp(9px, 1.1cqw, 17px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #F4EFE6;
+  white-space: nowrap;
+}
+.p7-tab.do { left: 36.9%; top: 17.85%; width: 6.3%; height: 3.0%; }
+.p7-tab.posle { left: 67.95%; top: 18.25%; width: 6.15%; height: 3.0%; }
+
+/* ---- Card items (ДО / ПОСЛЕ) ---------------------------------------- */
+.p7-item {
+  position: absolute;
+  width: 16.5%;
+}
+.p7-item p {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(8px, 1.02cqw, 15.7px);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p7-item.do p strong { color: var(--ink); font-weight: 700; }
+.p7-item.posle p strong { color: var(--ink); font-weight: 700; }
+
+.p7-item.do.i1 { left: 37.2%; top: 25.6%; }
+.p7-item.do.i2 { left: 37.2%; top: 32.9%; }
+.p7-item.do.i3 { left: 37.2%; top: 40.3%; }
+.p7-item.do.i4 { left: 37.2%; top: 47.7%; }
+.p7-item.do.i5 { left: 37.2%; top: 55.0%; }
+
+.p7-item.posle.i1 { left: 68.3%; top: 25.6%; }
+.p7-item.posle.i2 { left: 68.3%; top: 32.9%; }
+.p7-item.posle.i3 { left: 68.3%; top: 40.3%; }
+.p7-item.posle.i4 { left: 68.3%; top: 47.7%; }
+.p7-item.posle.i5 { left: 68.3%; top: 55.0%; }
+
+/* ---- Bottom notes inside cards --------------------------------------- */
+.p7-note {
+  position: absolute;
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(10px, 1.35cqw, 21px);
+  line-height: 1.55;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p7-note.do { left: 36.3%; top: 63.4%; }
+.p7-note.posle { left: 67.0%; top: 63.4%; }
+.p7-note .p7-underline {
+  text-decoration: none;
+  border-bottom: 0.09em solid var(--accent);
+  padding-bottom: 0.03em;
+}
+
+/* ---- Yellow accent note ---------------------------------------------- */
+.p7-yellownote {
+  position: absolute;
+  left: 36.2%;
+  top: 75.3%;
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(16px, 2.28cqw, 35px);
+  line-height: 1.40;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p7-yellownote .p7-underline {
+  text-decoration: none;
+  border-bottom: 0.08em solid var(--ink);
+  padding-bottom: 0.02em;
+}
+
+/* ==========================================================================
+   Экран 8 — «Что делаю и как помогаю.»
+   Собран по assets/08-what-i-do-approved.png. Шапка, четыре бумажные карточки
+   с иконками и красными подчёркиваниями, рука с бордовым маркером, красная
+   нить с пинами, скотч, скрепка, бордовые фактурные пятна, чёрный мазок,
+   кляксы и все рукописные фразы («сначала слышу, потом собираю», «из мыслей —
+   в систему», «ваши смыслы в правильной форме») запечены в
+   images/what-i-do-bg.png — текстовые зоны стёрты по маске самих букв
+   (см. scratchpad s8_build_bg.py).
+   Живой текст: «08», заголовок с бордовой точкой, левый лид, заголовки и
+   описания четырёх карточек. Карточки в макете лежат под разными углами,
+   поэтому каждый блок повёрнут отдельно. Стили изолированы классами p8-*.
+   ========================================================================== */
+.what-i-do { background: var(--bg); }
+.what-i-do-stage {
+  position: relative;
+  width: min(1536px, 100%);
+  margin-inline: auto;
+  aspect-ratio: 1536 / 1024;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.what-i-do-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.p8-num {
+  position: absolute;
+  left: 4.232%;
+  top: 17.70%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 3.4505cqw;
+  line-height: 1;
+  color: var(--p8-red);
+  transform: scaleX(0.62);
+  transform-origin: left top;
+}
+
+.p8-title {
+  position: absolute;
+  left: 4.297%;
+  top: 25.63%;
+  margin: 0;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 6.30cqw;
+  line-height: 5.75cqw;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p8-title > span {
+  display: block;
+  transform: scaleX(0.5);
+  transform-origin: left center;
+}
+.p8-title em {
+  font-style: normal;
+  color: var(--p8-red);
+}
+
+.p8-lead {
+  position: absolute;
+  left: 4.688%;
+  top: 48.83%;
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.7253cqw;
+  line-height: 2.2461cqw;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ---- Карточки: заголовки ---------------------------------------------- */
+.p8-ctitle {
+  position: absolute;
+  margin: 0;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  transform-origin: left top;
+}
+.p8-ctitle > span {
+  display: block;
+  transform: scaleX(0.85);
+  transform-origin: left center;
+}
+
+.p8-ctitle.c1 {
+  left: 35.547%; top: 23.28%;
+  font-size: 2.1875cqw; line-height: 2.6693cqw;
+  transform: rotate(-6.2deg);
+}
+.p8-ctitle.c2 {
+  left: 78.125%; top: 23.61%;
+  font-size: 2.4089cqw; line-height: 2.6693cqw;
+  transform: rotate(4.6deg);
+}
+.p8-ctitle.c3 {
+  left: 36.914%; top: 57.14%;
+  font-size: 2.4609cqw; line-height: 2.5781cqw;
+  transform: rotate(0.3deg);
+}
+.p8-ctitle.c4 {
+  left: 77.174%; top: 59.02%;
+  font-size: 2.1745cqw; line-height: 2.4089cqw;
+  transform: rotate(-0.5deg);
+}
+
+/* ---- Карточки: описания ----------------------------------------------- */
+.p8-cdesc {
+  position: absolute;
+  margin: 0;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  transform-origin: left top;
+}
+.p8-cdesc.c1 {
+  left: 37.031%; top: 34.51%;
+  font-size: 1.2044cqw; line-height: 2.0182cqw;
+  transform: rotate(-5deg);
+}
+.p8-cdesc.c2 {
+  left: 77.832%; top: 34.64%;
+  font-size: 1.1719cqw; line-height: 2.1484cqw;
+  transform: rotate(5.25deg);
+}
+.p8-cdesc.c3 {
+  left: 36.719%; top: 68.36%;
+  font-size: 1.5169cqw; line-height: 1.7578cqw;
+  transform: rotate(0deg);
+}
+.p8-cdesc.c4 {
+  left: 77.507%; top: 70.82%;
+  font-size: 1.5365cqw; line-height: 1.7253cqw;
+  transform: rotate(-0.2deg);
+}
+
+/* ---- Контактный блок в нижней зоне экрана 08 (добавлено) --------------
+   Живёт вне .what-i-do-stage (вне масштабируемого «постера»), обычным
+   flow-блоком — поэтому на мобильных строки естественно идут друг под
+   другом и не выходят за экран, без отдельных media-запросов. -------- */
+.p8-contact {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 56px) 20px clamp(40px, 6vw, 72px);
+  text-align: center;
+}
+.p8-contact-text {
+  font-weight: 500;
+  font-size: clamp(14px, 1.6vw, 18px);
+  line-height: 1.5;
+  color: var(--ink);
+}
+.p8-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(18px, 2.4vw, 28px);
+  padding: 0.85em 1.6em;
+  border-radius: 999px;
+  background: var(--wine);
+  color: #fff;
+  font-weight: 700;
+  font-size: clamp(13px, 1.15vw, 16px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background .2s ease, transform .2s ease;
+}
+.p8-contact-btn:hover {
+  background: var(--wine-ink);
+  transform: translateY(-1px);
+}
+.p8-contact-btn-arrow {
+  width: 20px;
+  height: auto;
+  transition: transform .2s ease;
+}
+.p8-contact-btn:hover .p8-contact-btn-arrow { transform: translateX(3px); }
+
+.p8-contact-list {
+  list-style: none;
+  margin: clamp(20px, 2.6vw, 28px) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(12px, 1.05vw, 14px);
+  color: var(--ink-soft);
+}
+.p8-contact-list a {
+  color: var(--wine);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-word;
+}
+.p8-contact-list a:hover { color: var(--wine-ink); }
+
+/* ==========================================================================
+   МОБИЛЬНАЯ ВЕРСИЯ (<= 700px)
+   ==========================================================================
+   Десктоп не затрагивается: все правила ниже живут внутри медиазапроса,
+   а мобильная разметка (.m-screen) на десктопе скрыта правилом ниже.
+
+   Подход: вместо того чтобы сжимать десктопный постер 3:2 целиком, на
+   телефоне «сцена» экрана прячется, а контент выкладывается обычным
+   вертикальным потоком. Изображения не перерисовывались — нужные фрагменты
+   утверждённых подложек вырезаются средствами CSS (background-position).
+   ========================================================================== */
+
+.m-screen { display: none; }
+
+/* На десктопе бургера нет, а обёртка меню не создаёт собственного бокса —
+   .nav и .top-cta остаются прямыми потомками .site-header-inner. */
+.nav-toggle { display: none; }
+.site-nav-panel { display: contents; }
+
+@media (max-width: 700px) {
+
+  /* ---- Шапка: 56px, логотип слева, бургер справа ---------------------- */
+  :root { --bar-h: 56px; }
+
+  .site-header {
+    height: 56px;
+    border-bottom: 1px solid rgba(22, 17, 15, 0.08);
+    transition: background-color .25s linear, transform .28s ease;
+  }
+  /* Прокрутка вниз — шапка уезжает, вверх — возвращается (js/main.js).
+     В самом верху страницы всегда видна. */
+  .site-header.is-hidden { transform: translateY(-100%); }
+
+  .site-header-inner { container-type: normal; }
+
+  .brand { left: 16px; top: 50%; transform: translateY(-50%); }
+  .brand-name { font-size: 14px; letter-spacing: 0.12em; }
+  .brand-role { font-size: 9px; letter-spacing: 0.09em; margin-top: 2px; }
+
+  /* Бургер — зона нажатия 48x48 */
+  .nav-toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-toggle-bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--wine);
+    border-radius: 2px;
+    transition: transform .25s ease, opacity .2s ease;
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ---- Выпадающее меню ------------------------------------------------ */
+  .site-nav-panel {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 56px;
+    z-index: 120;
+    padding: 6px 0 14px;
+    background: var(--header-paper, var(--bg));
+    box-shadow: 0 16px 28px rgba(22, 17, 15, 0.16);
+    transform: translateY(-115%);
+    transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+    visibility: hidden;
+  }
+  .site-nav-panel.is-open { transform: none; visibility: visible; }
+
+  .nav {
+    position: static;
+    transform: none;
+    display: block;
+    gap: 0;
+  }
+  .nav a {
+    display: block;
+    padding: 15px 20px;
+    font-size: 17px;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(22, 17, 15, 0.07);
+  }
+  .nav a::after { display: none; }
+
+  .top-cta {
+    position: static;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px 20px 15px;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+  }
+  .top-cta-arrow { width: 30px; }
+  .top-cta-underline { display: none; }
+
+  /* Затемнение под панелью — закрывает меню по тапу вне её.
+     z-index строго меньше, чем у .site-header (100): шапка создаёт свой
+     контекст наложения, поэтому z-index панели внутри неё не может
+     перебить слой, лежащий выше шапки — затемнение перекрыло бы меню. */
+  .nav-scrim {
+    position: fixed;
+    inset: 56px 0 0;
+    z-index: 90;
+    background: rgba(22, 17, 15, 0.32);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .28s ease, visibility .28s;
+  }
+  .nav-scrim.is-open { opacity: 1; visibility: visible; }
+
+  /* ---- Переключение раскладок ---------------------------------------- */
+  .hero-stage,
+  .cases-stage { display: none; }
+
+  .m-screen {
+    display: block;
+    /* Верхний отступ 58px: номер экрана начинается ниже 56-пиксельной
+       шапки и не уходит под неё при ручной прокрутке вверх. Нижний
+       уменьшен с 44 до 20, поэтому промежуток между экранами почти
+       не изменился: было 44+28=72px, стало 20+58=78px. */
+    padding: 58px 20px 20px;
+    /* Подложка экрана подключается, когда экран подходит к окну
+       (класс is-near ставит js/main.js). Размеры всех фрагментов
+       заданы через aspect-ratio, поэтому появление картинки не меняет
+       вёрстку и не сдвигает страницу. */
+    --plate: none;
+  }
+  .problem       .m-screen.is-near { --plate: url(../images/problem-bg.webp); }
+  .system        .m-screen.is-near { --plate: url(../images/system-bg.webp); }
+  .process       .m-screen.is-near { --plate: url(../images/process-bg.webp); }
+  .services      .m-screen.is-near { --plate: url(../images/services-bg.webp); }
+  .cases         .m-screen.is-near { --plate: url(../images/cases-bg.webp); }
+  .system-effect .m-screen.is-near { --plate: url(../images/system-effect-bg.webp); }
+  .what-i-do     .m-screen.is-near { --plate: url(../images/what-i-do-bg.webp); }
+  /* Первый экран — единственный, который открывается «из-под» шапки,
+     поэтому ему нужен отступ на её высоту. */
+  .hero .m-screen  { background: #EDE6DD; padding: 80px 20px 44px; }
+  .cases .m-screen { background: #EEE4DC; }
+
+  /* Переходы из меню: верх секции не должен уезжать под шапку. */
+  .hero, .problem, .system, .process,
+  .services, .cases, .system-effect, .what-i-do { scroll-margin-top: 56px; }
+  #contact { scroll-margin-top: 68px; }
+
+  /* Общая типографика мобильной раскладки */
+  .m-lead {
+    margin: 0 0 14px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .m-lead-strong { color: var(--ink); font-weight: 600; }
+
+  /* ---- Экран 01 -------------------------------------------------------- */
+  .m-hero-title {
+    margin: 0;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: clamp(40px, 12.4vw, 60px);
+    line-height: 0.98;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  .m-hero-sub {
+    margin: 6px 0 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(21px, 6.4vw, 31px);
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  /* Кадр с портретным коллажем, вырезан из подложки первого экрана */
+  .m-hero-visual {
+    position: relative;
+    margin: 18px 0 20px;
+    aspect-ratio: 3 / 4.5;
+    overflow: hidden;
+    border-radius: 2px;
+  }
+  .m-hero-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 50%;
+  }
+
+  .m-hero-lead {
+    margin: 0 0 24px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  /* Кнопка «Сверим мысли» — оригинальный бордовый мазок с надписью
+     и стрелкой, вырезанный из images/hero-bg.webp (x 46-432, y 676-826
+     из 1536x1024, с полями вокруг мазка). Ссылка живая, вся площадь
+     кликабельна. */
+  .m-btn {
+    display: block;
+    width: min(348px, 100%);
+    aspect-ratio: 386 / 150;
+    background-image: url(../images/hero-bg.webp);
+    background-repeat: no-repeat;
+    background-size: 397.93% auto;      /* 1536 / 386 */
+    background-position: 4.0% 77.35%;   /* 46/(1536-386), 676/(1024-150) */
+    transition: transform .15s ease, filter .15s ease;
+  }
+  .m-btn:active {
+    transform: translateY(1px);
+    filter: drop-shadow(0 6px 14px rgba(60, 6, 20, 0.28));
+  }
+
+  /* ---- Экран 06 -------------------------------------------------------- */
+  .m-sec-head { display: flex; align-items: baseline; gap: 12px; }
+  .m-sec-num {
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--wine);
+    border-bottom: 2px solid var(--wine);
+    padding-bottom: 2px;
+  }
+  .m-sec-title {
+    margin: 0;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: clamp(34px, 10.5vw, 48px);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .m-sec-title em { color: var(--accent); font-style: normal; }
+  .m-sec-head + .m-lead { margin-top: 18px; }
+
+  /* Рукописная пометка «смысл — в связях, а не в словах» с глазом:
+     фрагмент images/cases-bg.webp, вырезан по координатам 25,575 - 300,745
+     из исходных 1536x1024. */
+  .m-note {
+    width: 190px;
+    height: 100px;
+    margin: 4px 0 26px -6px;
+    transform: rotate(-1.6deg);
+    background-image: var(--plate);
+    background-repeat: no-repeat;
+    background-size: 558.5% auto;
+    background-position: 1.98% 65.4%;
+  }
+
+  /* Карточка кейса — бумага, лёгкий наклон, как в утверждённом коллаже */
+  /* Карточка кейса. Фон — бумага своей карточки из images/cases-bg.webp
+     (чистая полоса y 600-730, растянутая на высоту карточки; боковые
+     рваные срезы входят в кадр). Сверху и снизу — настоящие рваные
+     кромки той же карточки (y 214-246 и y 830-862). Ничего не
+     дорисовывалось: все три фрагмента взяты из утверждённой подложки. */
+  .m-card {
+    position: relative;
+    margin: 0 0 26px;
+    padding: 40px 26px 12px;
+    background: #F1E9E0;
+    box-shadow: 0 14px 26px rgba(22, 17, 15, 0.13);
+  }
+  .m-card > *:not(.m-card-paper) { position: relative; z-index: 2; }
+
+  .m-card-paper {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .m-card-paper img {
+    position: absolute;
+    max-width: none;
+    width: 457.14%;    /* 1536 / 336 — ширина карточки в подложке */
+    height: 787.69%;   /* 1024 / 130 — полоса чистой бумаги на всю высоту */
+  }
+
+  /* Рваные кромки — поверх бумаги, под текстом */
+  .m-card::before,
+  .m-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    aspect-ratio: 336 / 32;
+    z-index: 1;
+    background-image: var(--plate);
+    background-repeat: no-repeat;
+    background-size: 457.14% auto;
+    pointer-events: none;
+  }
+  .m-card::before { top: 0;    background-position-y: 21.57%; }  /* y 214 */
+  .m-card::after  { bottom: 0; background-position-y: 83.67%; }  /* y 830 */
+
+  /* Каждая карточка берёт бумагу и кромки своей карточки из подложки */
+  .m-card-1 { transform: rotate(-0.5deg); }
+  .m-card-2 { transform: rotate(0.45deg); }
+  .m-card-3 { transform: rotate(-0.35deg); }
+  .m-card-1 .m-card-paper img { left: -116.67%; top: -461.54%; }  /* x 392, y 600 */
+  .m-card-2 .m-card-paper img { left: -223.21%; top: -461.54%; }  /* x 750 */
+  .m-card-3 .m-card-paper img { left: -327.38%; top: -461.54%; }  /* x 1100 */
+  .m-card-1::before, .m-card-1::after { background-position-x: 32.67%; }
+  .m-card-2::before, .m-card-2::after { background-position-x: 62.50%; }
+  .m-card-3::before, .m-card-3::after { background-position-x: 91.67%; }
+
+  .m-card-num {
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--wine);
+  }
+  .m-card-title {
+    margin: 8px 0 16px;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 1.12;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  /* Иконки схемы «Было · Увидела · Спросила · Нашла · Сделала» —
+     фрагменты images/cases-bg.webp (полоса y 468-586, своя для каждой
+     карточки). Новых изображений не создавалось. */
+  .m-scheme {
+    aspect-ratio: 316 / 118;
+    background-image: var(--plate);
+    background-repeat: no-repeat;
+    background-size: 486.08% auto;
+    background-position-y: 51.66%;
+  }
+  .m-scheme-1 { background-position-x: 32.79%; }
+  .m-scheme-2 { background-position-x: 62.62%; }
+  .m-scheme-3 { background-position-x: 91.97%; }
+
+  /* Подписи схемы: 13px и перенос по словам. На 360px строка ложится
+     в две строки — все пять подписей сохранены и читаемы. */
+  .m-card-scheme-words {
+    margin: 8px 0 16px;
+    font-size: 13px;
+    line-height: 1.45;
+    text-wrap: balance;       /* перенос делит подписи поровну, без сироты */
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: rgba(22, 17, 15, 0.66);
+  }
+
+  .m-card-desc {
+    margin: 0 0 6px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .m-card-name {
+    display: block;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    color: var(--wine);
+    margin-bottom: 4px;
+  }
+
+  .m-card-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 52px;
+    margin-top: 10px;
+    padding: 0;
+    border: 0;
+    border-top: 1px solid rgba(110, 27, 39, 0.28);
+    background: none;
+    cursor: pointer;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--wine);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .m-card-link svg { width: 28px; height: auto; }
+
+
+  /* ======================================================================
+     Экраны 02, 03, 04 — мобильная раскладка (этап 2)
+     ====================================================================== */
+  .problem-stage,
+  .system-stage,
+  .process-stage { display: none; }
+
+  .problem .m-screen { background: #E8E1DB; }
+  .system  .m-screen { background: #E7DFD9; }
+  .process .m-screen { background: #E7DFDA; }
+
+  /* Заголовок в две-три строки — чуть мельче основного */
+  .m-sec-title-sm { font-size: clamp(27px, 8.2vw, 38px); line-height: 1.08; }
+  .m-sec-title span { display: block; }
+  .m-sec-head + .m-sec-title { margin-top: 10px; }
+  .m-sec-title + .m-lead { margin-top: 18px; }
+
+  /* Общие фрагменты подложек */
+  .m-collage, .m-hand, .m-paper-note {
+    background-repeat: no-repeat;
+    width: 100%;
+  }
+  .m-collage { margin: 22px 0 20px; }
+  .m-hand    { margin: 2px 0 22px; }
+  .m-paper-note { margin: 22px 0 4px; }
+
+  /* Рукописные пометки — уже полной ширины, с лёгким наклоном */
+  .m-hand-02 { width: 78%; transform: rotate(-1.2deg); }
+  .m-hand-03a { width: 62%; margin-left: auto; margin-right: 6%; transform: rotate(-1.5deg); }
+  .m-hand-03b { width: 74%; transform: rotate(-1deg); }
+  .m-paper-note-03 { width: 100%; }
+
+  /* Финальная мысль экрана 02 */
+  .m-final {
+    margin: 4px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .m-final-strong {
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: clamp(19px, 5.6vw, 26px);
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .m-final-italic {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(18px, 5.2vw, 25px);
+    color: var(--ink);
+  }
+
+  /* Ведущая фраза экрана 04 */
+  .m-phrase {
+    margin: 16px 0 18px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .m-phrase-hear {
+    white-space: nowrap;
+    border-bottom: 2.5px solid var(--accent);
+    padding-bottom: 1px;
+  }
+
+  /* ---- Цепочка / шаги: восемь пунктов сверху вниз ------------------- */
+  .m-chain {
+    list-style: none;
+    margin: 24px 0 8px;
+    padding: 0;
+  }
+  .m-chain-item,
+  .m-step-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+  }
+  /* Красная нить между пунктами — как на утверждённом макете */
+  .m-chain-item::after,
+  .m-step-item::after {
+    content: "";
+    position: absolute;
+    left: 33px;
+    top: calc(50% + 34px);
+    width: 2px;
+    height: calc(100% - 68px);
+    background: var(--accent);
+    opacity: 0.55;
+  }
+  .m-chain-item:last-child::after,
+  .m-step-item:last-child::after { display: none; }
+
+  .m-chain-ico,
+  .m-step-ico {
+    flex: 0 0 auto;
+    width: 68px;
+    height: 68px;
+    border-radius: 2px;
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 10px rgba(22, 17, 15, 0.12);
+  }
+  .m-chain-text,
+  .m-step-text {
+    display: block;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .m-chain-num,
+  .m-step-num {
+    display: block;
+    font-size: 14px;
+    color: var(--wine);
+    margin-bottom: 3px;
+  }
+
+  /* Иконки цепочки экрана 03 — фрагменты images/system-bg.webp */
+  .m-chain-ico { background-image: var(--plate);
+    background-size: 1324.14% auto; background-position-y: 75.11%; }
+  .m-chain-ico-1 { background-position-x: 2.11%; }
+  .m-chain-ico-2 { background-position-x: 13.87%; }
+  .m-chain-ico-3 { background-position-x: 27.96%; }
+  .m-chain-ico-4 { background-position-x: 41.48%; }
+  .m-chain-ico-5 { background-position-x: 53.24%; }
+  .m-chain-ico-6 { background-position-x: 65.92%; }
+  .m-chain-ico-7 { background-position-x: 78.59%; }
+  .m-chain-ico-8 { background-position-x: 93.94%; }
+
+  /* Иконки этапов экрана 04 — фрагменты images/process-bg.webp
+     (квадрат 112×112 px подложки вокруг иконки на карточке) */
+  .m-step-ico { background-image: var(--plate);
+    background-size: 1371.43% auto; }
+  .m-step-ico-1 { background-position: 10.60% 73.68%; }
+  .m-step-ico-2 { background-position: 36.24% 74.45%; }
+  .m-step-ico-3 { background-position: 64.04% 74.45%; }
+  .m-step-ico-4 { background-position: 90.66% 75.55%; }
+  /* Пояснение к этапу — под названием, обычным текстом */
+  .m-step-desc {
+    display: block;
+    margin-top: 5px;
+    font-family: "Manrope", Arial, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-soft);
+  }
+
+  .m-collage-02 {
+    aspect-ratio: 830 / 505;
+    background-image: var(--plate);
+    background-size: 185.06% auto;
+    background-position: 52.41% 56.84%;
+  }
+  .m-hand-02 {
+    aspect-ratio: 235 / 105;
+    background-image: var(--plate);
+    background-size: 653.62% auto;
+    background-position: 7.30% 85.96%;
+  }
+  .m-hand-03a {
+    aspect-ratio: 195 / 117;
+    background-image: var(--plate);
+    background-size: 787.69% auto;
+    background-position: 50.34% 41.35%;
+  }
+  .m-hand-03b {
+    aspect-ratio: 270 / 95;
+    background-image: var(--plate);
+    background-size: 568.89% auto;
+    background-position: 46.60% 91.50%;
+  }
+  .m-paper-note-03 {
+    aspect-ratio: 355 / 165;
+    background-image: var(--plate);
+    background-size: 432.68% auto;
+    background-position: 92.29% 25.61%;
+  }
+
+
+  /* ======================================================================
+     Экраны 05, 07, 08 — мобильная раскладка (этап 3)
+     ====================================================================== */
+  .services-stage,
+  .system-effect-stage,
+  .what-i-do-stage { display: none; }
+
+  .services      .m-screen { background: #F3EEE9; }
+  .system-effect .m-screen { background: #F2ECE2; }
+  .what-i-do     .m-screen { background: #ECE4DC; padding-bottom: 20px; }
+
+  /* Плашка «Контент-сопровождение эксперта» */
+  .m-banner { width: 100%; margin: 20px 0 22px; }
+
+  .m-bottom {
+    margin: 4px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+
+  .m-hand-05a { width: 74%; margin-left: auto; margin-right: 2%; transform: rotate(-1.4deg); }
+  .m-hand-05b { width: 54%; transform: rotate(-1.5deg); }
+  .m-hand-05c { width: 86%; transform: rotate(-1deg); }
+  .m-hand-08a { width: 70%; margin-left: auto; margin-right: 4%; transform: rotate(-1.5deg); }
+  .m-hand-08b { width: 84%; transform: rotate(-1.2deg); }
+
+  /* Карточки услуг — тот же приём, что у цепочки экранов 03 и 04 */
+  .m-svc-item { position: relative; display: flex; align-items: center; gap: 16px; padding: 12px 0; }
+  .m-svc-item::after {
+    content: ""; position: absolute; left: 33px; top: calc(50% + 34px);
+    width: 2px; height: calc(100% - 68px); background: var(--accent); opacity: 0.5;
+  }
+  .m-svc-item:last-child::after { display: none; }
+  .m-svc-ico {
+    flex: 0 0 auto; width: 68px; height: 68px; border-radius: 2px;
+    background-repeat: no-repeat; box-shadow: 0 4px 10px rgba(22, 17, 15, 0.12);
+  }
+  .m-svc-text {
+    display: block; font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700; font-size: 17px; line-height: 1.2; letter-spacing: 0.02em;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .m-svc-num { display: block; font-size: 14px; color: var(--wine); margin-bottom: 3px; }
+
+  /* ---- Экран 07: «До» и «После» друг под другом -------------------- */
+  .m-sidenote {
+    margin: 18px 0 26px;
+    padding-left: 16px;
+    border-left: 3px solid var(--wine);
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic; font-weight: 700;
+    font-size: 18px; line-height: 1.45; color: var(--ink);
+  }
+
+  .m-vs {
+    position: relative;
+    margin: 0 0 26px;
+    padding: 22px 20px 4px;
+    background: #F6F1E9;
+    box-shadow: 0 12px 24px rgba(22, 17, 15, 0.10);
+  }
+  .m-vs-do    { border-left: 4px solid var(--ink); }
+  .m-vs-posle { border-left: 4px solid var(--accent); }
+
+  /* Плашка-заголовок: бордовый и чёрный мазки из подложки */
+  .m-vs-tab {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 116px; height: 38px; margin-bottom: 16px;
+    background-repeat: no-repeat; background-size: 100% 100%;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700; font-size: 16px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #F6F1E9;
+  }
+  .m-vs-tab-do,
+  .m-vs-tab-posle { background-size: 100% 100%; }
+
+  .m-vs-list { list-style: none; margin: 0; padding: 0; }
+  .m-vs-list li {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 0 0 16px;
+  }
+  .m-vs-mark {
+    flex: 0 0 auto; width: 26px; height: 26px; margin-top: 1px;
+    background-repeat: no-repeat; background-size: contain;
+  }
+  .m-vs-list p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink-soft); }
+  .m-vs-list strong { color: var(--ink); font-weight: 700; }
+
+  .m-vs-note {
+    margin: 4px 0 0;
+    padding: 14px 0 18px;
+    border-top: 1px solid rgba(22, 17, 15, 0.12);
+    font-weight: 700; font-size: 16px; line-height: 1.5; color: var(--ink);
+  }
+  .m-u { border-bottom: 2px solid var(--accent); padding-bottom: 1px; }
+
+  /* Жёлтая заметка — настоящая бумага из подложки, растянутая под текст */
+  .m-yellow { position: relative; margin: 4px 0 0; padding: 20px 20px 22px; }
+  .m-yellow-paper { position: absolute; inset: 0; overflow: hidden; z-index: 0; }
+  .m-yellow-paper img { position: absolute; max-width: none; }
+  .m-yellow p {
+    position: relative; z-index: 1; margin: 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700; font-size: 18px; line-height: 1.45; color: var(--ink);
+  }
+
+  /* ---- Экран 08 ------------------------------------------------------ */
+  .m-collage-08 { width: 100%; margin: 6px 0 24px; }
+
+  .m-do { list-style: none; margin: 8px 0 22px; padding: 0; }
+  .m-do-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(22, 17, 15, 0.10);
+  }
+  .m-do-item:last-child { border-bottom: 0; }
+  .m-do-ico {
+    flex: 0 0 auto; width: 62px; height: 62px; border-radius: 2px;
+    background-repeat: no-repeat;
+  }
+  .m-do-title {
+    margin: 0 0 6px;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700; font-size: 19px; line-height: 1.15;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .m-do-desc { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink-soft); }
+
+  /* Контактный блок — общий с десктопом, поджимаем поля */
+  .p8-contact { padding: 30px 20px 44px; }
+  .p8-contact-text { font-size: 17px; line-height: 1.55; }
+  .p8-contact-btn { min-height: 54px; font-size: 15px; }
+  .p8-contact-list { font-size: 15px; line-height: 1.9; gap: 0; }
+  /* Зона нажатия ссылок — 44px по высоте; сам текст не меняется */
+  .p8-contact-list a { display: inline-block; line-height: 44px; }
+
+  .m-banner-05 {
+    aspect-ratio: 735 / 80;
+    background-image: var(--plate);
+    background-size: 208.84% auto;
+    background-position: 76.88% 15.36%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-05a {
+    aspect-ratio: 270 / 50;
+    background-image: var(--plate);
+    background-size: 568.52% auto;
+    background-position: 67.19% 24.13%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-05b {
+    aspect-ratio: 190 / 120;
+    background-image: var(--plate);
+    background-size: 807.89% auto;
+    background-position: 8.18% 74.12%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-05c {
+    aspect-ratio: 310 / 70;
+    background-image: var(--plate);
+    background-size: 495.16% auto;
+    background-position: 63.67% 91.72%;
+    background-repeat: no-repeat;
+  }
+  .m-vs-x {
+    aspect-ratio: 48 / 48;
+    background-image: var(--plate);
+    background-size: 3197.92% auto;
+    background-position: 34.63% 25.92%;
+    background-repeat: no-repeat;
+  }
+  .m-vs-v {
+    aspect-ratio: 48 / 48;
+    background-image: var(--plate);
+    background-size: 3197.92% auto;
+    background-position: 66.78% 25.92%;
+    background-repeat: no-repeat;
+  }
+  .m-collage-08 {
+    aspect-ratio: 390 / 460;
+    background-image: var(--plate);
+    background-size: 393.85% auto;
+    background-position: 64.57% 67.38%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-08a {
+    aspect-ratio: 265 / 125;
+    background-image: var(--plate);
+    background-size: 579.62% auto;
+    background-position: 70.42% 13.90%;
+    background-repeat: no-repeat;
+  }
+  .m-hand-08b {
+    aspect-ratio: 305 / 115;
+    background-image: var(--plate);
+    background-size: 503.61% auto;
+    background-position: 8.53% 73.16%;
+    background-repeat: no-repeat;
+  }
+  .m-vs-tab-do {
+    aspect-ratio: 175 / 44;
+    background-image: var(--plate);
+    background-size: 877.14% auto;
+    background-position: 38.60% 18.16%;
+    background-repeat: no-repeat;
+  }
+  .m-vs-tab-posle {
+    aspect-ratio: 185 / 44;
+    background-image: var(--plate);
+    background-size: 829.73% auto;
+    background-position: 73.70% 18.16%;
+    background-repeat: no-repeat;
+  }
+  .m-svc-ico { background-image: var(--plate);
+    background-size: 1598.96% auto; }
+  .m-svc-ico-1 { background-position: 40.10% 47.95%; }
+  .m-svc-ico-2 { background-position: 55.66% 47.95%; }
+  .m-svc-ico-3 { background-position: 72.62% 47.95%; }
+  .m-svc-ico-4 { background-position: 87.77% 47.95%; }
+  .m-svc-ico-5 { background-position: 40.24% 78.45%; }
+  .m-svc-ico-6 { background-position: 55.59% 78.45%; }
+  .m-svc-ico-7 { background-position: 72.55% 78.45%; }
+  .m-svc-ico-8 { background-position: 87.77% 78.45%; }
+  .m-do-ico { background-image: var(--plate);
+    background-size: 1476.92% auto; }
+  .m-do-ico-1 { background-position: 49.44% 22.83%; }
+  .m-do-ico-2 { background-position: 93.85% 26.52%; }
+  .m-do-ico-3 { background-position: 49.44% 59.35%; }
+  .m-do-ico-4 { background-position: 93.65% 62.50%; }
+  .m-yellow-paper img {
+    width: 216.20%;
+    height: 640.00%;
+    left: -73.24%;
+    top: -493.75%;
+  }
+
+  /* ---- Раскрытый кейс: читаемые размеры ------------------------------- */
+  .p6-case { padding: 26px 0 40px; }
+  .p6-case-title { font-size: 30px; }
+  .p6-case-tags { font-size: 13px; }
+  .p6-case-block h4 { font-size: 15px; }
+  .p6-case-block p,
+  .p6-case-list { font-size: 16px; line-height: 1.55; }
+  .p6-case-quote { font-size: 19px; line-height: 1.5; }
+  .p6-case-frag-label { font-size: 13px; }
+  .p6-case-close { min-height: 52px; font-size: 15px; }
+  .p6-case-visual-stage,
+  .p6-case-visual-stage-psych,
+  .p6-case-visual-stage-delonghi { max-width: 100%; margin: 0 auto; }
+}

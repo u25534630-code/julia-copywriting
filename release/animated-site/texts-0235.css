@@ -1,0 +1,407 @@
+/* ==========================================================================
+   ЭКРАНЫ 02, 03, 05 — утверждённые тексты (прототип)
+   CONTENT_APPROVED_02.md, CONTENT_APPROVED_03.md, CONTENT_APPROVED_05.md.
+   Поверх стилей основного сайта; основной сайт не меняется.
+   Подложки со стёртыми старыми надписями — fragments/*-v2.webp
+   (tools/build_plate_0203.py).
+   ========================================================================== */
+
+/* ---- Экран 02 ------------------------------------------------------------ */
+/* Заголовок в три строки; нарисованный красный штрих подложки ложится
+   под «отличаетесь.» */
+.p2-title {
+  top: 13.9%;
+  font-size: clamp(16px, 3.85cqw, 60px);
+  line-height: 0.95;
+}
+.p2-lead {
+  top: 34.4%;
+  font-size: clamp(9px, 1.1cqw, 17px);
+  line-height: 1.42;
+}
+.p2-lead p + p { margin-top: 0.8em; }
+
+/* Рукописные пометки — тем же почерком и цветом, что на подложке */
+.p2-hand-note,
+.p2-hand-caption {
+  position: absolute;
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", cursive;
+  font-weight: 600;
+  line-height: 1.08;
+  color: #9e1b2d;
+  white-space: nowrap;
+  transform-origin: left center;
+}
+.p2-hand-note {
+  left: 9.1%;
+  top: 77.6%;
+  font-size: clamp(12px, 2.0cqw, 31px);
+  transform: rotate(-5deg);
+}
+.p2-hand-caption {
+  left: 38.0%;
+  top: 79.6%;
+  font-size: clamp(10px, 1.5cqw, 23px);
+  transform: rotate(-8deg);
+}
+
+.p2-final-italic {
+  font-size: clamp(11px, 2.1cqw, 32px);
+  line-height: 1.16;
+}
+
+@media (min-width: 701px) {
+  .motion-ready .p2-hand-note,
+  .motion-ready .p2-hand-caption { opacity: 0; }
+  .motion-ready .problem-stage.is-revealed .p2-hand-note,
+  .motion-ready .problem-stage.is-revealed .p2-hand-caption {
+    opacity: 1;
+    animation: mo-wipe .9s cubic-bezier(.4,0,.3,1) both;
+  }
+  .motion-ready .problem-stage.is-revealed .p2-hand-note    { animation-delay: 1.05s; }
+  .motion-ready .problem-stage.is-revealed .p2-hand-caption { animation-delay: 1.35s; }
+
+  .motion-ready .problem-stage.is-revealed .p2-title span:nth-child(3) {
+    animation-name: mo-settle-x; animation-duration: .9s; animation-delay: .49s;
+  }
+  .motion-ready .problem-stage.is-revealed .p2-lead p:nth-child(3) {
+    animation-name: mo-settle; animation-duration: .8s; animation-delay: .85s;
+  }
+  .motion-lite .problem-stage.is-revealed .p2-title span:nth-child(3),
+  .motion-lite .problem-stage.is-revealed .p2-lead p:nth-child(3) { animation-name: mo-settle-lite; }
+}
+
+@media (max-width: 700px) {
+  /* Подложка прототипа. Не через --plate: url() внутри переменной
+     считается от css/style.css, где переменная используется. */
+  .problem .m-screen.is-near .m-collage-02,
+  .problem .m-screen.is-near .m-hand-02 { background-image: url(fragments/problem-bg-v2.webp); }
+
+  .m-hand-caption-02 {
+    margin: -8px 0 14px auto;
+    width: max-content;
+    font-family: "Caveat", "Playfair Display", cursive;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.1;
+    color: #9e1b2d;
+    transform: rotate(-3deg);
+  }
+  /* Листок-пометка: бумага — фрагмент подложки, надпись живая */
+  .m-hand-02 {
+    position: relative;
+    container-type: inline-size;
+  }
+  .m-hand-text-02 {
+    position: absolute;
+    left: 15%;
+    top: 16%;
+    width: 72%;
+    margin: 0;
+    font-family: "Caveat", "Playfair Display", cursive;
+    font-weight: 600;
+    font-size: 8.4cqw;
+    line-height: 1.08;
+    color: #9e1b2d;
+    transform: rotate(-4deg);
+  }
+}
+
+/* ---- Экран 03 ------------------------------------------------------------ */
+.p3-title span { white-space: nowrap; }
+.p3-lead {
+  top: 36.6%;
+  font-size: clamp(9px, 1.1cqw, 17px);
+  line-height: 1.42;
+}
+.p3-lead p { margin: 0; }
+.p3-lead p + p { margin-top: 0.55em; }
+
+.p3-hand {
+  position: absolute;
+  left: 44.6%;
+  top: 37.2%;
+  margin: 0;
+  font-family: "Caveat", "Playfair Display", cursive;
+  font-weight: 600;
+  font-size: clamp(12px, 2.1cqw, 32px);
+  line-height: 1.1;
+  color: #9e1b2d;
+  white-space: nowrap;
+  transform: rotate(-6deg);
+  transform-origin: left center;
+}
+/* Финальная мысль — на записке справа, тем же наклоном, что у записки */
+.p3-note {
+  position: absolute;
+  left: 75.6%;
+  top: 23.4%;
+  margin: 0;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 500;
+  font-size: clamp(8px, 1.06cqw, 16.5px);
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: nowrap;
+  transform: rotate(7deg);
+  transform-origin: left top;
+}
+
+/* Этапы: название на карточке (там, где было старое), пояснение под ней */
+.p3-steps { list-style: none; margin: 0; padding: 0; }
+.p3-step-name,
+.p3-step-text { position: absolute; }
+.p3-step-name {
+  top: 60.1%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(8px, 1.04cqw, 16px);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p3-step-text {
+  top: 79.9%;
+  width: 9.6%;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 500;
+  font-size: clamp(7px, 0.78cqw, 12px);
+  line-height: 1.32;
+  color: var(--ink-soft);
+}
+.p3-step-1 > span { left: 5.01%; }
+.p3-step-2 > span { left: 15.95%; }
+.p3-step-3 > span { left: 28.97%; }
+.p3-step-4 > span { left: 41.34%; }
+.p3-step-5 > span { left: 52.21%; }
+.p3-step-6 > span { left: 63.93%; }
+.p3-step-7 > span { left: 75.85%; }
+.p3-step-8 > span { left: 88.54%; }
+/* справа от пояснений 03 и 04 — газетный обрывок и стрелка записки */
+.p3-step-3 .p3-step-text { width: 6.5%; }
+.p3-step-4 .p3-step-text { width: 7.8%; }
+
+@media (min-width: 701px) {
+  .motion-ready .is-armed .p3-hand,
+  .motion-ready .is-armed .p3-note,
+  .motion-ready .is-armed .p3-step > span { opacity: 0; }
+  .motion-ready .is-text .p3-hand { opacity: 1; animation: mo-wipe .9s cubic-bezier(.4,0,.3,1) .9s both; }
+  .motion-ready .is-text .p3-note { animation: mo-settle .8s cubic-bezier(.22,.7,.2,1) .75s both; }
+  .motion-ready .is-text .p3-lead p:nth-child(2) { animation-delay: .75s; }
+
+  /* Название и пояснение этапа встают, когда его карточка легла
+     (--at — в fragments-0304.css, ход «руки» — как у .chain) */
+  .motion-ready .p3-steps { --t0: .6s; --dur: 2.9s; --lead: .55s; --card: .85s; }
+  .motion-lite .p3-steps { --dur: 2s; --lead: .4s; --card: .6s; }
+  .motion-ready .is-play .p3-step > span {
+    animation: mo-settle .6s cubic-bezier(.22,.7,.2,1) both;
+    animation-delay: calc(var(--t0) + var(--at) * var(--dur) - var(--lead) + var(--card) * .7);
+  }
+  .motion-ready .is-play .p3-step > .p3-step-text { animation-delay: calc(var(--t0) + var(--at) * var(--dur) - var(--lead) + var(--card) * .7 + .15s); }
+  .motion-lite .is-play .p3-step > span,
+  .motion-lite .is-text .p3-note { animation-name: mo-settle-lite; }
+}
+
+@media (max-width: 700px) {
+  .system .m-screen.is-near .m-chain-ico,
+  .system .m-screen.is-near .m-hand-03b,
+  .system .m-screen.is-near .m-paper-note-03 { background-image: url(fragments/system-bg-v2.webp); }
+  /* Окно значка (116×116 px подложки) — по центру значка на карточке */
+  .m-chain-ico { background-position-y: 74.56%; }
+  .m-chain-ico-1 { background-position-x: 4.51%; }
+  .m-chain-ico-2 { background-position-x: 17.75%; }
+  .m-chain-ico-3 { background-position-x: 30.42%; }
+  .m-chain-ico-4 { background-position-x: 42.89%; }
+  .m-chain-ico-5 { background-position-x: 56.13%; }
+  .m-chain-ico-6 { background-position-x: 68.31%; }
+  .m-chain-ico-7 { background-position-x: 81.55%; }
+  .m-chain-ico-8 { background-position-x: 95.21%; }
+  .m-chain-desc {
+    display: block;
+    margin-top: 4px;
+    font-family: "Manrope", Arial, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-soft);
+  }
+  .m-hand-text-03 {
+    margin: 4px 6% 18px auto;
+    width: max-content;
+    font-family: "Caveat", "Playfair Display", cursive;
+    font-weight: 600;
+    font-size: 24px;
+    color: #9e1b2d;
+    transform: rotate(-3deg);
+  }
+  /* Записка: бумага — фрагмент подложки, текст живой */
+  .m-paper-note-03 { position: relative; container-type: inline-size; }
+  .m-note-text-03 {
+    position: absolute;
+    left: 20%;
+    top: 12%;
+    width: 58%;
+    margin: 0;
+    font-family: "Manrope", Arial, sans-serif;
+    font-weight: 500;
+    font-size: 4.3cqw;
+    line-height: 1.45;
+    color: var(--ink);
+    transform: rotate(6deg);
+    transform-origin: left top;
+  }
+}
+
+/* ---- Экран 05 ------------------------------------------------------------ */
+.p5-lead { line-height: 1.5; }
+.p5-lead p + p { margin-top: 0.65em; }
+
+.p5-final {
+  position: absolute;
+  left: 2.8%;
+  top: 61.3%;
+  font-weight: 500;
+  font-size: clamp(8px, 1.12cqw, 17px);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.p5-final p { margin: 0; }
+.p5-final p + p { margin-top: 0.65em; }
+.p5-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  margin-top: 0.55em;
+  font-family: "Caveat", "Playfair Display", cursive;
+  font-weight: 700;
+  font-size: clamp(14px, 1.95cqw, 30px);
+  line-height: 1.1;
+  color: var(--wine);
+  text-decoration: none;
+}
+.p5-cta-arrow { width: 1.1em; height: auto; transition: transform .2s ease; }
+.p5-cta:hover .p5-cta-arrow { transform: translateX(3px); }
+.p5-cta:focus-visible { outline: 2px solid var(--wine); outline-offset: 3px; }
+
+/* Надпись на красной плашке плаката */
+.p5-banner-text {
+  position: absolute;
+  left: 41.4%;
+  top: 16.0%;
+  width: 42.6%;
+  margin: 0;
+  text-align: center;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(12px, 2.45cqw, 38px);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #FBF4EE;
+  white-space: nowrap;
+}
+
+/* Услуги: название — на верхнем листке, пояснение — на нижнем */
+.p5-services { list-style: none; margin: 0; padding: 0; }
+.p5-svc-name,
+.p5-svc-text { position: absolute; }
+.p5-svc-name {
+  top: 34.9%;
+  font-family: "Oswald", "Manrope", Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(8px, 1.12cqw, 17px);
+  line-height: 1.42;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.p5-svc-text {
+  top: 59.4%;
+  width: 9.7%;
+  font-family: "Manrope", Arial, sans-serif;
+  font-weight: 500;
+  font-size: clamp(7px, 0.84cqw, 13px);
+  line-height: 1.38;
+  color: var(--ink-soft);
+}
+.p5-svc-1 .p5-svc-name { left: 37.76%; }  .p5-svc-1 .p5-svc-text { left: 36.91%; }
+.p5-svc-2 .p5-svc-name { left: 52.08%; }  .p5-svc-2 .p5-svc-text { left: 51.24%; }
+.p5-svc-3 .p5-svc-name { left: 67.38%; }  .p5-svc-3 .p5-svc-text { left: 66.86%; }
+.p5-svc-4 .p5-svc-name { left: 82.36%; }  .p5-svc-4 .p5-svc-text { left: 82.16%; }
+
+@media (min-width: 701px) {
+  .motion-ready .is-armed .p5-lead p,
+  .motion-ready .is-armed .p5-final > *,
+  .motion-ready .is-armed .p5-banner-text,
+  .motion-ready .is-armed .p5-svc > span { opacity: 0; }
+  .motion-ready .is-text .p5-lead p:nth-child(3) {
+    animation: mo-settle .8s cubic-bezier(.22,.7,.2,1) .9s both;
+  }
+  .motion-ready .is-text .p5-final > * { animation: mo-settle .8s cubic-bezier(.22,.7,.2,1) both; }
+  .motion-ready .is-text .p5-final > :nth-child(1) { animation-delay: 1.05s; }
+  .motion-ready .is-text .p5-final > :nth-child(2) { animation-delay: 1.2s; }
+  .motion-ready .is-text .p5-final > :nth-child(3) { animation-delay: 1.35s; }
+  /* надпись на плашке — когда плашка легла; текст листка — когда лёг листок */
+  .motion-ready .is-play .p5-banner-text { animation: mo-settle .6s cubic-bezier(.22,.7,.2,1) .95s both; }
+  .motion-ready .is-play .p5-svc > span { animation: mo-settle .6s cubic-bezier(.22,.7,.2,1) both; }
+  .motion-ready .is-play .p5-svc-1 .p5-svc-name { animation-delay: 1.2s; }
+  .motion-ready .is-play .p5-svc-2 .p5-svc-name { animation-delay: 1.37s; }
+  .motion-ready .is-play .p5-svc-3 .p5-svc-name { animation-delay: 1.54s; }
+  .motion-ready .is-play .p5-svc-4 .p5-svc-name { animation-delay: 1.71s; }
+  .motion-ready .is-play .p5-svc-1 .p5-svc-text { animation-delay: 1.88s; }
+  .motion-ready .is-play .p5-svc-2 .p5-svc-text { animation-delay: 2.05s; }
+  .motion-ready .is-play .p5-svc-3 .p5-svc-text { animation-delay: 2.22s; }
+  .motion-ready .is-play .p5-svc-4 .p5-svc-text { animation-delay: 2.39s; }
+  .motion-lite .is-text .p5-lead p:nth-child(3),
+  .motion-lite .is-text .p5-final > *,
+  .motion-lite .is-play .p5-banner-text,
+  .motion-lite .is-play .p5-svc > span { animation-name: mo-settle-lite; }
+}
+
+@media (max-width: 700px) {
+  /* Окно значка 110×110 px подложки — по центру значка верхнего листка */
+  .services .m-screen.is-near .m-svc-ico,
+  .services .m-screen.is-near .m-banner-05 { background-image: url(fragments/services-bg-v2.webp); }
+  .m-svc-ico { background-size: 1396.36% auto; background-position-y: 48.03%; }
+  .m-svc-ico-1 { background-position-x: 41.16%; }
+  .m-svc-ico-2 { background-position-x: 56.94%; }
+  .m-svc-ico-3 { background-position-x: 73.42%; }
+  .m-svc-ico-4 { background-position-x: 89.41%; }
+  .m-svc-item { align-items: flex-start; }
+  .m-svc-desc {
+    display: block;
+    margin-top: 5px;
+    font-family: "Manrope", Arial, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.45;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-soft);
+  }
+  .m-banner-05 { position: relative; container-type: inline-size; margin: 26px 0 18px; }
+  .m-banner-text {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Oswald", "Manrope", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 4.6cqw;
+    padding-right: 7%;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: #FBF4EE;
+    white-space: nowrap;
+  }
+  .m-p5-cta { font-size: 28px; margin: 4px 0 6px; min-height: 44px; }
+}

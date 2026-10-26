@@ -1,0 +1,1110 @@
+/* ==========================================================================
+   Прототип анимации экранов 01–02
+   «Оживший редакционный коллаж» + переход «Сквозь взгляд»
+
+   Подключается ПОСЛЕ ../../css/style.css и ничего в нём не переопределяет
+   без класса режима на <html>:
+     .motion-on      — анимация включена (ставит скрипт в <head>);
+     .motion-ready   — motion.js загрузился (всё, что ждёт JS, — под ним);
+     .motion-lite    — облегчённый режим;
+     .motion-static  — prefers-reduced-motion: страница = оригинал.
+   Движение: только transform, opacity, clip-path, filter и маски
+   (размытие — лишь в полном режиме и только во время перехода).
+   ========================================================================== */
+
+/* ---- Слои фрагментов (координаты — в fragments.css) -------------------- */
+.frag {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+.cam, .fg, .lift {
+  position: absolute;
+  inset: 0;
+}
+/* Передний план лежит над камерой, но не перехватывает нажатия:
+   «Сверим мысли» под ним остаётся кликабельной. Текст выделяется. */
+.fg { pointer-events: none; }
+.fg > h1, .fg > p { pointer-events: auto; }
+
+.f-lift-struct-shadow,
+.f-eye-hd { opacity: 0; }
+
+.cine-vignette,
+.cine-next,
+.cine-rim { display: none; }
+
+/* Чтобы в статичном режиме якоря не «ехали» плавно */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* ---- Метка прототипа ---------------------------------------------------- */
+.proto-badge {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  z-index: 120;
+  padding: 6px 10px 5px;
+  border-radius: 3px;
+  background: rgba(22, 17, 15, 0.82);
+  color: #F3EEE9;
+  font: 600 11px/1.2 "Manrope", Arial, sans-serif;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+.proto-badge:empty { display: none; }
+
+/* ==========================================================================
+   Ключевые кадры
+   ========================================================================== */
+/* «Печать» слева направо: текст, кисть, рукописные строки */
+@keyframes mo-wipe {
+  from { clip-path: inset(-25% 100% -25% -2%); }
+  to   { clip-path: inset(-25% -4% -25% -2%); }
+}
+/* Стрелка прорисовывается сверху вниз */
+@keyframes mo-wipe-down {
+  from { clip-path: inset(-5% -10% 100% -10%); }
+  to   { clip-path: inset(-5% -10% -5% -10%); }
+}
+@keyframes mo-fade-up {
+  from { opacity: 0; translate: 0 14px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+/* Иконка «прикалывается» к бумаге */
+@keyframes mo-pop {
+  0%   { opacity: 0; scale: 0.82; }
+  60%  { opacity: 1; scale: 1.04; }
+  100% { opacity: 1; scale: 1; }
+}
+/* Бумажка опускается на стол: копия всегда больше оригинала под ней,
+   поэтому край оригинала не выглядывает — двойного контура нет. */
+@keyframes mo-land {
+  from { scale: 1.06; rotate: -0.5deg; }
+  to   { scale: 1;    rotate: 0deg; }
+}
+@keyframes mo-shadow-off {
+  from { opacity: 0.95; }
+  to   { opacity: 0; }
+}
+@keyframes mo-draw {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ==========================================================================
+   ЭКРАН 01 — интро при загрузке (компьютер)
+   Анимации стоят на паузе в первом кадре, пока motion.js не добавит
+   .intro-play (картинка и шрифты готовы). Страховка — таймер в <head>.
+   ========================================================================== */
+@media (min-width: 701px) {
+  .intro-pending .hero-services,
+  .intro-pending .btn-label,
+  .intro-pending .btn-label-underline,
+  .intro-pending .headline,
+  .intro-pending .subhead,
+  .intro-pending .f-ink-underline,
+  .intro-pending .lead,
+  .intro-pending .f-ink-btn-stroke,
+  .intro-pending .f-ink-btn-ticks,
+  .intro-pending .f-lift-struct,
+  .intro-pending .f-lift-struct-shadow,
+  .intro-pending .cam .ink {
+    animation-fill-mode: both;
+    animation-play-state: paused;
+  }
+  .intro-play .hero-services,
+  .intro-play .btn-label,
+  .intro-play .btn-label-underline,
+  .intro-play .headline,
+  .intro-play .subhead,
+  .intro-play .f-ink-underline,
+  .intro-play .lead,
+  .intro-play .f-ink-btn-stroke,
+  .intro-play .f-ink-btn-ticks,
+  .intro-play .f-lift-struct,
+  .intro-play .f-lift-struct-shadow,
+  .intro-play .cam .ink { animation-play-state: running; }
+
+  /* Заголовок и подзаголовок «печатаются», лид проявляется */
+  .intro-pending .headline        { animation-name: mo-wipe; animation-duration: .85s; animation-delay: .1s;  animation-timing-function: cubic-bezier(.3,.6,.2,1); }
+  .intro-pending .subhead         { animation-name: mo-wipe; animation-duration: .75s; animation-delay: .42s; animation-timing-function: cubic-bezier(.3,.6,.2,1); }
+  .intro-pending .f-ink-underline { animation-name: mo-wipe; animation-duration: .55s; animation-delay: .95s; animation-timing-function: cubic-bezier(.5,0,.3,1); }
+  .intro-pending .lead            { animation-name: mo-fade-up; animation-duration: .8s; animation-delay: .7s; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+
+  /* Кнопка: кисть проводит мазок, затем штрихи вокруг */
+  .intro-pending .f-ink-btn-stroke { animation-name: mo-wipe; animation-duration: .7s;  animation-delay: 1.05s; animation-timing-function: cubic-bezier(.55,0,.25,1); }
+  .intro-pending .f-ink-btn-ticks  { animation-name: mo-pop;  animation-duration: .45s; animation-delay: 1.65s; animation-timing-function: ease-out; }
+  /* Надпись на мазке пишется, когда мазок проведён; на подложке старой
+     надписи нет — до этого момента мазок пустой */
+  .intro-pending .btn-label           { animation-name: mo-wipe; animation-duration: .6s;  animation-delay: 1.55s; animation-timing-function: cubic-bezier(.4,0,.3,1); }
+  .intro-pending .btn-label-underline { animation-name: mo-wipe; animation-duration: .35s; animation-delay: 2.1s; animation-timing-function: ease-out; }
+  /* Строка услуг проявляется, когда встал заголовок */
+  .intro-pending .hero-services       { animation-name: mo-fade-up; animation-duration: .7s; animation-delay: .62s; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+
+  /* Рукописная заметка — строка за строкой */
+  .intro-pending .f-ink-note-l1    { animation-name: mo-wipe; animation-duration: .5s;  animation-delay: .55s; animation-timing-function: linear; }
+  .intro-pending .f-ink-note-l2    { animation-name: mo-wipe; animation-duration: .38s; animation-delay: 1.0s; animation-timing-function: linear; }
+  .intro-pending .f-ink-note-l3    { animation-name: mo-wipe; animation-duration: .36s; animation-delay: 1.32s; animation-timing-function: linear; }
+  .intro-pending .f-ink-note-l4    { animation-name: mo-wipe; animation-duration: .3s;  animation-delay: 1.62s; animation-timing-function: linear; }
+  .intro-pending .f-ink-note-l5    { animation-name: mo-wipe; animation-duration: .34s; animation-delay: 1.88s; animation-timing-function: linear; }
+  .intro-pending .f-ink-note-l6    { animation-name: mo-wipe; animation-duration: .36s; animation-delay: 2.18s; animation-timing-function: linear; }
+  .intro-pending .f-ink-note-arrow { animation-name: mo-wipe; animation-duration: .4s;  animation-delay: 2.55s; animation-timing-function: ease-out; }
+
+  /* Схема: разрозненные фрагменты → связи → система материалов */
+  .intro-pending .f-ink-s1-icon  { animation-name: mo-pop;       animation-duration: .5s;  animation-delay: .65s; }
+  .intro-pending .f-ink-s1-text  { animation-name: mo-fade-up;   animation-duration: .5s;  animation-delay: .82s; }
+  .intro-pending .f-ink-s2-arrow { animation-name: mo-wipe-down; animation-duration: .32s; animation-delay: 1.1s; animation-timing-function: ease-in; }
+  .intro-pending .f-ink-s3-icon  { animation-name: mo-pop;       animation-duration: .5s;  animation-delay: 1.36s; }
+  .intro-pending .f-ink-s3-text  { animation-name: mo-fade-up;   animation-duration: .5s;  animation-delay: 1.52s; }
+  .intro-pending .f-ink-s4-arrow { animation-name: mo-wipe-down; animation-duration: .32s; animation-delay: 1.8s; animation-timing-function: ease-in; }
+  .intro-pending .f-ink-s5-icon  { animation-name: mo-pop;       animation-duration: .5s;  animation-delay: 2.06s; }
+  .intro-pending .f-ink-s6-label { animation-name: mo-wipe;      animation-duration: .6s;  animation-delay: 2.32s; animation-timing-function: cubic-bezier(.55,0,.25,1); }
+  .intro-pending .f-ink-s6-marks { animation-name: mo-pop;       animation-duration: .45s; animation-delay: 2.8s; }
+
+  /* «Структура вместо шума» опускается на стол */
+  .intro-pending .f-lift-struct        { animation-name: mo-land;       animation-duration: 1.1s; animation-delay: .35s; animation-timing-function: cubic-bezier(.3,.7,.2,1); }
+  .intro-pending .f-lift-struct-shadow { animation-name: mo-shadow-off; animation-duration: 1.1s; animation-delay: .35s; animation-timing-function: cubic-bezier(.3,.7,.2,1);
+                                         /* после интро тенью управляет прокрутка (motion.js) —
+                                            анимация не должна удерживать конечный кадр */
+                                         animation-fill-mode: backwards; }
+}
+
+/* ==========================================================================
+   ЭКРАН 01 → 02 — переход «Сквозь взгляд» (компьютер)
+   Высоту .cine, отступ закрепления и все трансформации задаёт motion.js.
+
+   Камера подходит к глазу; из зрачка рвётся бумажный слой экрана 01, и
+   в разрыве уже лежит разворот экрана 02 (.cine-next) — сначала бумага,
+   потом проявляется коллаж, камера отъезжает от глаза «наблюдения».
+   В конце закрепления настоящий экран 02 стоит ровно на месте слоя
+   .cine-next, поэтому смена незаметна. Пустых и белых кадров нет.
+   ========================================================================== */
+@media (min-width: 701px) {
+  .motion-ready .cine {
+    position: relative;
+    /* если окно выше сцены, под закреплённым экраном — бумага экрана 02 */
+    background: #E8E1DB;
+  }
+  .motion-ready .hero {
+    position: sticky;
+    z-index: 1;
+    /* Камера при наезде выходит за края сцены 1536px (на широких окнах
+       иначе были бы видны её боковые границы); лишнее обрезает секция —
+       горизонтальной прокрутки нет. Сама секция — sticky, её overflow
+       закреплению не мешает. */
+    overflow: hidden;
+  }
+  .motion-ready .hero-stage { overflow: visible; }
+  /* will-change для .cam и .fg ставит motion.js только на время наезда:
+     постоянный слой меняет сглаживание текста лида. */
+
+  .motion-ready .cine-vignette,
+  .motion-ready .cine-next,
+  .motion-ready .cine-rim {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .motion-ready .cine-vignette {
+    z-index: 4;
+    opacity: 0;
+    background: radial-gradient(ellipse 72% 68% at var(--ix, 50%) var(--iy, 50%),
+      rgba(30, 14, 12, 0) 40%, rgba(30, 14, 12, 0.42) 100%);
+  }
+  .motion-lite .cine-vignette { display: none; }
+
+  /* Разрыв: слой экрана 02 виден только внутри рваного отверстия.
+     Маску (рваный круг) рисует motion.js; её размер и место —
+     переменные --hd (сторона картинки маски) и --hx/--hy (левый верх). */
+  .motion-ready .cine-next,
+  .motion-ready .cine-rim { visibility: hidden; }
+  .motion-ready .cine-next {
+    z-index: 5;
+    overflow: hidden;
+    /* поля по бокам сцены на широких окнах — как у секции экрана 02 */
+    background: var(--bg);
+    -webkit-mask-image: var(--hole-mask);
+            mask-image: var(--hole-mask);
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-size: var(--hd, 0px) var(--hd, 0px);
+            mask-size: var(--hd, 0px) var(--hd, 0px);
+    -webkit-mask-position: var(--hx, 0px) var(--hy, 0px);
+            mask-position: var(--hx, 0px) var(--hy, 0px);
+  }
+  /* Когда разрыв закрыл кадр целиком, маска уже не нужна */
+  .motion-ready .cine-next.is-open {
+    -webkit-mask-image: none;
+            mask-image: none;
+  }
+  /* Разворот экрана 02: та же геометрия, что у .problem-stage, —
+     в конце перехода совпадает с ним пиксель в пиксель. Под подложкой —
+     бумага того же тона с зерном: она видна первой. */
+  .motion-ready .cine-next-stage {
+    position: absolute;
+    background-color: #E8E1DB;
+    background-image: var(--grain);
+    background-size: 240px 240px;
+  }
+  .motion-ready .cine-next-plate {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    opacity: 0;
+    user-select: none;
+  }
+  /* Рваный край: светлые волокна бумаги и тень от слоя — картинка того
+     же размера и места, что и маска разрыва. */
+  .motion-ready .cine-rim {
+    z-index: 6;
+    background-image: var(--hole-rim);
+    background-repeat: no-repeat;
+    background-size: var(--hd, 0px) var(--hd, 0px);
+    background-position: var(--hx, 0px) var(--hy, 0px);
+  }
+
+  /* Экран 02 лежит поверх последнего окна закрепления; пока идёт
+     переход, он скрыт — его роль играет .cine-next. */
+  .motion-ready .problem {
+    position: relative;
+    z-index: 2;
+  }
+  /* Вперёд — появляется мгновенно (под ним тот же кадр), назад — коротко
+     гаснет вместе с текстом, а не пропадает. */
+  .motion-ready .problem.is-waiting {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .22s ease, visibility 0s linear .22s;
+  }
+  .motion-ready .cam2 {
+    position: absolute;
+    inset: 0;
+  }
+}
+/* На телефоне обёртка камеры экрана 02 не нужна */
+.cam2 { display: contents; }
+@media (min-width: 701px) {
+  .motion-ready .cam2 { display: block; }
+}
+
+/* ==========================================================================
+   ЭКРАН 02 — живой текст мягко занимает свои места (компьютер).
+   Запускается, когда разворот встал на место; при прокрутке назад
+   сбрасывается и при следующем проходе играет снова. Конечные
+   координаты — те же, что в style.css: анимируются только opacity,
+   translate и filter.
+   ========================================================================== */
+@keyframes mo-settle {
+  from { opacity: 0; translate: 0 0.45em; filter: blur(5px); }
+  60%  { filter: blur(0); }
+  to   { opacity: 1; translate: 0 0;      filter: blur(0); }
+}
+@keyframes mo-settle-x {
+  from { opacity: 0; translate: -0.5em 0; filter: blur(6px); }
+  60%  { filter: blur(0); }
+  to   { opacity: 1; translate: 0 0;      filter: blur(0); }
+}
+@keyframes mo-settle-lite {
+  from { opacity: 0; translate: 0 0.45em; }
+  to   { opacity: 1; translate: 0 0; }
+}
+@media (min-width: 701px) {
+  .motion-ready .p2-num,
+  .motion-ready .p2-title span,
+  .motion-ready .p2-lead p,
+  .motion-ready .p2-final-strong,
+  .motion-ready .p2-final-italic { opacity: 0; }
+  .motion-ready .p2-final-underline path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+  .motion-ready .problem-stage.is-revealed .p2-num,
+  .motion-ready .problem-stage.is-revealed .p2-title span,
+  .motion-ready .problem-stage.is-revealed .p2-lead p,
+  .motion-ready .p2-final.is-revealed .p2-final-strong,
+  .motion-ready .p2-final.is-revealed .p2-final-italic {
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(.22,.7,.2,1);
+  }
+  .motion-ready .problem-stage.is-revealed .p2-num                     { animation-name: mo-settle;   animation-duration: .7s; animation-delay: .05s; }
+  .motion-ready .problem-stage.is-revealed .p2-title span:nth-child(1) { animation-name: mo-settle-x; animation-duration: .9s; animation-delay: .15s; }
+  .motion-ready .problem-stage.is-revealed .p2-title span:nth-child(2) { animation-name: mo-settle-x; animation-duration: .9s; animation-delay: .32s; }
+  .motion-ready .problem-stage.is-revealed .p2-lead p:nth-child(1)     { animation-name: mo-settle;   animation-duration: .8s; animation-delay: .55s; }
+  .motion-ready .problem-stage.is-revealed .p2-lead p:nth-child(2)     { animation-name: mo-settle;   animation-duration: .8s; animation-delay: .7s; }
+  .motion-ready .p2-final.is-revealed .p2-final-strong                 { animation-name: mo-settle;   animation-duration: .8s; }
+  .motion-ready .p2-final.is-revealed .p2-final-italic                 { animation-name: mo-settle;   animation-duration: .8s; animation-delay: .3s; }
+  .motion-ready .p2-final.is-revealed .p2-final-underline path {
+    animation: mo-draw .7s cubic-bezier(.5,0,.3,1) .7s both;
+  }
+
+  /* Облегчённый режим: без размытия текста */
+  .motion-lite .problem-stage.is-revealed .p2-num,
+  .motion-lite .problem-stage.is-revealed .p2-title span,
+  .motion-lite .problem-stage.is-revealed .p2-lead p,
+  .motion-lite .p2-final.is-revealed .p2-final-strong,
+  .motion-lite .p2-final.is-revealed .p2-final-italic { animation-name: mo-settle-lite; }
+}
+
+/* ==========================================================================
+   ТЕЛЕФОН (<=700px) — облегчённая версия
+   Интро первого экрана, короткий «наезд» на глаз в кадре коллажа и
+   ответный «отъезд» от глаза на карточке «наблюдение» экрана 02.
+   Ничего не закрепляется, длина страницы не меняется.
+   ========================================================================== */
+@media (max-width: 700px) {
+  .intro-pending .m-hero-title,
+  .intro-pending .m-hero-sub,
+  .intro-pending .m-hero-services,
+  .intro-pending .m-btn .btn-label,
+  .intro-pending .m-hero-visual,
+  .intro-pending .m-hero-lead,
+  .intro-pending .m-btn {
+    animation-fill-mode: both;
+    animation-play-state: paused;
+  }
+  .intro-play .m-hero-title,
+  .intro-play .m-hero-sub,
+  .intro-play .m-hero-services,
+  .intro-play .m-btn .btn-label,
+  .intro-play .m-hero-visual,
+  .intro-play .m-hero-lead,
+  .intro-play .m-btn { animation-play-state: running; }
+
+  .intro-pending .m-hero-title  { animation-name: mo-wipe; animation-duration: .75s; animation-delay: .08s; animation-timing-function: cubic-bezier(.3,.6,.2,1); }
+  .intro-pending .m-hero-sub    { animation-name: mo-wipe; animation-duration: .65s; animation-delay: .34s; animation-timing-function: cubic-bezier(.3,.6,.2,1); }
+  .intro-pending .m-hero-visual { animation-name: mo-fade-up; animation-duration: .8s; animation-delay: .2s; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+  .intro-pending .m-hero-lead   { animation-name: mo-fade-up; animation-duration: .7s; animation-delay: .55s; }
+  .intro-pending .m-btn         { animation-name: mo-wipe; animation-duration: .6s; animation-delay: .8s; animation-timing-function: cubic-bezier(.55,0,.25,1); }
+  .intro-pending .m-hero-services { animation-name: mo-fade-up; animation-duration: .6s; animation-delay: .45s; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+  .intro-pending .m-btn .btn-label { animation-name: mo-wipe; animation-duration: .5s; animation-delay: 1.25s; animation-timing-function: cubic-bezier(.4,0,.3,1); }
+
+  .motion-ready .m-hero-visual img { will-change: transform; }
+
+  /* Кадр коллажа экрана 02: внутренний слой масштабируется, рамка
+     обрезает — за пределы экрана ничего не вылезает. */
+  .motion-ready .m-collage-02 {
+    position: relative;
+    overflow: hidden;
+  }
+  .m-collage-02 .m-zoom { display: none; }
+  .motion-ready .m-collage-02 .m-zoom {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    transform-origin: 76.39% 11.29%;     /* глаз: (1004-370)/830, (352-295)/505 */
+    will-change: transform;
+  }
+
+  /* Тексты экрана 02 проявляются по мере прокрутки */
+  .motion-ready .m-problem > * {
+    animation: mo-fade-up .7s cubic-bezier(.2,.7,.2,1) both paused;
+  }
+  .motion-ready .m-problem > .is-revealed { animation-play-state: running; }
+  .motion-ready .m-problem > .m-collage-02 { animation: none; }
+}
+
+/* ==========================================================================
+   ЭКРАНЫ 03 и 04 — цепочка раскладывается по редакционному столу
+   (компьютер). Карточки этапов ложатся по одной слева направо, красная
+   нить тянется следом от карточки к карточке, живой текст встаёт на место.
+   Слои — вырезки из той же подложки (fragments-0304.css): «стол» без
+   цепочки, нить, карточки этапов (03 — восемь, 04 — четыре); поверх стола дают подложку пиксель
+   в пиксель.
+
+   Классы ставит motion.js на .system-stage / .process-stage:
+     .is-near   — экран рядом: начинают грузиться слои;
+     .is-armed  — слои загружены, экран целиком ниже окна: на подложке
+                  лежит «стол» без цепочки, текст спрятан;
+     .is-text   — верх экрана в кадре: текст встаёт на место;
+     .is-play   — цепочка в кадре: карточки ложатся, нить тянется.
+   Когда всё легло, motion.js снимает все три класса: слои убраны, видна
+   сама подложка — исходная композиция. Без .is-armed слои не видны
+   вовсе: если что-то не загрузилось, экран остаётся статичным.
+   ========================================================================== */
+/* Карточку кладут на стол: чуть выше, с поворотом — и она ложится */
+@keyframes mo-card-place {
+  0%   { opacity: 0; translate: var(--fx) -2.4cqw; rotate: var(--rot); scale: 1.045; }
+  30%  { opacity: 1; }
+  78%  { translate: 0 0.1cqw; rotate: calc(var(--rot) * -0.08); scale: 0.999; }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
+}
+/* Тень поднятой карточки уходит под неё (только полный режим) */
+@keyframes mo-card-lift {
+  from { filter: drop-shadow(0.4cqw 1.5cqw 1cqw rgba(40, 22, 16, 0.26)); }
+  to   { filter: drop-shadow(0 0 0 rgba(40, 22, 16, 0)); }
+}
+/* Нить «протягивается» слева направо */
+@keyframes mo-thread {
+  from { clip-path: inset(-10% 100% -10% 0); }
+  to   { clip-path: inset(-10% 0 -10% 0); }
+}
+
+.chain { display: none; }
+@media (min-width: 701px) {
+  .motion-ready .chain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Ход «руки»: старт, время прохода по всей цепочке, насколько
+       раньше прихода нити карточка начинает ложиться, и сколько она
+       ложится */
+    --t0: .6s;
+    --dur: 2.9s;
+    --lead: .55s;
+    --card: .85s;
+  }
+  .motion-lite .chain { --dur: 2s; --lead: .4s; --card: .6s; }
+
+  .motion-ready .is-armed > .chain { display: block; }
+
+  .motion-ready .is-armed > .chain .p3-card,
+  .motion-ready .is-armed > .chain .p4-card { opacity: 0; }
+  .motion-ready .is-armed > .chain .p3-thread,
+  .motion-ready .is-armed > .chain .p4-thread { clip-path: inset(-10% 100% -10% 0); }
+
+  .motion-ready .is-play > .chain .p3-card,
+  .motion-ready .is-play > .chain .p4-card {
+    animation-name: mo-card-place, mo-card-lift;
+    animation-duration: var(--card), var(--card);
+    animation-timing-function: cubic-bezier(.25,.75,.3,1), cubic-bezier(.4,0,.3,1);
+    animation-delay: calc(var(--t0) + var(--at) * var(--dur) - var(--lead));
+    animation-fill-mode: both;
+    transform-origin: 50% 30%;
+  }
+  .motion-lite .is-play > .chain .p3-card,
+  .motion-lite .is-play > .chain .p4-card { animation-name: mo-card-place; }
+
+  /* У каждой карточки — свой наклон и снос, как у бумаги из рук */
+  .chain > :nth-child(3)  { --rot: -3.2deg; --fx: -0.5cqw; }
+  .chain > :nth-child(4)  { --rot:  2.4deg; --fx:  0.3cqw; }
+  .chain > :nth-child(5)  { --rot: -1.8deg; --fx: -0.2cqw; }
+  .chain > :nth-child(6)  { --rot:  3deg;   --fx:  0.4cqw; }
+  .chain > :nth-child(7)  { --rot: -2.4deg; --fx: -0.3cqw; }
+  .chain > :nth-child(8)  { --rot:  1.9deg; --fx:  0.2cqw; }
+  .chain > :nth-child(9)  { --rot: -2.8deg; --fx: -0.4cqw; }
+  .chain > :nth-child(10) { --rot:  2.2deg; --fx:  0.3cqw; }
+
+  .motion-ready .is-play > .chain .p3-thread,
+  .motion-ready .is-play > .chain .p4-thread {
+    animation-name: mo-thread;
+    animation-duration: calc(var(--tl) * var(--dur));
+    animation-delay: calc(var(--t0) + var(--ts) * var(--dur));
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+  }
+
+  /* ---- Живой текст экранов 03 и 04 ----------------------------------- */
+  .motion-ready .is-armed .p3-num,
+  .motion-ready .is-armed .p3-num-underline,
+  .motion-ready .is-armed .p3-title span,
+  .motion-ready .is-armed .p3-lead p,
+  .motion-ready .is-armed .p4-num,
+  .motion-ready .is-armed .p4-num-underline,
+  .motion-ready .is-armed .p4-title,
+  .motion-ready .is-armed .p4-phrase > span,
+  .motion-ready .is-armed .p4-step > span { opacity: 0; }
+  .motion-ready .is-armed .p4-hear-underline path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+  .motion-ready .is-text .p3-num,
+  .motion-ready .is-text .p3-num-underline,
+  .motion-ready .is-text .p3-title span,
+  .motion-ready .is-text .p3-lead p,
+  .motion-ready .is-text .p4-num,
+  .motion-ready .is-text .p4-num-underline,
+  .motion-ready .is-text .p4-title,
+  .motion-ready .is-text .p4-phrase > span {
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(.22,.7,.2,1);
+  }
+  .motion-ready .is-text .p3-num                        { animation-name: mo-settle;   animation-duration: .7s;  animation-delay: .05s; }
+  .motion-ready .is-text .p3-num-underline              { animation-name: mo-wipe;     animation-duration: .45s; animation-delay: .35s; }
+  .motion-ready .is-text .p3-title span:nth-child(1)    { animation-name: mo-settle-x; animation-duration: .9s;  animation-delay: .12s; }
+  .motion-ready .is-text .p3-title span:nth-child(2)    { animation-name: mo-settle-x; animation-duration: .9s;  animation-delay: .26s; }
+  .motion-ready .is-text .p3-title span:nth-child(3)    { animation-name: mo-settle-x; animation-duration: .9s;  animation-delay: .4s; }
+  .motion-ready .is-text .p3-lead p                     { animation-name: mo-settle;   animation-duration: .8s;  animation-delay: .6s; }
+
+  .motion-ready .is-text .p4-num                        { animation-name: mo-settle;   animation-duration: .7s;  animation-delay: .05s; }
+  .motion-ready .is-text .p4-num-underline              { animation-name: mo-wipe;     animation-duration: .45s; animation-delay: .35s; }
+  .motion-ready .is-text .p4-title                      { animation-name: mo-settle-x; animation-duration: .9s;  animation-delay: .12s; }
+  .motion-ready .is-text .p4-phrase > span:nth-child(1) { animation-name: mo-settle;   animation-duration: .8s;  animation-delay: .35s; }
+  .motion-ready .is-text .p4-phrase > span:nth-child(2) { animation-name: mo-settle;   animation-duration: .8s;  animation-delay: .55s; }
+
+  /* Номер, название и пояснение этапа встают, когда их карточка легла
+     (--at карточки — в fragments-0304.css, ход «руки» — как у .chain) */
+  .motion-ready .p4-steps { --t0: .6s; --dur: 2.9s; --lead: .55s; --card: .85s; }
+  .motion-lite .p4-steps { --dur: 2s; --lead: .4s; --card: .6s; }
+  .motion-ready .is-play .p4-step > span {
+    animation: mo-settle .6s cubic-bezier(.22,.7,.2,1) both;
+    animation-delay: calc(var(--t0) + var(--at) * var(--dur) - var(--lead) + var(--card) * .7);
+  }
+  .motion-ready .is-play .p4-step > .p4-step-name { animation-delay: calc(var(--t0) + var(--at) * var(--dur) - var(--lead) + var(--card) * .7 + .08s); }
+  .motion-ready .is-play .p4-step > .p4-step-text { animation-delay: calc(var(--t0) + var(--at) * var(--dur) - var(--lead) + var(--card) * .7 + .18s); }
+  .motion-lite .is-play .p4-step > span { animation-name: mo-settle-lite; }
+  /* Штрих под «слышать.» прорисовывается от руки, когда фраза встала */
+  .motion-ready .is-text .p4-hear-underline path {
+    stroke-dasharray: 1;
+    animation: mo-draw .9s cubic-bezier(.55,0,.3,1) 1.05s both;
+  }
+
+  .motion-lite .is-text .p3-num,
+  .motion-lite .is-text .p3-title span,
+  .motion-lite .is-text .p3-lead p,
+  .motion-lite .is-text .p4-num,
+  .motion-lite .is-text .p4-title,
+  .motion-lite .is-text .p4-phrase > span { animation-name: mo-settle-lite; }
+}
+
+/* ==========================================================================
+   ЭКРАНЫ 03 и 04 — телефон (<=700px)
+   Пункты цепочки проявляются по мере прокрутки: иконка-карточка ложится
+   с лёгким поворотом, подпись встаёт следом, красная нить дотягивается
+   до следующего пункта. Штрих под «слышать.» прорисовывается.
+   Только translate/rotate/scale, opacity и размер фона штриха — вёрстка
+   не пересчитывается, длина страницы не меняется.
+   ========================================================================== */
+@keyframes mo-m-card {
+  0%   { opacity: 0; translate: 0 -10px; rotate: -5deg; scale: 1.08; }
+  35%  { opacity: 1; }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
+}
+@keyframes mo-m-thread {
+  from { scale: 1 0; }
+  to   { scale: 1 1; }
+}
+@keyframes mo-m-hear {
+  from { background-size: 0% 2.5px; }
+  to   { background-size: 100% 2.5px; }
+}
+@media (max-width: 700px) {
+  .motion-ready .m-system > :not(.m-chain),
+  .motion-ready .m-process > :not(.m-chain) {
+    animation: mo-fade-up .7s cubic-bezier(.2,.7,.2,1) both paused;
+  }
+  .motion-ready .m-system > .is-revealed,
+  .motion-ready .m-process > .is-revealed { animation-play-state: running; }
+
+  .motion-ready .m-chain-item .m-chain-ico,
+  .motion-ready .m-step-item .m-step-ico {
+    animation: mo-m-card .75s cubic-bezier(.25,.75,.3,1) both paused;
+  }
+  .motion-ready .m-chain-item .m-chain-text,
+  .motion-ready .m-step-item .m-step-text {
+    animation: mo-fade-up .6s cubic-bezier(.2,.7,.2,1) .15s both paused;
+  }
+  .motion-ready .m-chain-item::after,
+  .motion-ready .m-step-item::after {
+    transform-origin: 50% 0;
+    animation: mo-m-thread .5s cubic-bezier(.5,0,.3,1) .4s both paused;
+  }
+  .motion-ready .m-chain-item.is-revealed .m-chain-ico,
+  .motion-ready .m-chain-item.is-revealed .m-chain-text,
+  .motion-ready .m-chain-item.is-revealed::after,
+  .motion-ready .m-step-item.is-revealed .m-step-ico,
+  .motion-ready .m-step-item.is-revealed .m-step-text,
+  .motion-ready .m-step-item.is-revealed::after { animation-play-state: running; }
+
+  /* «слышать.»: вместо рамки снизу — штрих фоном, который растёт */
+  .motion-ready .m-phrase-hear {
+    border-bottom-color: transparent;
+    background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0% 2.5px no-repeat;
+  }
+  .motion-ready .m-phrase.is-revealed .m-phrase-hear {
+    animation: mo-m-hear .8s cubic-bezier(.55,0,.3,1) .55s both;
+  }
+}
+
+/* ==========================================================================
+   ЭКРАН 05 — «Редактор раскладывает предложения на столе» (компьютер)
+   Та же механика, что у экранов 03–04 (классы .is-armed / .is-text /
+   .is-play ставит motion.js, после анимации классы сняты и видна сама
+   подложка). Порядок: заголовок → плашка «Контент-сопровождение»
+   ложится как наклейка → карточки 01–08 по одной (верхний ряд, затем
+   нижний), нить между ними дотягивается следом → рукописные пометки.
+   Слои — fragments-0506.css. Новых изображений нет.
+   ========================================================================== */
+/* Наклейка: сверху вниз с небольшим поворотом, мягкая остановка */
+@keyframes mo-sticker {
+  0%   { opacity: 0; translate: 0 -2.2cqw; rotate: -3.5deg; scale: 1.06; }
+  35%  { opacity: 1; }
+  70%  { translate: 0 0.12cqw; rotate: 0.5deg; scale: 0.998; }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
+}
+@media (min-width: 701px) {
+  .motion-ready .p5-chain { --t0: .15s; }
+
+  .motion-ready .is-armed > .p5-chain > :not(.p5-desk) { opacity: 0; }
+  .motion-ready .is-play > .p5-chain > :not(.p5-desk) {
+    animation-fill-mode: both;
+    opacity: 1;
+  }
+  .motion-ready .is-play > .p5-chain .p5-banner {
+    animation: mo-sticker .85s cubic-bezier(.25,.75,.3,1) var(--t0) both;
+    transform-origin: 30% 50%;
+  }
+  /* Карточки: наклон и снос — те же переменные, что у экранов 03–04
+     (.chain > :nth-child(3…10)) */
+  .motion-ready .is-play > .p5-chain [class*="p5-card-"] {
+    animation-name: mo-card-place, mo-card-lift;
+    animation-duration: .8s, .8s;
+    animation-timing-function: cubic-bezier(.25,.75,.3,1), cubic-bezier(.4,0,.3,1);
+    animation-delay: calc(.6s + var(--i) * .17s);
+    transform-origin: 50% 30%;
+  }
+  .p5-card-1 { --i: 0; } .p5-card-2 { --i: 1; } .p5-card-3 { --i: 2; } .p5-card-4 { --i: 3; }
+  .p5-card-5 { --i: 4; } .p5-card-6 { --i: 5; } .p5-card-7 { --i: 6; } .p5-card-8 { --i: 7; }
+  .motion-lite .is-play > .p5-chain [class*="p5-card-"] { animation-name: mo-card-place; }
+
+  /* Нить между карточками — когда обе соседки легли */
+  .motion-ready .is-play > .p5-chain [class*="p5-thread-"] {
+    animation: mo-thread .35s linear both;
+    animation-delay: calc(.6s + var(--i) * .17s + .62s);
+  }
+  .p5-thread-12 { --i: 1; } .p5-thread-23 { --i: 2; } .p5-thread-34 { --i: 3; }
+  .p5-thread-56 { --i: 5; } .p5-thread-67 { --i: 6; } .p5-thread-78 { --i: 7; }
+  .motion-ready .is-play > .p5-chain .p5-thread-loop {
+    animation: mo-wipe-down .7s cubic-bezier(.45,0,.4,1) 2.45s both;
+  }
+
+  /* Рукописное — последним, «от руки» слева направо */
+  .motion-ready .is-play > .p5-chain [class*="p5-hand-"] {
+    animation: mo-wipe .75s cubic-bezier(.3,.6,.2,1) both;
+  }
+  .motion-ready .is-play > .p5-chain .p5-hand-top    { animation-delay: 2.75s; }
+  .motion-ready .is-play > .p5-chain .p5-hand-bottom { animation-delay: 2.95s; }
+  .motion-ready .is-play > .p5-chain .p5-hand-lines  { animation-delay: 3.1s; }
+  .motion-ready .is-play > .p5-chain .p5-hand-left   { animation-delay: 3.25s; }
+
+  /* ---- Живой текст экрана 05 ---------------------------------------- */
+  .motion-ready .is-armed .p5-num,
+  .motion-ready .is-armed .p5-num-underline,
+  .motion-ready .is-armed .p5-title span,
+  .motion-ready .is-armed .p5-lead p,
+  .motion-ready .is-armed .p5-bottom span { opacity: 0; }
+  .motion-ready .is-text .p5-num,
+  .motion-ready .is-text .p5-num-underline,
+  .motion-ready .is-text .p5-title span,
+  .motion-ready .is-text .p5-lead p,
+  .motion-ready .is-text .p5-bottom span {
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(.22,.7,.2,1);
+  }
+  .motion-ready .is-text .p5-num                     { animation-name: mo-settle;   animation-duration: .7s;  animation-delay: .05s; }
+  .motion-ready .is-text .p5-num-underline           { animation-name: mo-wipe;     animation-duration: .45s; animation-delay: .35s; }
+  .motion-ready .is-text .p5-title span:nth-child(1) { animation-name: mo-settle-x; animation-duration: .9s;  animation-delay: .12s; }
+  .motion-ready .is-text .p5-title span:nth-child(2) { animation-name: mo-settle-x; animation-duration: .9s;  animation-delay: .26s; }
+  .motion-ready .is-text .p5-title span:nth-child(3) { animation-name: mo-settle-x; animation-duration: .9s;  animation-delay: .4s; }
+  .motion-ready .is-text .p5-lead p:nth-child(1)     { animation-name: mo-settle;   animation-duration: .8s;  animation-delay: .6s; }
+  .motion-ready .is-text .p5-lead p:nth-child(2)     { animation-name: mo-settle;   animation-duration: .8s;  animation-delay: .75s; }
+  .motion-ready .is-text .p5-bottom span:nth-child(1) { animation-name: mo-settle;  animation-duration: .8s;  animation-delay: .95s; }
+  .motion-ready .is-text .p5-bottom span:nth-child(2) { animation-name: mo-settle;  animation-duration: .8s;  animation-delay: 1.1s; }
+  .motion-lite .is-text .p5-num,
+  .motion-lite .is-text .p5-title span,
+  .motion-lite .is-text .p5-lead p,
+  .motion-lite .is-text .p5-bottom span { animation-name: mo-settle-lite; }
+}
+
+/* ==========================================================================
+   ЭКРАН 06 — «На стол выкладывают папки с реальными работами» (компьютер)
+   Бумага карточки (вырезка из подложки) и её живой текст с кнопкой
+   «Смотреть кейс» лежат в одной обёртке .p6-card-group и движутся
+   вместе. Три карточки ложатся по очереди, каждая по-своему: откуда
+   «пришла», какой наклон, насколько сильно оседает. Затем красная нить
+   внизу протягивается слева направо.
+   Обёртки вне анимации — display: contents: без JS, в статичной версии
+   и на телефоне вёрстка та же, что в оригинале. Кнопки не перекрываются
+   ничем и работают всегда; после анимации у обёрток не остаётся
+   ни transform, ни filter.
+   ========================================================================== */
+@keyframes mo-folder {
+  0%   { opacity: 0; translate: var(--fx) var(--fy); rotate: var(--rot); scale: var(--sc); }
+  25%  { opacity: 1; }
+  72%  { translate: 0 0.15cqw; rotate: calc(var(--rot) * -0.12); scale: 0.998; }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
+}
+@keyframes mo-folder-lift {
+  from { filter: drop-shadow(0.6cqw 2.2cqw 1.6cqw rgba(40, 22, 16, 0.3)); }
+  to   { filter: drop-shadow(0 0 0 rgba(40, 22, 16, 0)); }
+}
+.p6-card-group { display: contents; }
+.p6-card-paper { display: none; }
+@media (min-width: 701px) {
+  .motion-ready .p6-card-group {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;           /* обёртка во всю сцену не ловит нажатия */
+  }
+  .motion-ready .p6-card-group > :not(.frag) { pointer-events: auto; }
+  .motion-ready .is-armed .p6-card-paper { display: block; }
+
+  .motion-ready .is-armed .p6-card-group { opacity: 0; }
+  .motion-ready .is-armed > .p6-chain .p6-thread { clip-path: inset(-10% 100% -10% 0); }
+
+  .p6-card-group.g1 { transform-origin: 36% 53%;   --fx: -1.4cqw; --fy: -2.4cqw; --rot: -3.6deg; --sc: 1.04; --d: .3s; }
+  .p6-card-group.g2 { transform-origin: 59.6% 52%; --fx: 0.2cqw;  --fy: -3.2cqw; --rot: 2.1deg;  --sc: 1.06; --d: .75s; }
+  .p6-card-group.g3 { transform-origin: 83% 52%;   --fx: 1.8cqw;  --fy: -1.8cqw; --rot: 4.2deg;  --sc: 1.035; --d: 1.2s; }
+
+  .motion-ready .is-play .p6-card-group {
+    animation-name: mo-folder, mo-folder-lift;
+    animation-duration: 1s, 1s;
+    animation-timing-function: cubic-bezier(.25,.75,.3,1), cubic-bezier(.4,0,.3,1);
+    animation-delay: var(--d), var(--d);
+    animation-fill-mode: both;
+  }
+  .motion-lite .is-play .p6-card-group { animation-name: mo-folder; animation-duration: .75s; }
+
+  .motion-ready .is-play > .p6-chain .p6-thread {
+    animation: mo-thread 1.1s cubic-bezier(.45,.05,.55,.95) 2.15s both;
+  }
+
+  /* ---- Живой текст экрана 06 (заголовок — первым) -------------------- */
+  .motion-ready .is-armed .p6-num,
+  .motion-ready .is-armed .p6-num-underline,
+  .motion-ready .is-armed .p6-title,
+  .motion-ready .is-armed .p6-lead1,
+  .motion-ready .is-armed .p6-lead2 { opacity: 0; }
+  .motion-ready .is-text .p6-num,
+  .motion-ready .is-text .p6-num-underline,
+  .motion-ready .is-text .p6-title,
+  .motion-ready .is-text .p6-lead1,
+  .motion-ready .is-text .p6-lead2 {
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(.22,.7,.2,1);
+  }
+  .motion-ready .is-text .p6-num            { animation-name: mo-settle;   animation-duration: .7s;  animation-delay: .05s; }
+  .motion-ready .is-text .p6-num-underline  { animation-name: mo-wipe;     animation-duration: .45s; animation-delay: .35s; }
+  .motion-ready .is-text .p6-title          { animation-name: mo-settle-x; animation-duration: .9s;  animation-delay: .12s; }
+  .motion-ready .is-text .p6-lead1          { animation-name: mo-settle;   animation-duration: .8s;  animation-delay: .45s; }
+  .motion-ready .is-text .p6-lead2          { animation-name: mo-settle;   animation-duration: .8s;  animation-delay: .65s; }
+  .motion-lite .is-text .p6-num,
+  .motion-lite .is-text .p6-title,
+  .motion-lite .is-text .p6-lead1,
+  .motion-lite .is-text .p6-lead2 { animation-name: mo-settle-lite; }
+}
+
+/* ==========================================================================
+   ЭКРАНЫ 05 и 06 — телефон (<=700px)
+   05: плашка ложится наклейкой, услуги встают по очереди (иконка с лёгким
+   поворотом, подпись, нить к следующей), рукописные пометки и нижний
+   текст проявляются при прокрутке — то есть после карточек над ними.
+   06: три карточки кейсов ложатся по очереди, каждая со своим наклоном.
+   Сдвиг по горизонтали — не больше 4px, поворот — не больше 1.5°: края
+   карточек остаются внутри полей экрана (20px), горизонтальной прокрутки
+   нет. Кнопки «Смотреть кейс» работают в любой момент.
+   ========================================================================== */
+@keyframes mo-m-sticker {
+  0%   { opacity: 0; translate: 0 -14px; rotate: -2.5deg; scale: 1.04; }
+  40%  { opacity: 1; }
+  75%  { translate: 0 1px; rotate: 0.3deg; scale: 1; }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
+}
+@keyframes mo-m-folder {
+  0%   { opacity: 0; translate: var(--mx) -22px; rotate: var(--mr); }
+  30%  { opacity: 1; }
+  75%  { translate: 0 1px; rotate: calc(var(--mr) * -0.1); }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; }
+}
+@media (max-width: 700px) {
+  .motion-ready .m-services > :not(.m-chain),
+  .motion-ready .m-cases > :not(.m-card) {
+    animation: mo-fade-up .7s cubic-bezier(.2,.7,.2,1) both paused;
+  }
+  .motion-ready .m-services > .m-banner-05 {
+    animation: mo-m-sticker .8s cubic-bezier(.25,.75,.3,1) .1s both paused;
+  }
+  .motion-ready .m-services > .is-revealed,
+  .motion-ready .m-cases > .is-revealed { animation-play-state: running; }
+
+  .motion-ready .m-svc-item .m-svc-ico {
+    animation: mo-m-card .75s cubic-bezier(.25,.75,.3,1) both paused;
+  }
+  .motion-ready .m-svc-item .m-svc-text {
+    animation: mo-fade-up .6s cubic-bezier(.2,.7,.2,1) .15s both paused;
+  }
+  .motion-ready .m-svc-item::after {
+    transform-origin: 50% 0;
+    animation: mo-m-thread .5s cubic-bezier(.5,0,.3,1) .4s both paused;
+  }
+  .motion-ready .m-svc-item.is-revealed .m-svc-ico,
+  .motion-ready .m-svc-item.is-revealed .m-svc-text,
+  .motion-ready .m-svc-item.is-revealed::after { animation-play-state: running; }
+
+  .motion-ready .m-cases > .m-card {
+    animation: mo-m-folder .85s cubic-bezier(.25,.75,.3,1) both paused;
+  }
+  .m-card-1 { --mx: -4px; --mr: -1.5deg; }
+  .m-card-2 { --mx: 2px;  --mr: 1.2deg; }
+  .m-card-3 { --mx: 4px;  --mr: 1.5deg; }
+
+  /* Запуск — отдельным правилом ПОСЛЕ своих анимаций: сокращённая запись
+     animation выше снова ставит paused, и при той же специфичности
+     общее правило «.is-revealed → running» проигрывало бы ей —
+     карточки так и оставались бы прозрачными. */
+  .motion-ready .m-services > .m-banner-05.is-revealed,
+  .motion-ready .m-cases > .m-card.is-revealed { animation-play-state: running; }
+}
+
+/* ==========================================================================
+   ЭКРАНЫ 07 и 08 — общие обёртки
+   Бумага (вырезка из подложки) и её живой текст лежат в одной обёртке
+   и движутся вместе. Вне анимации обёртки — display: contents, слои
+   бумаги скрыты: без JS, в статичной версии и на телефоне вёрстка та же,
+   что в оригинале. После анимации у обёрток не остаётся ни transform,
+   ни filter, слои снова скрыты — видна сама подложка.
+   ========================================================================== */
+.p7-card-group, .p7-row, .p7-yellow-group, .p8-card-group { display: contents; }
+.p7-paper, .p8-paper { display: none; }
+@media (min-width: 701px) {
+  .motion-ready .p7-card-group,
+  .motion-ready .p7-row,
+  .motion-ready .p7-yellow-group,
+  .motion-ready .p8-card-group {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;           /* обёртка во всю сцену не ловит нажатия */
+  }
+  .motion-ready .p7-card-group > :not(.frag),
+  .motion-ready .p7-row > :not(.frag),
+  .motion-ready .p7-yellow-group > :not(.frag),
+  .motion-ready .p8-card-group > :not(.frag) { pointer-events: auto; }
+  .motion-ready .is-armed .p7-paper,
+  .motion-ready .is-armed .p8-paper { display: block; }
+}
+
+/* ==========================================================================
+   ЭКРАН 07 — «Из хаоса рождается система» (компьютер)
+   1. Заголовок и лид, затем карточка «До».
+   2. Пункты «До» прилетают вразнобой: у каждого свой снос и наклон
+      (до 5°), но они оседают за 0,85 с и читаются.
+   3. Стрелка и красная нить внизу связывают стороны.
+   4. Карточка «После» и её пункты встают ровно, по порядку, без наклона.
+   5. Круг вокруг «в систему» прорисовывается последним.
+   6. Жёлтая заметка мягко ложится, как итоговый комментарий редактора
+      (это точная копия поверх оригинала — под ней полосы бумаги, убрать
+      её со стола без следов нельзя).
+   ========================================================================== */
+@keyframes mo-scatter {
+  0%   { opacity: 0; translate: var(--fx) var(--fy); rotate: var(--rot); }
+  35%  { opacity: 1; }
+  75%  { translate: calc(var(--fx) * -0.04) calc(var(--fy) * -0.04); rotate: calc(var(--rot) * -0.08); }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; }
+}
+@keyframes mo-orderly {
+  from { opacity: 0; translate: 0 0.5cqw; }
+  to   { opacity: 1; translate: 0 0; }
+}
+/* Копия ложится поверх такой же: всегда чуть больше оригинала, поворот
+   мал — край оригинала не выглядывает */
+@keyframes mo-lay-copy {
+  0%   { opacity: 0; scale: 1.06; rotate: var(--rot, -0.6deg); translate: 0 -0.3cqw; }
+  14%  { opacity: 1; }
+  70%  { scale: 1.004; rotate: 0deg; translate: 0 0; }
+  100% { opacity: 1; scale: 1; rotate: 0deg; translate: 0 0; }
+}
+@keyframes mo-copy-lift {
+  from { filter: drop-shadow(0.3cqw 1.2cqw 1.1cqw rgba(40, 22, 16, 0.32)); }
+  to   { filter: drop-shadow(0 0 0 rgba(40, 22, 16, 0)); }
+}
+@media (min-width: 701px) {
+  .motion-ready .is-armed .p7-card-group,
+  .motion-ready .is-armed .p7-row,
+  .motion-ready .is-armed .p7-yellow-group,
+  .motion-ready .is-armed > .p7-chain .p7-arrow,
+  .motion-ready .is-armed > .p7-chain .p7-thread { opacity: 0; }
+  .motion-ready .is-armed .p7-circle path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+  .p7-card-group.do    { transform-origin: 44.4% 45.1%; }
+  .p7-card-group.posle { transform-origin: 76.7% 44.8%; }
+  .p7-row.do    { --ox: 45%; }
+  .p7-row.posle { --ox: 76%; }
+  .p7-row.r1 { transform-origin: var(--ox) 27.5%; }
+  .p7-row.r2 { transform-origin: var(--ox) 34.8%; }
+  .p7-row.r3 { transform-origin: var(--ox) 42.2%; }
+  .p7-row.r4 { transform-origin: var(--ox) 49.6%; }
+  .p7-row.r5 { transform-origin: var(--ox) 56.9%; }
+  .p7-yellow-group { transform-origin: 57.1% 85.2%; }
+
+  /* «До»: карточка и разрозненные пункты */
+  .motion-ready .is-play .p7-card-group.do {
+    animation: mo-folder .8s cubic-bezier(.25,.75,.3,1) .05s both;
+    --fx: -1.6cqw; --fy: 0.6cqw; --rot: -2deg; --sc: 1.02;
+  }
+  .motion-ready .is-play .p7-row.do {
+    animation: mo-scatter .85s cubic-bezier(.2,.8,.25,1.05) both;
+    opacity: 1;
+  }
+  .motion-ready .is-play .p7-row.do.r1 { --fx: -1.3cqw; --fy: -0.6cqw; --rot: -5deg;  animation-delay: .4s; }
+  .motion-ready .is-play .p7-row.do.r2 { --fx:  1.1cqw; --fy:  0.5cqw; --rot:  4deg;  animation-delay: .55s; }
+  .motion-ready .is-play .p7-row.do.r3 { --fx: -0.7cqw; --fy:  0.9cqw; --rot: -3deg;  animation-delay: .66s; }
+  .motion-ready .is-play .p7-row.do.r4 { --fx:  1.4cqw; --fy: -0.5cqw; --rot:  5deg;  animation-delay: .82s; }
+  .motion-ready .is-play .p7-row.do.r5 { --fx: -1cqw;   --fy:  0.4cqw; --rot: -4deg;  animation-delay: .92s; }
+
+  /* Связь: стрелка, затем нить слева направо */
+  .motion-ready .is-play > .p7-chain .p7-arrow {
+    animation: mo-wipe .45s cubic-bezier(.4,0,.3,1) 1.4s both;
+    opacity: 1;
+  }
+  .motion-ready .is-play > .p7-chain .p7-thread {
+    animation: mo-thread 1.3s cubic-bezier(.45,.05,.55,.95) 1.5s both;
+    opacity: 1;
+  }
+
+  /* «После»: ровно и по порядку */
+  .motion-ready .is-play .p7-card-group.posle {
+    animation: mo-orderly .7s cubic-bezier(.22,.7,.2,1) 1.8s both;
+  }
+  .motion-ready .is-play .p7-row.posle {
+    animation: mo-orderly .5s cubic-bezier(.22,.7,.2,1) both;
+    opacity: 1;
+  }
+  .motion-ready .is-play .p7-row.posle.r1 { animation-delay: 2.2s; }
+  .motion-ready .is-play .p7-row.posle.r2 { animation-delay: 2.36s; }
+  .motion-ready .is-play .p7-row.posle.r3 { animation-delay: 2.52s; }
+  .motion-ready .is-play .p7-row.posle.r4 { animation-delay: 2.68s; }
+  .motion-ready .is-play .p7-row.posle.r5 { animation-delay: 2.84s; }
+
+  /* Круг вокруг «в систему» — последним штрихом */
+  .motion-ready .is-play .p7-circle path {
+    stroke-dasharray: 1;
+    animation: mo-draw .9s cubic-bezier(.5,0,.3,1) 3.2s both;
+  }
+  /* Жёлтая заметка — итоговый комментарий */
+  .motion-ready .is-play .p7-yellow-group {
+    --rot: -0.7deg;
+    animation: mo-lay-copy 1s cubic-bezier(.25,.75,.3,1) 3.75s both,
+               mo-copy-lift 1s cubic-bezier(.4,0,.3,1) 3.75s both;
+  }
+  .motion-lite .is-play .p7-card-group.do { animation-name: mo-folder; }
+  .motion-lite .is-play .p7-yellow-group { animation: mo-lay-copy .8s cubic-bezier(.25,.75,.3,1) 3.4s both; }
+
+  /* ---- Живой текст экрана 07 ---------------------------------------- */
+  .motion-ready .is-armed .p7-num,
+  .motion-ready .is-armed .p7-title > span,
+  .motion-ready .is-armed .p7-lead,
+  .motion-ready .is-armed .p7-leftnote,
+  .motion-ready .is-armed .p7-leftnote-heart { opacity: 0; }
+  .motion-ready .is-text .p7-num,
+  .motion-ready .is-text .p7-title > span,
+  .motion-ready .is-text .p7-lead,
+  .motion-ready .is-text .p7-leftnote,
+  .motion-ready .is-text .p7-leftnote-heart {
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(.22,.7,.2,1);
+  }
+  .motion-ready .is-text .p7-num                      { animation-name: mo-settle;   animation-duration: .7s; animation-delay: .05s; }
+  .motion-ready .is-text .p7-title > span:nth-child(1) { animation-name: mo-settle-x; animation-duration: .9s; animation-delay: .12s; }
+  .motion-ready .is-text .p7-title > span:nth-child(2) { animation-name: mo-settle-x; animation-duration: .9s; animation-delay: .26s; }
+  .motion-ready .is-text .p7-title > span:nth-child(3) { animation-name: mo-settle-x; animation-duration: .9s; animation-delay: .4s; }
+  .motion-ready .is-text .p7-lead                     { animation-name: mo-settle;   animation-duration: .8s; animation-delay: .6s; }
+  /* mo-wipe открывает строку маской и прозрачность не трогает — вернуть её */
+  .motion-ready .is-text .p7-leftnote                 { animation-name: mo-wipe;     animation-duration: .8s; animation-delay: .9s; opacity: 1; }
+  .motion-ready .is-text .p7-leftnote-heart           { animation-name: mo-pop;      animation-duration: .5s; animation-delay: 1.5s; }
+  .motion-lite .is-text .p7-num,
+  .motion-lite .is-text .p7-title > span,
+  .motion-lite .is-text .p7-lead { animation-name: mo-settle-lite; }
+}
+
+/* ==========================================================================
+   ЭКРАН 08 — «Последний лист творческого досье» (компьютер)
+   Коротко: заголовок → четыре карточки по очереди «поднимают и кладут»
+   вокруг руки с маркером → маркер дотягивает линию, нить от 03 к 04
+   замыкается → всё неподвижно (~2,7 с). Карточки — точные копии поверх
+   оригинала: под ними плотный коллаж, убирать их нельзя. Контактный
+   блок ниже не анимируется: он виден и доступен с первого момента.
+   ========================================================================== */
+@media (min-width: 701px) {
+  .motion-ready .is-armed .p8-card-group,
+  .motion-ready .is-armed > .p8-chain .p8t-line,
+  .motion-ready .is-armed > .p8-chain .p8t-bottom { opacity: 0; }
+
+  .p8-card-group.g1 { transform-origin: 43.5% 29.3%; --rot: -0.6deg; --d: .15s; }
+  .p8-card-group.g2 { transform-origin: 84.6% 32.5%; --rot: 0.5deg;  --d: .4s; }
+  .p8-card-group.g3 { transform-origin: 43.9% 64.7%; --rot: 0.4deg;  --d: .65s; }
+  .p8-card-group.g4 { transform-origin: 84.5% 68.4%; --rot: -0.5deg; --d: .9s; }
+  .motion-ready .is-play .p8-card-group {
+    animation-name: mo-lay-copy, mo-copy-lift;
+    animation-duration: .8s, .8s;
+    animation-timing-function: cubic-bezier(.25,.75,.3,1), cubic-bezier(.4,0,.3,1);
+    animation-delay: var(--d), var(--d);
+    animation-fill-mode: both;
+  }
+  .motion-lite .is-play .p8-card-group { animation-name: mo-lay-copy; }
+
+  .motion-ready .is-play > .p8-chain .p8t-line {
+    animation: mo-wipe .6s cubic-bezier(.45,.05,.4,1) 1.6s both;
+    opacity: 1;
+  }
+  .motion-ready .is-play > .p8-chain .p8t-bottom {
+    animation: mo-thread .8s cubic-bezier(.45,.05,.55,.95) 1.85s both;
+    opacity: 1;
+  }
+
+  .motion-ready .is-armed .p8-num,
+  .motion-ready .is-armed .p8-title > span,
+  .motion-ready .is-armed .p8-lead { opacity: 0; }
+  .motion-ready .is-text .p8-num,
+  .motion-ready .is-text .p8-title > span,
+  .motion-ready .is-text .p8-lead {
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(.22,.7,.2,1);
+  }
+  .motion-ready .is-text .p8-num                      { animation-name: mo-settle;   animation-duration: .7s; animation-delay: .05s; }
+  .motion-ready .is-text .p8-title > span:nth-child(1) { animation-name: mo-settle-x; animation-duration: .9s; animation-delay: .12s; }
+  .motion-ready .is-text .p8-title > span:nth-child(2) { animation-name: mo-settle-x; animation-duration: .9s; animation-delay: .26s; }
+  .motion-ready .is-text .p8-lead                     { animation-name: mo-settle;   animation-duration: .8s; animation-delay: .45s; }
+  .motion-lite .is-text .p8-num,
+  .motion-lite .is-text .p8-title > span,
+  .motion-lite .is-text .p8-lead { animation-name: mo-settle-lite; }
+}
+
+/* ==========================================================================
+   ЭКРАНЫ 07 и 08 — телефон (<=700px)
+   07: пункты «До» встают по очереди с лёгким разнобоем (наклон до 1.5°,
+   снос до 4px), пункты «После» — ровно; жёлтая заметка ложится наклейкой.
+   08: заголовок и коллаж проявляются, четыре пункта — по очереди.
+   Контактный блок не анимируется. Сдвиг вбок не больше 4px —
+   горизонтальной прокрутки нет.
+   ========================================================================== */
+@keyframes mo-m-scatter {
+  0%   { opacity: 0; translate: var(--mx) 8px; rotate: var(--mr); }
+  40%  { opacity: 1; }
+  100% { opacity: 1; translate: 0 0; rotate: 0deg; }
+}
+@media (max-width: 700px) {
+  .motion-ready .m-effect > :not(.m-vs),
+  .motion-ready .m-effect > .m-vs > :not(.m-vs-list),
+  .motion-ready .m-whatido > :not(.m-do) {
+    animation: mo-fade-up .7s cubic-bezier(.2,.7,.2,1) both paused;
+  }
+  .motion-ready .m-vs-do .m-vs-list li {
+    animation: mo-m-scatter .7s cubic-bezier(.2,.8,.25,1.05) both paused;
+  }
+  .m-vs-do .m-vs-list li:nth-child(odd)  { --mx: -4px; --mr: -1.5deg; }
+  .m-vs-do .m-vs-list li:nth-child(even) { --mx: 4px;  --mr: 1.2deg; }
+  .motion-ready .m-vs-posle .m-vs-list li {
+    animation: mo-fade-up .5s cubic-bezier(.22,.7,.2,1) both paused;
+  }
+  .motion-ready .m-do-item .m-do-ico {
+    animation: mo-m-card .75s cubic-bezier(.25,.75,.3,1) both paused;
+  }
+  .motion-ready .m-do-item .m-do-body {
+    animation: mo-fade-up .6s cubic-bezier(.2,.7,.2,1) .15s both paused;
+  }
+  .motion-ready .m-effect > .m-yellow {
+    animation: mo-m-sticker .8s cubic-bezier(.25,.75,.3,1) .1s both paused;
+  }
+  /* Запуск — после всех правил выше (сокращённая запись animation снова
+     ставит paused, см. экраны 05–06) */
+  .motion-ready .m-effect > .is-revealed,
+  .motion-ready .m-effect > .m-vs > .is-revealed,
+  .motion-ready .m-vs-list li.is-revealed,
+  .motion-ready .m-whatido > .is-revealed,
+  .motion-ready .m-do-item.is-revealed .m-do-ico,
+  .motion-ready .m-do-item.is-revealed .m-do-body { animation-play-state: running; }
+}

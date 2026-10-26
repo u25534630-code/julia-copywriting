@@ -1,0 +1,47 @@
+/* СГЕНЕРИРОВАНО tools/build_fragments_0304.py — не править вручную. */
+@media (min-width: 701px) {
+  .motion-ready .p3-desk { left: 2.2786%; top: 51.7578%; width: 97.7214%; height: 29.5898%; }
+  .motion-ready .is-near .p3-desk { background-image: url(fragments/p3-desk.webp); }
+  .motion-ready .p3-card-1 { left: 2.2786%; top: 53.8086%; width: 11.2630%; height: 26.7578%; --at: 0.0000; }
+  .motion-ready .is-near .p3-card-1 { background-image: url(fragments/p3-card-1.webp); }
+  .motion-ready .p3-card-2 { left: 13.0859%; top: 53.4180%; width: 12.4349%; height: 26.8555%; --at: 0.1106; }
+  .motion-ready .is-near .p3-card-2 { background-image: url(fragments/p3-card-2.webp); }
+  .motion-ready .p3-card-3 { left: 24.8047%; top: 51.9531%; width: 13.4115%; height: 29.1992%; --at: 0.2305; }
+  .motion-ready .is-near .p3-card-3 { background-image: url(fragments/p3-card-3.webp); }
+  .motion-ready .p3-card-4 { left: 38.1510%; top: 52.2461%; width: 11.1979%; height: 28.3203%; --at: 0.3671; }
+  .motion-ready .is-near .p3-card-4 { background-image: url(fragments/p3-card-4.webp); }
+  .motion-ready .p3-card-5 { left: 49.4792%; top: 52.2461%; width: 11.8490%; height: 28.3203%; --at: 0.4830; }
+  .motion-ready .is-near .p3-card-5 { background-image: url(fragments/p3-card-5.webp); }
+  .motion-ready .p3-card-6 { left: 61.2630%; top: 52.6367%; width: 11.7188%; height: 26.8555%; --at: 0.6036; }
+  .motion-ready .is-near .p3-card-6 { background-image: url(fragments/p3-card-6.webp); }
+  .motion-ready .p3-card-7 { left: 72.9818%; top: 52.9297%; width: 11.9141%; height: 27.0508%; --at: 0.7235; }
+  .motion-ready .is-near .p3-card-7 { background-image: url(fragments/p3-card-7.webp); }
+  .motion-ready .p3-card-8 { left: 84.3099%; top: 51.7578%; width: 14.7786%; height: 29.5898%; --at: 0.8394; }
+  .motion-ready .is-near .p3-card-8 { background-image: url(fragments/p3-card-8.webp); }
+  .motion-ready .p3-thread { left: 12.7604%; top: 60.9375%; width: 87.2396%; height: 17.7734%; --ts: 0.1073; --tl: 0.8927; }
+  .motion-ready .is-near .p3-thread { background-image: url(fragments/p3-thread.webp); }
+  .motion-ready .p3-step-1 { --at: 0.0000; }
+  .motion-ready .p3-step-2 { --at: 0.1106; }
+  .motion-ready .p3-step-3 { --at: 0.2305; }
+  .motion-ready .p3-step-4 { --at: 0.3671; }
+  .motion-ready .p3-step-5 { --at: 0.4830; }
+  .motion-ready .p3-step-6 { --at: 0.6036; }
+  .motion-ready .p3-step-7 { --at: 0.7235; }
+  .motion-ready .p3-step-8 { --at: 0.8394; }
+  .motion-ready .p4-desk { left: 0.0000%; top: 46.2891%; width: 100.0000%; height: 41.4062%; }
+  .motion-ready .is-near .p4-desk { background-image: url(fragments/p4-desk.webp); }
+  .motion-ready .p4-card-1 { left: 5.6641%; top: 46.2891%; width: 15.5599%; height: 37.6953%; --at: 0.0566; }
+  .motion-ready .is-near .p4-card-1 { background-image: url(fragments/p4-card-1.webp); }
+  .motion-ready .p4-card-2 { left: 30.0781%; top: 46.9727%; width: 15.8854%; height: 38.8672%; --at: 0.3008; }
+  .motion-ready .is-near .p4-card-2 { background-image: url(fragments/p4-card-2.webp); }
+  .motion-ready .p4-card-3 { left: 54.2969%; top: 48.3398%; width: 17.1875%; height: 33.5938%; --at: 0.5430; }
+  .motion-ready .is-near .p4-card-3 { background-image: url(fragments/p4-card-3.webp); }
+  .motion-ready .p4-card-4 { left: 79.8177%; top: 47.7539%; width: 15.4948%; height: 36.2305%; --at: 0.7982; }
+  .motion-ready .is-near .p4-card-4 { background-image: url(fragments/p4-card-4.webp); }
+  .motion-ready .p4-thread { left: 0.0000%; top: 63.5742%; width: 100.0000%; height: 24.1211%; --ts: 0.0000; --tl: 1.0000; }
+  .motion-ready .is-near .p4-thread { background-image: url(fragments/p4-thread.webp); }
+  .motion-ready .p4-step-1 { --at: 0.0566; }
+  .motion-ready .p4-step-2 { --at: 0.3008; }
+  .motion-ready .p4-step-3 { --at: 0.5430; }
+  .motion-ready .p4-step-4 { --at: 0.7982; }
+}

@@ -1,0 +1,29 @@
+/* СГЕНЕРИРОВАНО tools/build_fragments.py — не править вручную. */
+@media (min-width: 701px) {
+  .f-hole-underline { left: 3.1250%; top: 41.5039%; width: 34.7656%; height: 2.8320%; background-image: url(fragments/hero-hole-underline.webp); }
+  .f-hole-btn { left: 3.9714%; top: 66.6992%; width: 27.4089%; height: 18.6523%; background-image: url(fragments/hero-hole-btn.webp); }
+  .f-hole-note { left: 39.1927%; top: 14.2578%; width: 12.1745%; height: 18.6523%; background-image: url(fragments/hero-hole-note.webp); }
+  .f-hole-scheme { left: 76.7578%; top: 19.3359%; width: 20.4427%; height: 65.3320%; background-image: url(fragments/hero-hole-scheme.webp); }
+  .f-ink-underline { left: 3.1250%; top: 41.5039%; width: 34.7656%; height: 2.8320%; background-image: url(fragments/hero-ink-underline.webp); }
+  .f-ink-btn-stroke { left: 4.4271%; top: 67.2852%; width: 26.9531%; height: 15.4297%; background-image: url(fragments/hero-ink-btn-stroke.webp); }
+  .f-ink-btn-ticks { left: 3.9714%; top: 66.6992%; width: 26.1068%; height: 18.6523%; background-image: url(fragments/hero-ink-btn-ticks.webp); }
+  .f-ink-note-l1 { left: 39.1927%; top: 14.2578%; width: 12.1745%; height: 6.3477%; background-image: url(fragments/hero-ink-note-l1.webp); }
+  .f-ink-note-l2 { left: 39.9740%; top: 17.7734%; width: 6.7708%; height: 5.2734%; background-image: url(fragments/hero-ink-note-l2.webp); }
+  .f-ink-note-l3 { left: 40.3646%; top: 21.0938%; width: 6.4453%; height: 4.4922%; background-image: url(fragments/hero-ink-note-l3.webp); }
+  .f-ink-note-l4 { left: 40.7552%; top: 23.7305%; width: 5.3385%; height: 4.2969%; background-image: url(fragments/hero-ink-note-l4.webp); }
+  .f-ink-note-l5 { left: 41.1458%; top: 25.9766%; width: 5.9245%; height: 4.6875%; background-image: url(fragments/hero-ink-note-l5.webp); }
+  .f-ink-note-l6 { left: 41.4714%; top: 28.0273%; width: 6.8359%; height: 4.8828%; background-image: url(fragments/hero-ink-note-l6.webp); }
+  .f-ink-note-arrow { left: 46.3542%; top: 19.1406%; width: 4.6224%; height: 7.3242%; background-image: url(fragments/hero-ink-note-arrow.webp); }
+  .f-ink-s1-icon { left: 82.2917%; top: 19.3359%; width: 6.9010%; height: 8.8867%; background-image: url(fragments/hero-ink-s1-icon.webp); }
+  .f-ink-s1-text { left: 80.9245%; top: 29.4922%; width: 10.2214%; height: 4.5898%; background-image: url(fragments/hero-ink-s1-text.webp); }
+  .f-ink-s2-arrow { left: 84.9609%; top: 36.6211%; width: 2.0833%; height: 5.4688%; background-image: url(fragments/hero-ink-s2-arrow.webp); }
+  .f-ink-s3-icon { left: 83.0078%; top: 44.3359%; width: 5.9245%; height: 6.0547%; background-image: url(fragments/hero-ink-s3-icon.webp); }
+  .f-ink-s3-text { left: 83.0078%; top: 51.3672%; width: 6.0547%; height: 4.5898%; background-image: url(fragments/hero-ink-s3-text.webp); }
+  .f-ink-s4-arrow { left: 85.0260%; top: 58.2031%; width: 2.0182%; height: 5.5664%; background-image: url(fragments/hero-ink-s4-arrow.webp); }
+  .f-ink-s5-icon { left: 82.1615%; top: 65.1367%; width: 14.1927%; height: 7.3242%; background-image: url(fragments/hero-ink-s5-icon.webp); }
+  .f-ink-s6-label { left: 76.8880%; top: 73.5352%; width: 18.4245%; height: 10.7422%; background-image: url(fragments/hero-ink-s6-label.webp); }
+  .f-ink-s6-marks { left: 76.7578%; top: 72.4609%; width: 20.4427%; height: 12.2070%; background-image: url(fragments/hero-ink-s6-marks.webp); }
+  .f-lift-struct { left: 56.7057%; top: 76.6602%; width: 16.4062%; height: 18.1641%; background-image: url(fragments/hero-lift-struct.webp); }
+  .f-lift-struct-shadow { left: 54.7526%; top: 73.7305%; width: 20.3125%; height: 24.0234%; background-image: url(fragments/hero-lift-struct-shadow.webp); }
+  .f-eye-hd { left: 41.6667%; top: 72.2656%; width: 16.9271%; height: 16.1133%; background-image: url(fragments/hero-eye-hd.webp); }
+}

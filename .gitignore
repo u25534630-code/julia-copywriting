@@ -9,3 +9,7 @@ Thumbs.db
 
 # Local dev / calibration pages
 _*.html
+
+# Working prototype, its backups and an old repo copy — not published
+experiments/
+julia-copywriting-main/

@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Юлия Седышева — смыслы, визуал, сайты</title>
+<!-- ПРОТОТИП АНИМАЦИИ экранов 01–08 («Оживший редакционный коллаж»,
+     переход «Сквозь взгляд», цепочки экранов 03–04, услуги и кейсы
+     05–06, «до / после» и финал 07–08). Отдельная копия страницы: основной сайт, его файлы и настройки Netlify не затронуты.
+     Стили, картинки и скрипт основного сайта подключены относительными
+     ссылками  без изменений; всё новое — в motion.css, fragments.css,
+     fragments-0304.css, fragments-0506.css, fragments-0708.css, motion.js
+     и fragments/. -->
+<script>
+  /* Режим анимации выбирается до первой отрисовки, чтобы не было вспышки
+     «показали — спрятали — показали».
+     static — prefers-reduced-motion (или ?static): страница как оригинал;
+     lite   — слабое устройство, экономия трафика (или ?lite): короче
+              переход, без размытия; JS может включить его и сам, если
+              кадры идут медленно;
+     full   — всё остальное. */
+  (function () {
+    var d = document.documentElement;
+    var q = new URLSearchParams(location.search);
+    var reduce = q.has('static') ||
+      (!q.has('full') && !q.has('lite') && window.matchMedia &&
+       matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (reduce) { d.classList.add('motion-static'); return; }
+    var c = navigator.connection;
+    var weak = (c && c.saveData) ||
+      (navigator.deviceMemory && navigator.deviceMemory <= 2) ||
+      (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
+    d.classList.add('motion-on');
+    if (q.has('lite') || (weak && !q.has('full'))) d.classList.add('motion-lite');
+    if (!q.has('nointro') && !q.has('y')) {
+      d.classList.add('intro-pending');
+      /* Страховка: если скрипт не загрузится, контент всё равно появится. */
+      setTimeout(function () { d.classList.add('intro-play'); }, 3000);
+    }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Oswald:wght@600;700&family=Playfair+Display:ital,wght@1,600;1,700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="fragments.css">
+<link rel="stylesheet" href="fragments-0304.css">
+<link rel="stylesheet" href="fragments-0506.css">
+<link rel="stylesheet" href="fragments-0708.css">
+<link rel="stylesheet" href="hero-01.css">
+<link rel="stylesheet" href="cases-06.css">
+<link rel="stylesheet" href="texts-0235.css">
+<link rel="stylesheet" href="motion.css">
+</head>
+<body>
+
+<!-- ============ Единая живая шапка сайта ============
+     Одна на весь сайт. Растровые шапки, впечатанные в подложки экранов
+     03–08, закрываются полосой .plate-mask в цвет бумаги своего экрана. -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="#top">
+      <span class="brand-name">Юлия&nbsp;Седышева</span>
+      <span class="brand-role">Смыслы · визуал · сайты</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-label="Меню"
+            aria-expanded="false" aria-controls="site-nav">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+
+    <div class="site-nav-panel" id="site-nav">
+    <nav class="nav">
+      <a href="#cases">Кейсы</a>
+      <a href="#approach">Подход</a>
+      <a href="#services">Услуги</a>
+    </nav>
+
+    <a href="#contact" class="top-cta">
+      <span class="top-cta-text">Обсудить задачу</span>
+      <svg class="top-cta-arrow" viewBox="0 0 34 16" aria-hidden="true">
+        <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg class="top-cta-underline" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M2 7 C 40 3, 70 10, 104 6 C 140 2, 168 9, 198 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+    </a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- .cine — «съёмочная площадка» перехода «Сквозь взгляд» (только
+       компьютер; высоту задаёт motion.js). Первый экран закрепляется,
+       камера подходит к глазу, из зрачка рвётся бумага, и в разрыве
+       раскрывается разворот экрана 02; в конце настоящий экран 02
+       встаёт точно на его место. Без класса motion-on обёртка ни на что
+       не влияет — вёрстка как у оригинала. -->
+  <div class="cine">
+  <section class="hero" data-paper="#EDE6DD">
+    <div class="hero-stage">
+      <!-- Камера: подложка и всё, что на ней лежит. Координаты слоёв —
+           в fragments.css, в процентах сцены 1536x1024. -->
+      <div class="cam">
+        <img class="hero-plate" src="fragments/hero-bg-v2.webp" alt="" aria-hidden="true"
+             fetchpriority="high" decoding="async">
+
+        <!-- «Заплатки»: бумага на месте оживающих элементов. В покое их
+             целиком закрывают сами элементы. -->
+        <div class="frag f-hole-underline" aria-hidden="true"></div>
+        <div class="frag f-hole-btn" aria-hidden="true"></div>
+        <div class="frag f-hole-note" aria-hidden="true"></div>
+        <div class="frag f-hole-scheme" aria-hidden="true"></div>
+
+        <!-- Глаз в повышенном разрешении — проявляется при наезде -->
+        <div class="frag f-eye-hd" aria-hidden="true"></div>
+
+        <!-- Бумажка «структура вместо шума» приподнимается над столом -->
+        <div class="lift" aria-hidden="true">
+          <div class="frag f-lift-struct-shadow"></div>
+          <div class="frag f-lift-struct"></div>
+        </div>
+
+        <!-- Рукописная заметка — пишется по строкам -->
+        <div class="frag ink f-ink-note-l1" aria-hidden="true"></div>
+        <div class="frag ink f-ink-note-l2" aria-hidden="true"></div>
+        <div class="frag ink f-ink-note-l3" aria-hidden="true"></div>
+        <div class="frag ink f-ink-note-l4" aria-hidden="true"></div>
+        <div class="frag ink f-ink-note-l5" aria-hidden="true"></div>
+        <div class="frag ink f-ink-note-l6" aria-hidden="true"></div>
+        <div class="frag ink f-ink-note-arrow" aria-hidden="true"></div>
+
+        <!-- Схема: разрозненные фрагменты → связи → система -->
+        <div class="frag ink f-ink-s1-icon" aria-hidden="true"></div>
+        <div class="frag ink f-ink-s1-text" aria-hidden="true"></div>
+        <div class="frag ink f-ink-s2-arrow" aria-hidden="true"></div>
+        <div class="frag ink f-ink-s3-icon" aria-hidden="true"></div>
+        <div class="frag ink f-ink-s3-text" aria-hidden="true"></div>
+        <div class="frag ink f-ink-s4-arrow" aria-hidden="true"></div>
+        <div class="frag ink f-ink-s5-icon" aria-hidden="true"></div>
+        <div class="frag ink f-ink-s6-label" aria-hidden="true"></div>
+        <div class="frag ink f-ink-s6-marks" aria-hidden="true"></div>
+
+        <!-- Кнопка: бордовый мазок проводится кистью -->
+        <div class="frag ink f-ink-btn-stroke" aria-hidden="true"></div>
+        <div class="frag ink f-ink-btn-ticks" aria-hidden="true"></div>
+
+        <!-- Кнопка: мазок кисти — на подложке (без надписи, см.
+             tools/build_hero_plate.py), надпись и стрелка — живые -->
+        <a href="#contact" class="btn-hotspot">
+          <span class="btn-label">Обсудить задачу<svg class="btn-label-arrow" viewBox="0 0 48 16" aria-hidden="true">
+              <path d="M2 9 C 16 8, 30 8, 45 7 M35 1.5 L46 7 L36 13.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg><svg class="btn-label-underline" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M3 8 C 50 5, 110 6, 197 3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg></span>
+        </a>
+      </div>
+
+      <!-- Передний план: живой текст. При наезде улетает «мимо камеры». -->
+      <div class="fg">
+        <!-- Строка услуг — над заголовком, мельче и тише его -->
+        <p class="hero-services">
+          <span>Позиционирование</span><i aria-hidden="true">·</i><span>Тексты</span><i aria-hidden="true">·</i><span>AI-визуал</span><i aria-hidden="true">·</i><span>Сайты</span>
+        </p>
+
+        <!-- Headline -->
+        <h1 class="headline">Знания видят.</h1>
+        <p class="subhead">Человека запоминают.</p>
+        <div class="frag ink f-ink-underline" aria-hidden="true"></div>
+
+        <div class="lead">
+          <p>У вас уже есть опыт, идеи и свой характер.</p>
+          <p>Я нахожу то, что отличает вас от других,<br>
+            и помогаю показать это клиентам — через<br>
+            исследование аудитории, тексты, визуал и сайты.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Виньетка «объектива» и проход сквозь бумагу: от зрачка рвётся
+         бумажный слой экрана 01, в разрыве — разворот экрана 02 (та же
+         подложка, что и у экрана 02, в той же позиции). Рваный край и
+         зерно бумаги рисует motion.js на canvas — новых файлов нет. -->
+    <div class="cine-vignette" aria-hidden="true"></div>
+    <div class="cine-next" aria-hidden="true">
+      <div class="cine-next-stage">
+        <img class="cine-next-plate" src="fragments/problem-bg-v2.webp" alt=""
+             decoding="async" fetchpriority="low">
+      </div>
+    </div>
+    <div class="cine-rim" aria-hidden="true"></div>
+
+    <!-- Мобильная раскладка экрана 01 (<=700px). Тексты те же, что на
+         десктопе. Визуал — кадр из fragments/hero-bg-v2.webp, обрезанный по
+         портретному коллажу средствами CSS; новых изображений нет. -->
+    <div class="m-screen m-hero">
+      <h1 class="m-hero-title">Знания видят.</h1>
+      <p class="m-hero-sub">Человека запоминают.</p>
+
+      <p class="m-hero-services">
+        <span>Позиционирование</span><i aria-hidden="true">·</i><span>Тексты</span><i aria-hidden="true">·</i><span>AI-визуал</span><i aria-hidden="true">·</i><span>Сайты</span>
+      </p>
+
+      <div class="m-hero-visual" aria-hidden="true">
+        <img src="fragments/hero-bg-v2.webp" alt="" fetchpriority="high" decoding="async">
+      </div>
+
+      <div class="m-hero-lead">
+        <p>У вас уже есть опыт, идеи и свой характер.</p>
+        <p>Я нахожу то, что отличает вас от других, и помогаю показать это
+          клиентам — через исследование аудитории, тексты, визуал и сайты.</p>
+      </div>
+
+      <!-- Бордовый мазок — фрагмент fragments/hero-bg-v2.webp (уже без
+           старой надписи), надпись и стрелка — живые -->
+      <a href="#contact" class="m-btn">
+        <span class="btn-label">Обсудить задачу<svg class="btn-label-arrow" viewBox="0 0 48 16" aria-hidden="true">
+            <path d="M2 9 C 16 8, 30 8, 45 7 M35 1.5 L46 7 L36 13.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg><svg class="btn-label-underline" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M3 8 C 50 5, 110 6, 197 3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg></span>
+      </a>
+    </div>
+  </section>
+  </div><!-- /.cine -->
+
+  <!-- ============ Экран 2 — узнавание проблемы ============ -->
+  <section class="problem" data-paper="#E8E1DB">
+    <div class="problem-stage">
+      <!-- Обёртка подложки экрана 02. На компьютере отъезд от карточки
+           «наблюдение» играет слой .cine-next внутри перехода, а этот
+           экран встаёт точно на его место. -->
+      <div class="cam2">
+        <img class="problem-plate" src="fragments/problem-bg-v2.webp" alt="" aria-hidden="true"
+             loading="lazy" decoding="async">
+      </div>
+
+      <span class="p2-num">02</span>
+
+      <h2 class="p2-title">
+        <span>Вас видят.</span>
+        <span>Но не всегда понимают,</span>
+        <span>чем вы отличаетесь.</span>
+      </h2>
+
+      <div class="p2-lead">
+        <p>У вас есть опыт, идеи, проекты, клиенты. Возможно,<br>
+          хороший продукт и десятки довольных покупателей.</p>
+        <p>Но всё это существует отдельно: сайт рассказывает<br>
+          одно, соцсети — другое, а самое важное остаётся<br>
+          где-то между строк.</p>
+        <p>А потом наступает вторник.<br>
+          И снова нужно придумать,<br>
+          что о себе рассказать.</p>
+      </div>
+
+      <!-- Рукописные пометки: на подложке стёрты, здесь — живой текст -->
+      <p class="p2-hand-note">идей много —<br>образ не<br>складывается</p>
+      <p class="p2-hand-caption">Всё ценное —<br>в разных местах.</p>
+
+      <p class="p2-final">
+        <span class="p2-final-strong">Материалов много.</span>
+        <span class="p2-final-italic">А цельного представления о вас<br>или вашем бренде так и не возникает.</span>
+        <svg class="p2-final-underline" viewBox="0 0 380 14" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M3 8 C 70 3, 150 12, 230 6 C 300 1, 345 9, 377 5" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" pathLength="1"/>
+        </svg>
+      </p>
+    </div>
+
+    <!-- Мобильная раскладка экрана 02 (<=700px). Тексты те же. Коллаж
+         и рукописная пометка — фрагменты images/problem-bg.webp,
+         вырезанные средствами CSS. -->
+    <div class="m-screen m-problem">
+      <div class="m-sec-head">
+        <span class="m-sec-num">02</span>
+      </div>
+      <h2 class="m-sec-title m-sec-title-sm">
+        <span>Вас видят.</span>
+        <span>Но не всегда понимают,</span>
+        <span>чем вы отличаетесь.</span>
+      </h2>
+
+      <p class="m-lead">У вас есть опыт, идеи, проекты, клиенты. Возможно,
+        хороший продукт и десятки довольных покупателей.</p>
+      <p class="m-lead">Но всё это существует отдельно: сайт рассказывает
+        одно, соцсети — другое, а самое важное остаётся где-то между строк.</p>
+      <p class="m-lead">А потом наступает вторник. И снова нужно придумать,
+        что о себе рассказать.</p>
+
+      <div class="m-collage m-collage-02" aria-hidden="true"><div class="m-zoom"></div></div>
+      <p class="m-hand-caption-02">Всё ценное — в разных местах.</p>
+      <div class="m-hand m-hand-02"><p class="m-hand-text-02">идей много — образ не складывается</p></div>
+
+      <p class="m-final">
+        <span class="m-final-strong">Материалов много.</span>
+        <span class="m-final-italic">А цельного представления о вас или вашем бренде так и не возникает.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ Экран 3 — что я называю системным контентом ============ -->
+  <section class="system" data-paper="#E7DFD9">
+    <div class="system-stage">
+      <img class="system-plate" src="fragments/system-bg-v2.webp" alt="" aria-hidden="true"
+           loading="lazy" decoding="async">
+      <div class="plate-mask" style="--paper: #E7DFD9" aria-hidden="true"></div>
+
+      <!-- Прототип: цепочка этапов 01–08 раскладывается по столу.
+           Подложка — fragments/system-bg-v2.webp (старые названия этапов
+           стёрты, значки переставлены, tools/build_plate_0203.py).
+           Слои — вырезки из той же подложки (tools/build_fragments_0304.py):
+           «стол» без цепочки, нить, восемь карточек. До подхода к экрану
+           и после анимации слои убраны — видна сама подложка. -->
+      <div class="chain p3-chain" aria-hidden="true">
+        <div class="frag p3-desk"></div>
+        <div class="frag p3-thread"></div>
+        <div class="frag p3-card p3-card-1"></div>
+        <div class="frag p3-card p3-card-2"></div>
+        <div class="frag p3-card p3-card-3"></div>
+        <div class="frag p3-card p3-card-4"></div>
+        <div class="frag p3-card p3-card-5"></div>
+        <div class="frag p3-card p3-card-6"></div>
+        <div class="frag p3-card p3-card-7"></div>
+        <div class="frag p3-card p3-card-8"></div>
+      </div>
+
+      <span class="p3-num">03</span>
+      <svg class="p3-num-underline" viewBox="0 0 60 10" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M2 6 C 20 8, 40 3, 58 5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+
+      <h2 class="p3-title">
+        <span>Когда всё складывается</span>
+        <span>в одну историю<em>.</em></span>
+      </h2>
+
+      <div class="p3-lead">
+        <p>Сильная подача начинается не с красивой картинки<br>
+          и не с удачного текста.</p>
+        <p>Сначала нужно понять, что делает вас или ваш бренд<br>
+          особенным. А потом связать эту идею со всем, что видит<br>
+          и читает ваш будущий клиент.</p>
+      </div>
+
+      <!-- Рукописная пометка и финальная мысль на записке справа -->
+      <p class="p3-hand">одна идея<br>связывает всё</p>
+      <p class="p3-note">Не обязательно делать<br>всё сразу. Важно, чтобы<br>каждая часть работала<br>на общую идею.</p>
+
+      <!-- Восемь этапов: номера, значки, карточки и нить — на подложке;
+           названия на карточках и пояснения под ними — живой текст -->
+      <ol class="p3-steps">
+        <li class="p3-step p3-step-1">
+          <span class="p3-step-name">Знакомство</span>
+          <span class="p3-step-text">Узнаю вас, ваш продукт и задачи.</span>
+        </li>
+        <li class="p3-step p3-step-2">
+          <span class="p3-step-name">Аудитория</span>
+          <span class="p3-step-text">Разбираюсь, кому и почему вы нужны.</span>
+        </li>
+        <li class="p3-step p3-step-3">
+          <span class="p3-step-name">Конкуренты</span>
+          <span class="p3-step-text">Смотрю, что уже предлагают другие.</span>
+        </li>
+        <li class="p3-step p3-step-4">
+          <span class="p3-step-name">Сильная<br>идея</span>
+          <span class="p3-step-text">Нахожу то, на чём строится отличие.</span>
+        </li>
+        <li class="p3-step p3-step-5">
+          <span class="p3-step-name">Позицио-<br>нирование</span>
+          <span class="p3-step-text">Формулирую, как представить вашу ценность.</span>
+        </li>
+        <li class="p3-step p3-step-6">
+          <span class="p3-step-name">Тексты</span>
+          <span class="p3-step-text">Подбираю слова, которые передают вашу мысль.</span>
+        </li>
+        <li class="p3-step p3-step-7">
+          <span class="p3-step-name">Визуальный<br>образ</span>
+          <span class="p3-step-text">Соединяю характер, стиль и содержание.</span>
+        </li>
+        <li class="p3-step p3-step-8">
+          <span class="p3-step-name">Воплощение</span>
+          <span class="p3-step-text">Сайт, контент или отдельные материалы под вашу задачу.</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Мобильная раскладка экрана 03 (<=700px). Цепочка из восьми
+         карточек развёрнута сверху вниз: иконки — фрагменты
+         fragments/system-bg-v2.webp, названия и пояснения этапов —
+         живой текст (CONTENT_APPROVED_03.md). -->
+    <div class="m-screen m-system">
+      <div class="m-sec-head">
+        <span class="m-sec-num">03</span>
+      </div>
+      <h2 class="m-sec-title m-sec-title-sm">
+        <span>Когда всё складывается</span>
+        <span>в одну историю<em>.</em></span>
+      </h2>
+
+      <p class="m-lead">Сильная подача начинается не с красивой картинки
+        и не с удачного текста.</p>
+      <p class="m-lead">Сначала нужно понять, что делает вас или ваш бренд
+        особенным. А потом связать эту идею со всем, что видит и читает
+        ваш будущий клиент.</p>
+
+      <p class="m-hand-text-03">одна идея связывает всё</p>
+
+      <ol class="m-chain">
+        <li class="m-chain-item">
+          <span class="m-chain-ico m-chain-ico-1" aria-hidden="true"></span>
+          <span class="m-chain-text"><span class="m-chain-num">01</span>Знакомство<span class="m-chain-desc">Узнаю вас, ваш продукт и задачи.</span></span>
+        </li>
+        <li class="m-chain-item">
+          <span class="m-chain-ico m-chain-ico-2" aria-hidden="true"></span>
+          <span class="m-chain-text"><span class="m-chain-num">02</span>Аудитория<span class="m-chain-desc">Разбираюсь, кому и почему вы нужны.</span></span>
+        </li>
+        <li class="m-chain-item">
+          <span class="m-chain-ico m-chain-ico-3" aria-hidden="true"></span>
+          <span class="m-chain-text"><span class="m-chain-num">03</span>Конкуренты<span class="m-chain-desc">Смотрю, что уже предлагают другие.</span></span>
+        </li>
+        <li class="m-chain-item">
+          <span class="m-chain-ico m-chain-ico-4" aria-hidden="true"></span>
+          <span class="m-chain-text"><span class="m-chain-num">04</span>Сильная идея<span class="m-chain-desc">Нахожу то, на чём строится отличие.</span></span>
+        </li>
+        <li class="m-chain-item">
+          <span class="m-chain-ico m-chain-ico-5" aria-hidden="true"></span>
+          <span class="m-chain-text"><span class="m-chain-num">05</span>Позиционирование<span class="m-chain-desc">Формулирую, как представить вашу ценность.</span></span>
+        </li>
+        <li class="m-chain-item">
+          <span class="m-chain-ico m-chain-ico-6" aria-hidden="true"></span>
+          <span class="m-chain-text"><span class="m-chain-num">06</span>Тексты<span class="m-chain-desc">Подбираю слова, которые передают вашу мысль.</span></span>
+        </li>
+        <li class="m-chain-item">
+          <span class="m-chain-ico m-chain-ico-7" aria-hidden="true"></span>
+          <span class="m-chain-text"><span class="m-chain-num">07</span>Визуальный образ<span class="m-chain-desc">Соединяю характер, стиль и содержание.</span></span>
+        </li>
+        <li class="m-chain-item">
+          <span class="m-chain-ico m-chain-ico-8" aria-hidden="true"></span>
+          <span class="m-chain-text"><span class="m-chain-num">08</span>Воплощение<span class="m-chain-desc">Сайт, контент или отдельные материалы под вашу задачу.</span></span>
+        </li>
+      </ol>
+
+      <div class="m-hand m-hand-03b" aria-hidden="true"></div>
+      <div class="m-paper-note m-paper-note-03"><p class="m-note-text-03">Не обязательно делать всё сразу. Важно, чтобы каждая часть работала на общую идею.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ Экран 4 — как я работаю ============ -->
+  <section class="process" id="approach" data-paper="#E7DFDA">
+    <div class="process-stage">
+      <img class="process-plate" src="images/process-bg.webp" alt="" aria-hidden="true"
+           loading="lazy" decoding="async">
+      <div class="plate-mask" style="--paper: #E7DFDA" aria-hidden="true"></div>
+
+      <!-- Прототип: четыре этапа раскладываются по столу.
+           Слои — вырезки из той же подложки (tools/build_fragments_0304.py):
+           «стол» без цепочки, нить, четыре карточки. До подхода к экрану
+           и после анимации слои убраны — видна сама подложка. -->
+      <div class="chain p4-chain" aria-hidden="true">
+        <div class="frag p4-desk"></div>
+        <div class="frag p4-thread"></div>
+        <div class="frag p4-card p4-card-1"></div>
+        <div class="frag p4-card p4-card-2"></div>
+        <div class="frag p4-card p4-card-3"></div>
+        <div class="frag p4-card p4-card-4"></div>
+      </div>
+
+      <span class="p4-num">04</span>
+      <svg class="p4-num-underline" viewBox="0 0 60 10" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M2 6 C 20 8, 40 3, 58 5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+
+      <h2 class="p4-title">
+        <span>Сначала слышу<em>.</em></span>
+        <span>Потом собираю<em>.</em></span>
+      </h2>
+
+      <p class="p4-phrase">
+        <span>Мне не нужно научиться говорить вместо вас.</span>
+        <span>Мне нужно научиться хорошо вас
+          <span class="p4-hear">слышать.
+            <svg class="p4-hear-underline" viewBox="0 0 194 26" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M2 20 C 60 26, 130 8, 192 14" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" pathLength="1"/>
+            </svg>
+          </span>
+        </span>
+      </p>
+
+      <!-- Четыре этапа: карточки, иконки и нить запечены в подложку,
+           номера и названия на карточках и пояснения под ними — живой текст -->
+      <ol class="p4-steps">
+        <li class="p4-step p4-step-1">
+          <span class="p4-step-num">01</span>
+          <span class="p4-step-name">Слушаю</span>
+          <span class="p4-step-text">Выясняю, что вам действительно нужно.</span>
+        </li>
+        <li class="p4-step p4-step-2">
+          <span class="p4-step-num">02</span>
+          <span class="p4-step-name">Исследую</span>
+          <span class="p4-step-text">Изучаю аудиторию, конкурентов и ваши отличия.</span>
+        </li>
+        <li class="p4-step p4-step-3">
+          <span class="p4-step-num">03</span>
+          <span class="p4-step-name">Создаю</span>
+          <span class="p4-step-text">Превращаю идею в тексты, визуал или сайт.</span>
+        </li>
+        <li class="p4-step p4-step-4">
+          <span class="p4-step-num">04</span>
+          <span class="p4-step-name">Докручиваю</span>
+          <span class="p4-step-text">Проверяю, исправляю и довожу до согласованного результата.</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Мобильная раскладка экрана 04 (<=700px). Четыре этапа идут
+         сверху вниз: иконки — фрагменты images/process-bg.webp,
+         нумерация, названия и пояснения — живым текстом. -->
+    <div class="m-screen m-process">
+      <div class="m-sec-head">
+        <span class="m-sec-num">04</span>
+      </div>
+      <h2 class="m-sec-title m-sec-title-sm">
+        <span>Сначала слышу<em>.</em></span>
+        <span>Потом собираю<em>.</em></span>
+      </h2>
+
+      <p class="m-phrase">Мне не нужно научиться говорить вместо вас.
+        Мне нужно научиться хорошо вас
+        <span class="m-phrase-hear">слышать.</span></p>
+
+      <ol class="m-chain m-steps">
+        <li class="m-step-item">
+          <span class="m-step-ico m-step-ico-1" aria-hidden="true"></span>
+          <span class="m-step-text"><span class="m-step-num">01</span>Слушаю<span class="m-step-desc">Выясняю, что вам действительно нужно.</span></span>
+        </li>
+        <li class="m-step-item">
+          <span class="m-step-ico m-step-ico-2" aria-hidden="true"></span>
+          <span class="m-step-text"><span class="m-step-num">02</span>Исследую<span class="m-step-desc">Изучаю аудиторию, конкурентов и ваши отличия.</span></span>
+        </li>
+        <li class="m-step-item">
+          <span class="m-step-ico m-step-ico-3" aria-hidden="true"></span>
+          <span class="m-step-text"><span class="m-step-num">03</span>Создаю<span class="m-step-desc">Превращаю идею в тексты, визуал или сайт.</span></span>
+        </li>
+        <li class="m-step-item">
+          <span class="m-step-ico m-step-ico-4" aria-hidden="true"></span>
+          <span class="m-step-text"><span class="m-step-num">04</span>Докручиваю<span class="m-step-desc">Проверяю, исправляю и довожу до согласованного результата.</span></span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ Экран 5 — что можно передать мне в работу ============ -->
+  <section class="services" id="services" data-paper="#F3EEE9">
+    <div class="services-stage">
+      <img class="services-plate" src="fragments/services-bg-v2.webp" alt="" aria-hidden="true"
+           loading="lazy" decoding="async">
+      <div class="plate-mask" style="--paper: #F3EEE9" aria-hidden="true"></div>
+
+      <!-- Подложка — fragments/services-bg-v2.webp: старые услуги, надпись
+           плашки и пометки про контент стёрты (tools/build_plate_0203.py).
+           Прототип: редактор раскладывает предложения на столе.
+           Слои — вырезки из той же подложки (tools/build_fragments_0506.py):
+           «стол» без плаката, плашка, восемь карточек, нить, рукописные
+           пометки. До подхода к экрану и после анимации слои убраны —
+           видна сама подложка. -->
+      <div class="chain p5-chain" aria-hidden="true">
+        <div class="frag p5-desk"></div>
+        <div class="frag p5-banner"></div>
+        <div class="frag p5-card-1"></div>
+        <div class="frag p5-card-2"></div>
+        <div class="frag p5-card-3"></div>
+        <div class="frag p5-card-4"></div>
+        <div class="frag p5-card-5"></div>
+        <div class="frag p5-card-6"></div>
+        <div class="frag p5-card-7"></div>
+        <div class="frag p5-card-8"></div>
+        <div class="frag p5-thread-12"></div>
+        <div class="frag p5-thread-23"></div>
+        <div class="frag p5-thread-34"></div>
+        <div class="frag p5-thread-loop"></div>
+        <div class="frag p5-hand-top"></div>
+      </div>
+
+      <span class="p5-num">05</span>
+      <svg class="p5-num-underline" viewBox="0 0 60 10" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M2 6 C 20 8, 40 3, 58 5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+
+      <h2 class="p5-title">
+        <span>Что можно</span>
+        <span>передать</span>
+        <span>мне в работу<em>.</em></span>
+      </h2>
+
+      <div class="p5-lead">
+        <p class="p5-lead-strong">У вас уже есть то, чем можно отличаться.<br>
+          Моя работа — найти это и показать другим.</p>
+        <p>У вас может быть готовая идея, много разрозненных<br>
+          материалов или только ощущение, что нынешняя<br>
+          подача совсем не отражает вас.</p>
+        <p>Не обязательно заказывать всё сразу. Можно<br>
+          решить одну задачу или собрать целый проект.</p>
+      </div>
+
+      <!-- Финальный блок: первая фраза — на красной плашке плаката -->
+      <p class="p5-banner-text">Можно по частям. Можно целиком.</p>
+      <div class="p5-final">
+        <p>Сначала разберёмся, что у вас уже есть,<br>
+          чего не хватает и какой объём работы<br>
+          действительно нужен.</p>
+        <p>После знакомства с задачей предложу<br>
+          решение, сроки и стоимость.</p>
+        <a class="p5-cta" href="#contact">Обсудить задачу
+          <svg class="p5-cta-arrow" viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Четыре услуги: номер и значок — на верхнем листке, название —
+           живой текст на нём; пояснение — на листке под ним -->
+      <ol class="p5-services">
+        <li class="p5-svc p5-svc-1">
+          <span class="p5-svc-name">Найти вашу<br>сильную<br>сторону</span>
+          <span class="p5-svc-text">Исследование аудитории и конкурентов, распаковка экспертизы, поиск отличий и позиционирования.<br><br>Чтобы стало понятно, почему клиенту стоит выбрать именно вас.</span>
+        </li>
+        <li class="p5-svc p5-svc-2">
+          <span class="p5-svc-name">Найти<br>ваши слова</span>
+          <span class="p5-svc-text">Тексты для сайтов, статьи, посты, сценарии и контент-стратегия.<br><br>Без чужих масок и шаблонных фраз. С вашим характером, интонацией и смыслом.</span>
+        </li>
+        <li class="p5-svc p5-svc-3">
+          <span class="p5-svc-name">Сделать<br>характер<br>видимым</span>
+          <span class="p5-svc-text">Визуальная концепция, AI-фотографии, изображения и оформление материалов.<br><br>Чтобы вас узнавали не только по имени, но и по тому, как вы себя представляете.</span>
+        </li>
+        <li class="p5-svc p5-svc-4">
+          <span class="p5-svc-name">Собрать всё<br>в сайт</span>
+          <span class="p5-svc-text">От идеи и структуры до текстов, дизайна и разработки.<br><br>Чтобы человек не просто посмотрел красивую страницу, а понял, чем вы можете быть ему полезны.</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Мобильная раскладка экрана 05 (<=700px). Четыре услуги сверху
+         вниз; значки и плашка — фрагменты fragments/services-bg-v2.webp,
+         тексты — CONTENT_APPROVED_05.md. -->
+    <div class="m-screen m-services">
+      <div class="m-sec-head">
+        <span class="m-sec-num">05</span>
+      </div>
+      <h2 class="m-sec-title">
+        <span>Что можно</span>
+        <span>передать</span>
+        <span>мне в работу<em>.</em></span>
+      </h2>
+
+      <p class="m-lead m-lead-strong">У вас уже есть то, чем можно отличаться. Моя работа — найти это и показать другим.</p>
+      <p class="m-lead">У вас может быть готовая идея, много разрозненных материалов
+        или только ощущение, что нынешняя подача совсем не отражает вас.</p>
+      <p class="m-lead">Не обязательно заказывать всё сразу. Можно решить одну задачу
+        или собрать целый проект.</p>
+
+      <ol class="m-chain m-svc">
+        <li class="m-svc-item">
+          <span class="m-svc-ico m-svc-ico-1" aria-hidden="true"></span>
+          <span class="m-svc-text"><span class="m-svc-num">01</span>Найти вашу сильную сторону<span class="m-svc-desc">Исследование аудитории и конкурентов, распаковка экспертизы, поиск отличий и позиционирования. Чтобы стало понятно, почему клиенту стоит выбрать именно вас.</span></span>
+        </li>
+        <li class="m-svc-item">
+          <span class="m-svc-ico m-svc-ico-2" aria-hidden="true"></span>
+          <span class="m-svc-text"><span class="m-svc-num">02</span>Найти ваши слова<span class="m-svc-desc">Тексты для сайтов, статьи, посты, сценарии и контент-стратегия. Без чужих масок и шаблонных фраз. С вашим характером, интонацией и смыслом.</span></span>
+        </li>
+        <li class="m-svc-item">
+          <span class="m-svc-ico m-svc-ico-3" aria-hidden="true"></span>
+          <span class="m-svc-text"><span class="m-svc-num">03</span>Сделать характер видимым<span class="m-svc-desc">Визуальная концепция, AI-фотографии, изображения и оформление материалов. Чтобы вас узнавали не только по имени, но и по тому, как вы себя представляете.</span></span>
+        </li>
+        <li class="m-svc-item">
+          <span class="m-svc-ico m-svc-ico-4" aria-hidden="true"></span>
+          <span class="m-svc-text"><span class="m-svc-num">04</span>Собрать всё в сайт<span class="m-svc-desc">От идеи и структуры до текстов, дизайна и разработки. Чтобы человек не просто посмотрел красивую страницу, а понял, чем вы можете быть ему полезны.</span></span>
+        </li>
+      </ol>
+
+      <div class="m-banner m-banner-05"><p class="m-banner-text">Можно по частям. Можно целиком.</p></div>
+      <p class="m-lead">Сначала разберёмся, что у вас уже есть, чего не хватает
+        и какой объём работы действительно нужен.</p>
+      <p class="m-lead">После знакомства с задачей предложу решение, сроки и стоимость.</p>
+      <a class="p5-cta m-p5-cta" href="#contact">Обсудить задачу
+          <svg class="p5-cta-arrow" viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ Экран 6 — кейсы ============ -->
+  <section class="cases" id="cases" data-paper="#EEE4DC">
+    <div class="cases-stage">
+      <img class="cases-plate" src="images/cases-bg.webp" alt="" aria-hidden="true"
+           loading="lazy" decoding="async">
+      <div class="plate-mask" style="--paper: #EEE4DC" aria-hidden="true"></div>
+
+      <!-- Прототип: на стол выкладывают папки с работами. Слои — вырезки
+           из той же подложки (tools/build_fragments_0506.py): «стол» без
+           карточек и нить; бумага каждой карточки лежит в её обёртке
+           .p6-card-group вместе с живым текстом и кнопкой, чтобы они
+           двигались как одно целое. Обёртки без JS не влияют на вёрстку
+           (display: contents). -->
+      <div class="chain p6-chain" aria-hidden="true">
+        <div class="frag p6-desk"></div>
+        <div class="frag p6-thread"></div>
+      </div>
+
+      <span class="p6-num">06</span>
+      <svg class="p6-num-underline" viewBox="0 0 60 10" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M2 6 C 20 8, 40 3, 58 5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+
+      <h2 class="p6-title">Кейсы<em>.</em></h2>
+
+      <p class="p6-lead1">Не витрина готовых текстов.<br>
+        Показываю ход мысли: что заметила,<br>
+        что исследовала, какое решение<br>
+        нашла и почему выбрала именно его.</p>
+
+      <!-- Карточка 01 — сайт психолога. Имя специалиста
+           не показываем до подтверждения согласия. -->
+      <div class="p6-card-group g1">
+        <div class="frag p6-card-paper p6-card-1" aria-hidden="true"></div>
+        <span class="p6-cnum c1">01</span>
+        <h3 class="p6-ctitle c1">
+          <span>Сайт</span>
+          <span>психолога</span>
+        </h3>
+        <div class="p6-cscheme c1">
+          <span>Было</span><span>Увидела</span><span>Исследовала</span><span>Нашла</span><span>Сделала</span>
+        </div>
+        <p class="p6-cdesc c1">Не продавать психолога дипломами.<br>
+          Сначала показать человека и подход —<br>
+          потом опыт. Исследовала аудиторию,<br>
+          собрала структуру и тексты сайта,<br>
+          предложила визуальную концепцию.</p>
+        <button type="button" class="p6-clink p6-clink-active c1" data-case-trigger="psych-practice" aria-expanded="false" aria-controls="case-psych-practice">Смотреть кейс
+          <svg class="p6-clink-arrow" viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Карточка 02 — ASPEX -->
+      <div class="p6-card-group g2">
+        <div class="frag p6-card-paper p6-card-2" aria-hidden="true"></div>
+        <span class="p6-cnum c2">02</span>
+        <h3 class="p6-ctitle c2">
+          <span><b>ASPEX</b> — B2B без</span>
+          <span>канцелярита</span>
+        </h3>
+        <div class="p6-cscheme c2">
+          <span>Было</span><span>Увидела</span><span>Исследовала</span><span>Нашла</span><span>Сделала</span>
+        </div>
+        <p class="p6-cdesc c2">Факты у бренда были. Не хватало<br>
+          человека, который их читает. Написала<br>
+          пост для Telegram и переработала<br>
+          брендовый текст: о состоянии<br>
+          руководителя, которому нужна ясность,<br>
+          а не о продукте.</p>
+        <button type="button" class="p6-clink p6-clink-active c2" data-case-trigger="aspex" aria-expanded="false" aria-controls="case-aspex">Смотреть кейс
+          <svg class="p6-clink-arrow" viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Карточка 03 — De’Longhi -->
+      <div class="p6-card-group g3">
+        <div class="frag p6-card-paper p6-card-3" aria-hidden="true"></div>
+        <span class="p6-cnum c3">03</span>
+        <h3 class="p6-ctitle c3">
+          <span><b>De&rsquo;Longhi</b> —</span>
+          <span>не функция, а ритуал</span>
+        </h3>
+        <div class="p6-cscheme c3">
+          <span>Было</span><span>Увидела</span><span>Исследовала</span><span>Нашла</span><span>Сделала</span>
+        </div>
+        <p class="p6-cdesc c3">Не «15&nbsp;бар», а утро, в котором кофе<br>
+          каждый раз получается таким, как<br>
+          хочется. Перевела характеристики<br>
+          кофемашины в ритуал: статья,<br>
+          структура карточки товара, слоганы.</p>
+        <button type="button" class="p6-clink p6-clink-active c3" data-case-trigger="delonghi" aria-expanded="false" aria-controls="case-delonghi">Смотреть кейс
+          <svg class="p6-clink-arrow" viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Мобильная раскладка экрана 06 (<=700px). Карточки собраны на CSS;
+         иконки схемы и рукописная пометка обрезаны из images/cases-bg.webp
+         средствами CSS — новых изображений нет. Тексты и порядок карточек
+         те же, что на десктопе. -->
+    <div class="m-screen m-cases">
+      <div class="m-sec-head">
+        <span class="m-sec-num">06</span>
+        <h2 class="m-sec-title">Кейсы<em>.</em></h2>
+      </div>
+
+      <p class="m-lead">Не витрина готовых текстов. Показываю ход мысли:
+        что заметила, что исследовала, какое решение нашла и почему
+        выбрала именно его.</p>
+
+      <div class="m-note" aria-hidden="true"></div>
+
+      <article class="m-card m-card-1">
+        <span class="m-card-paper" aria-hidden="true"><img src="images/cases-bg.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="m-card-num">01</span>
+        <h3 class="m-card-title">Сайт психолога</h3>
+        <div class="m-scheme m-scheme-1" aria-hidden="true"></div>
+        <p class="m-card-scheme-words"><span>Было ·</span> <span>Увидела ·</span> <span>Исследовала ·</span> <span>Нашла ·</span> <span>Сделала</span></p>
+        <p class="m-card-desc">Не продавать психолога дипломами. Сначала показать человека и подход — потом опыт. Исследовала аудиторию, собрала структуру и тексты сайта, предложила визуальную концепцию.</p>
+        <button type="button" class="m-card-link" data-case-trigger="psych-practice"
+                aria-expanded="false" aria-controls="case-psych-practice">Смотреть кейс
+          <svg viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </article>
+      <article class="m-card m-card-2">
+        <span class="m-card-paper" aria-hidden="true"><img src="images/cases-bg.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="m-card-num">02</span>
+        <h3 class="m-card-title"><b>ASPEX</b> — B2B<br>без канцелярита</h3>
+        <div class="m-scheme m-scheme-2" aria-hidden="true"></div>
+        <p class="m-card-scheme-words"><span>Было ·</span> <span>Увидела ·</span> <span>Исследовала ·</span> <span>Нашла ·</span> <span>Сделала</span></p>
+        <p class="m-card-desc">Факты у бренда были. Не хватало человека, который их читает. Написала пост для Telegram и переработала брендовый текст: о состоянии руководителя, которому нужна ясность, а не о продукте.</p>
+        <button type="button" class="m-card-link" data-case-trigger="aspex"
+                aria-expanded="false" aria-controls="case-aspex">Смотреть кейс
+          <svg viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </article>
+      <article class="m-card m-card-3">
+        <span class="m-card-paper" aria-hidden="true"><img src="images/cases-bg.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="m-card-num">03</span>
+        <h3 class="m-card-title"><b>De&rsquo;Longhi</b> — не функция,<br>а ритуал</h3>
+        <div class="m-scheme m-scheme-3" aria-hidden="true"></div>
+        <p class="m-card-scheme-words"><span>Было ·</span> <span>Увидела ·</span> <span>Исследовала ·</span> <span>Нашла ·</span> <span>Сделала</span></p>
+        <p class="m-card-desc">Не «15&nbsp;бар», а утро, в котором кофе каждый раз получается таким, как хочется. Перевела характеристики кофемашины в ритуал: статья, структура карточки товара, слоганы.</p>
+        <button type="button" class="m-card-link" data-case-trigger="delonghi"
+                aria-expanded="false" aria-controls="case-delonghi">Смотреть кейс
+          <svg viewBox="0 0 34 16" aria-hidden="true">
+            <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ Раскрывающийся кейс «Сайт психолога» (карточка 01) ====
+       Композиция по референсу assets/01-psychological-practice-approved.png:
+       заголовок вверху слева, текстовые блоки в левой колонке, справа —
+       утверждённый коллаж (глаз, фигура человека в красном круге, бумажные
+       карточки с рукописными заметками, стопка слов, символ Ψ, красная нить),
+       вставленный как готовый PNG-asset images/psychological-practice-collage.png —
+       без пересборки средствами CSS/SVG. ------------------------------------- -->
+  <div class="p6-case-wrap" id="case-psych-practice">
+    <div class="p6-case-inner">
+      <div class="p6-case">
+
+        <div class="p6-case-head">
+          <h3 class="p6-case-title">Сайт психолога<em>.</em></h3>
+          <p class="p6-case-tags">Исследование аудитории · структура · тексты · визуальная концепция</p>
+        </div>
+
+        <div class="p6-case-grid">
+          <div class="p6-case-main">
+
+            <div class="p6-case-block">
+              <h4>Было</h4>
+              <p>Много опыта, методов, образования и клиентских историй — но всё лежало по отдельности и не складывалось в понятный образ специалиста.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Увидела</h4>
+              <p>Сильнее перечня техник работает отношение к человеку: бережность, внимание к его истории, честность без обещаний волшебной таблетки.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Исследовала</h4>
+              <p>Опыт специалиста, запросы и сомнения клиентов перед первой консультацией, образование, методы и то, как сам специалист говорит о своей работе.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Нашла</h4>
+              <p>Не продавать специалиста количеством дипломов. Сначала показать человека и подход, потом подтвердить опытом и квалификацией.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Сделала</h4>
+              <ul class="p6-case-list">
+                <li>исследовала аудиторию и её запросы;</li>
+                <li>собрала позиционирование;</li>
+                <li>выстроила структуру сайта: запрос → подход → методы и услуги;</li>
+                <li>написала тексты для сайта;</li>
+                <li>предложила визуальную концепцию.</li>
+              </ul>
+            </div>
+            <div class="p6-case-fragment p6-case-principle">
+              <span class="p6-case-frag-label">Принцип решения</span>
+              <p class="p6-case-quote">Не обещать быстрых ответов. Показать бережный подход: человек приходит, чтобы его услышали, а не чтобы ему продали метод.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Что получилось</h4>
+              <p>Структура, в которой человек сначала узнаёт свой запрос, потом понимает подход специалиста и только после этого видит методы, опыт и услуги.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Что здесь показываю</h4>
+              <p>Умение услышать специалиста и собрать его опыт в ясную историю — не придумывая ему чужой голос.</p>
+            </div>
+
+            <button type="button" class="p6-case-close" data-case-close>
+              Закрыть кейс
+              <svg class="p6-case-close-x" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 2l12 12M14 2L2 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="p6-case-visual" aria-hidden="true">
+            <div class="p6-case-visual-stage p6-case-visual-stage-psych">
+              <img class="p6-case-visual-img" src="images/psychological-practice-collage.webp" alt="" loading="lazy" decoding="async">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Раскрывающийся кейс ASPEX (карточка 02) ============
+       Композиция по референсу assets/a_clean_editorial_infographic_case_study_page_layo.png:
+       заголовок вверху слева, текстовые блоки в левой колонке, справа —
+       бумажный коллаж (маяк, обведённый рукописным кругом, скотч, стикеры
+       со словами, рукописные пометки со стрелкой). ----------------------- -->
+  <div class="p6-case-wrap" id="case-aspex">
+    <div class="p6-case-inner">
+      <div class="p6-case">
+
+        <div class="p6-case-head">
+          <h3 class="p6-case-title">ASPEX<em>.</em></h3>
+          <p class="p6-case-tags">B2B · tone of voice · смысл бренда</p>
+        </div>
+
+        <div class="p6-case-grid">
+          <div class="p6-case-main">
+
+            <div class="p6-case-block">
+              <h4>Было</h4>
+              <p>Экспертный B2B-контент рисковал звучать рационально и отстранённо: факты есть, а состояние руководителя не считывается.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Увидела</h4>
+              <p>В коммуникации бренда уже были спокойствие, зрелость, ясность и метафора маяка. Из этого можно было собрать содержательный голос.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Исследовала</h4>
+              <p>Сайт и соцсети ASPEX, тон коммуникации, боли руководителей и контекст, в котором они принимают решения.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Нашла</h4>
+              <p>Не говорить о продукте напрямую. Показать состояние, в котором человеку становится нужна ясность и структура.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Сделала</h4>
+              <ul class="p6-case-list">
+                <li>написала смысловой пост для Telegram;</li>
+                <li>переработала брендовый текст: факты и экспертиза остались, но появилось ощущение опоры и понимания.</li>
+              </ul>
+            </div>
+            <div class="p6-case-fragment p6-case-principle">
+              <span class="p6-case-frag-label">Принцип решения</span>
+              <p class="p6-case-quote">Начинать не с цифр, а с ощущения руководителя: данных много, ясности мало. Продукт появляется как ответ на это состояние.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Что получилось</h4>
+              <p>Тексты, которые сначала говорят с руководителем о его состоянии и только потом — о данных и аналитике.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Что здесь показываю</h4>
+              <p>Работу с B2B, tone of voice и философией бренда: как перевести рациональную экспертизу в понятный человеческий смысл.</p>
+            </div>
+
+            <button type="button" class="p6-case-close" data-case-close>
+              Закрыть кейс
+              <svg class="p6-case-close-x" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 2l12 12M14 2L2 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Утверждённый коллаж — готовый графический asset, вырезанный
+               из assets/a_clean_editorial_infographic_case_study_page_layo.png
+               (правая часть approved-макета: маяк, рукописный круг, скотч,
+               стикеры-теги, карточка-записка со скрепкой, рукописные пометки).
+               Не пересобирается средствами CSS/SVG — только готовое изображение. -->
+          <div class="p6-case-visual" aria-hidden="true">
+            <div class="p6-case-visual-stage">
+              <img class="p6-case-visual-img" src="fragments/aspex-collage-v2.webp" alt="" loading="lazy" decoding="async">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Раскрывающийся кейс DE'LONGHI (карточка 03) ============
+       Композиция по референсу assets/delonghi-case-approved.png:
+       заголовок вверху слева, текстовые блоки в левой колонке, справа —
+       утверждённый коллаж (чашка кофе, ч/б фрагмент кофемашины, техническая
+       схема, кофейное кольцо, красная нить, бумажные заметки), вставленный
+       как готовый PNG-asset images/delonghi-case-collage.png — без
+       пересборки средствами CSS/SVG. ----------------------------------- -->
+  <div class="p6-case-wrap" id="case-delonghi">
+    <div class="p6-case-inner">
+      <div class="p6-case">
+
+        <div class="p6-case-head">
+          <h3 class="p6-case-title">DE&rsquo;LONGHI<em>.</em></h3>
+          <p class="p6-case-tags">Премиальный продукт · tone of voice · сценарий потребления</p>
+        </div>
+
+        <div class="p6-case-grid">
+          <div class="p6-case-main">
+
+            <div class="p6-case-block">
+              <h4>Было</h4>
+              <p>У премиального продукта много функций. Перечислишь их — и текст превращается в инструкцию с пафосом.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Увидела</h4>
+              <p>Для аудитории кофе — не только бодрость. Это предсказуемый утренний ритуал, тишина и ощущение контроля.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Исследовала</h4>
+              <p>Сценарии использования, аудиторию, её боли и триггеры, роль кофемашины в повседневном ритуале.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Нашла</h4>
+              <p>Показывать функции через опыт человека: не «15&nbsp;бар», а уверенность, что кофе каждый раз получается таким, как хочется.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Сделала</h4>
+              <ul class="p6-case-list">
+                <li>написала статью;</li>
+                <li>собрала структуру карточки товара;</li>
+                <li>сформулировала главные аргументы продукта и слоганы;</li>
+                <li>встроила характеристики в пользовательский сценарий.</li>
+              </ul>
+            </div>
+            <div class="p6-case-fragment p6-case-principle">
+              <span class="p6-case-frag-label">Принцип решения</span>
+              <p class="p6-case-quote">Каждая характеристика отвечает на вопрос «что это даёт моему утру?» — тогда функция становится ритуалом.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Что получилось</h4>
+              <p>Текст, в котором характеристики работают на ощущение собранного утра, а не на сравнение спецификаций.</p>
+            </div>
+            <div class="p6-case-block">
+              <h4>Что здесь показываю</h4>
+              <p>Работу с продуктом, премиальным tone of voice и сценариями потребления: как превратить характеристики в ценность.</p>
+            </div>
+
+            <button type="button" class="p6-case-close" data-case-close>
+              Закрыть кейс
+              <svg class="p6-case-close-x" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 2l12 12M14 2L2 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="p6-case-visual" aria-hidden="true">
+            <div class="p6-case-visual-stage p6-case-visual-stage-delonghi">
+              <img class="p6-case-visual-img" src="images/delonghi-case-collage.webp" alt="" loading="lazy" decoding="async">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Экран 7 — что меняется, когда контент собран в систему ============ -->
+  <section class="system-effect" id="system-effect" data-paper="#F2ECE2">
+    <div class="system-effect-stage">
+      <img class="system-effect-plate" src="images/system-effect-bg.webp" alt="" aria-hidden="true"
+           loading="lazy" decoding="async">
+      <div class="plate-mask" style="--paper: #F2ECE2" aria-hidden="true"></div>
+
+      <!-- Прототип: из хаоса рождается система. Слои — вырезки из той же
+           подложки (tools/build_fragments_0708.py): «стол» без карточек,
+           стрелка, нить. Бумага карточек «До»/«После», значки ✕/✓ и жёлтая
+           заметка лежат в обёртках вместе со своим живым текстом. Обёртки
+           без JS и в статичной версии не влияют на вёрстку (display: contents). -->
+      <div class="chain p7-chain" aria-hidden="true">
+        <div class="frag p7-desk"></div>
+        <div class="frag p7-arrow"></div>
+        <div class="frag p7-thread"></div>
+      </div>
+
+      <span class="p7-num">07</span>
+
+      <h2 class="p7-title">
+        <span>Что меняется,</span>
+        <span>когда контент</span>
+        <span>собран
+          <span class="p7-circle-wrap">в систему
+            <svg class="p7-circle" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M52 32 C 26 18, 84 2, 168 4 C 240 6, 288 15, 290 36 C 292 56, 258 74, 188 80 C 118 86, 54 82, 33 63 C 20 51, 26 34, 53 29 C 57 28, 50 34, 47 40"
+                fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/>
+            </svg>
+          </span>
+        </span>
+      </h2>
+
+      <p class="p7-lead">Я не просто пишу тексты.<br>
+        Я связываю темы, смыслы и цели,<br>
+        чтобы контент работал на ваш проект<br>
+        долго, последовательно<br>
+        и с понятным результатом.</p>
+
+      <!-- Левая заметка -->
+      <p class="p7-leftnote">моя задача —<br>
+        не писать за вас,<br>
+        а настроить систему,<br>
+        которая работает<br>
+        на вас</p>
+      <svg class="p7-leftnote-heart" viewBox="0 0 40 36" aria-hidden="true">
+        <path d="M20 33 C 4 22, 2 10, 11 5 C 17 1, 20 7, 20 11 C 20 7, 23 1, 29 5 C 38 10, 36 22, 20 33 Z"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+
+      <!-- Карточка ДО -->
+      <div class="p7-card-group do">
+        <div class="frag p7-paper p7-card-do" aria-hidden="true"></div>
+        <span class="p7-tab do">До</span>
+        <div class="p7-row do r1">
+          <div class="frag p7-paper p7m-x-1" aria-hidden="true"></div>
+          <div class="p7-item do i1"><p><strong>Темы живут отдельно</strong><br>и не складываются в общую картину.</p></div>
+        </div>
+        <div class="p7-row do r2">
+          <div class="frag p7-paper p7m-x-2" aria-hidden="true"></div>
+          <div class="p7-item do i2"><p><strong>Каждый пост начинается с нуля,</strong><br>идеи приходится искать заново.</p></div>
+        </div>
+        <div class="p7-row do r3">
+          <div class="frag p7-paper p7m-x-3" aria-hidden="true"></div>
+          <div class="p7-item do i3"><p><strong>Экспертный голос скачет,</strong><br>вас трудно запомнить.</p></div>
+        </div>
+        <div class="p7-row do r4">
+          <div class="frag p7-paper p7m-x-4" aria-hidden="true"></div>
+          <div class="p7-item do i4"><p><strong>Контент трудно продолжать,</strong><br>нет ощущения направления.</p></div>
+        </div>
+        <div class="p7-row do r5">
+          <div class="frag p7-paper p7m-x-5" aria-hidden="true"></div>
+          <div class="p7-item do i5"><p><strong>Продажа появляется внезапно</strong><br>и воспринимается как навязчивая.</p></div>
+        </div>
+        <p class="p7-note do">Контент есть.<br>Но он <span class="p7-underline">не работает на систему</span>.</p>
+      </div>
+
+      <!-- Карточка ПОСЛЕ -->
+      <div class="p7-card-group posle">
+        <div class="frag p7-paper p7-card-posle" aria-hidden="true"></div>
+        <span class="p7-tab posle">После</span>
+        <div class="p7-row posle r1">
+          <div class="frag p7-paper p7m-v-1" aria-hidden="true"></div>
+          <div class="p7-item posle i1"><p>Темы связаны между собой<br>и ведут аудиторию по понятному пути.</p></div>
+        </div>
+        <div class="p7-row posle r2">
+          <div class="frag p7-paper p7m-v-2" aria-hidden="true"></div>
+          <div class="p7-item posle i2"><p>Одна мысль живёт <strong>серией</strong> —<br>её легко развивать.</p></div>
+        </div>
+        <div class="p7-row posle r3">
+          <div class="frag p7-paper p7m-v-3" aria-hidden="true"></div>
+          <div class="p7-item posle i3"><p>Ваш голос <strong>узнаваем</strong>,<br>человеку хочется вас читать.</p></div>
+        </div>
+        <div class="p7-row posle r4">
+          <div class="frag p7-paper p7m-v-4" aria-hidden="true"></div>
+          <div class="p7-item posle i4"><p>Каждый следующий материал<br>логично вытекает из предыдущего.</p></div>
+        </div>
+        <div class="p7-row posle r5">
+          <div class="frag p7-paper p7m-v-5" aria-hidden="true"></div>
+          <div class="p7-item posle i5"><p>Предложение продукта появляется<br>вовремя и воспринимается естественно.</p></div>
+        </div>
+        <p class="p7-note posle">Контент работает.<br><span class="p7-underline">Поддерживает, привлекает и продаёт</span>.</p>
+      </div>
+
+      <!-- Жёлтая заметка -->
+      <div class="p7-yellow-group">
+        <div class="frag p7-paper p7-yellow" aria-hidden="true"></div>
+        <p class="p7-yellownote">Контент перестаёт быть обязанностью.<br>
+          Он становится <span class="p7-underline">продолжением вашей работы</span>.</p>
+      </div>
+    </div>
+
+    <!-- Мобильная раскладка экрана 07 (<=700px). «До» и «После» идут
+         друг под другом, оба блока раскрыты. Крестики, галочки, плашки
+         и жёлтая бумага — фрагменты images/system-effect-bg.webp. -->
+    <div class="m-screen m-effect">
+      <div class="m-sec-head">
+        <span class="m-sec-num">07</span>
+      </div>
+      <h2 class="m-sec-title m-sec-title-sm">
+        <span>Что меняется,</span>
+        <span>когда контент</span>
+        <span>собран в систему</span>
+      </h2>
+
+      <p class="m-lead">Я не просто пишу тексты. Я связываю темы,
+        смыслы и цели, чтобы контент работал на ваш проект долго,
+        последовательно и с понятным результатом.</p>
+
+      <p class="m-sidenote">моя задача — не писать за вас,
+        а настроить систему, которая работает на вас</p>
+
+      <div class="m-vs m-vs-do">
+        <span class="m-vs-tab m-vs-tab-do">До</span>
+        <ul class="m-vs-list">
+          <li><span class="m-vs-mark m-vs-x" aria-hidden="true"></span>
+            <p><strong>Темы живут отдельно</strong><br>и не складываются в общую картину.</p></li>
+          <li><span class="m-vs-mark m-vs-x" aria-hidden="true"></span>
+            <p><strong>Каждый пост начинается с нуля,</strong><br>идеи приходится искать заново.</p></li>
+          <li><span class="m-vs-mark m-vs-x" aria-hidden="true"></span>
+            <p><strong>Экспертный голос скачет,</strong><br>вас трудно запомнить.</p></li>
+          <li><span class="m-vs-mark m-vs-x" aria-hidden="true"></span>
+            <p><strong>Контент трудно продолжать,</strong><br>нет ощущения направления.</p></li>
+          <li><span class="m-vs-mark m-vs-x" aria-hidden="true"></span>
+            <p><strong>Продажа появляется внезапно</strong><br>и воспринимается как навязчивая.</p></li>
+        </ul>
+        <p class="m-vs-note">Контент есть.<br>Но он <span class="m-u">не работает на систему</span>.</p>
+      </div>
+
+      <div class="m-vs m-vs-posle">
+        <span class="m-vs-tab m-vs-tab-posle">После</span>
+        <ul class="m-vs-list">
+          <li><span class="m-vs-mark m-vs-v" aria-hidden="true"></span>
+            <p>Темы связаны между собой<br>и ведут аудиторию по понятному пути.</p></li>
+          <li><span class="m-vs-mark m-vs-v" aria-hidden="true"></span>
+            <p>Одна мысль живёт <strong>серией</strong> —<br>её легко развивать.</p></li>
+          <li><span class="m-vs-mark m-vs-v" aria-hidden="true"></span>
+            <p>Ваш голос <strong>узнаваем</strong>,<br>человеку хочется вас читать.</p></li>
+          <li><span class="m-vs-mark m-vs-v" aria-hidden="true"></span>
+            <p>Каждый следующий материал<br>логично вытекает из предыдущего.</p></li>
+          <li><span class="m-vs-mark m-vs-v" aria-hidden="true"></span>
+            <p>Предложение продукта появляется<br>вовремя и воспринимается естественно.</p></li>
+        </ul>
+        <p class="m-vs-note">Контент работает.<br><span class="m-u">Поддерживает, привлекает и продаёт</span>.</p>
+      </div>
+
+      <div class="m-yellow">
+        <span class="m-yellow-paper" aria-hidden="true"><img src="images/system-effect-bg.webp" alt="" loading="lazy" decoding="async"></span>
+        <p>Контент перестаёт быть обязанностью.<br>
+          Он становится <span class="m-u">продолжением вашей работы</span>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Экран 8 — что делаю и как помогаю ============ -->
+  <section class="what-i-do" id="what-i-do" data-paper="#ECE4DC">
+    <div class="what-i-do-stage">
+      <img class="what-i-do-plate" src="images/what-i-do-bg.webp" alt="" aria-hidden="true"
+           loading="lazy" decoding="async">
+      <div class="plate-mask" style="--paper: #ECE4DC" aria-hidden="true"></div>
+
+      <!-- Прототип: последний лист творческого досье. Под карточками —
+           плотный коллаж, убрать их со стола нельзя, поэтому карточки
+           «поднимают и кладут»: точная копия бумаги (без руки с маркером,
+           она всегда сверху) лежит в обёртке вместе с живым текстом поверх
+           оригинала. Нить, которую ведёт маркер, и дуга от 03 к 04
+           прорисовываются (tools/build_fragments_0708.py). Контактный блок
+           ниже не анимируется — он виден и доступен сразу. -->
+      <div class="chain p8-chain" aria-hidden="true">
+        <div class="frag p8t-desk"></div>
+        <div class="frag p8t-line"></div>
+        <div class="frag p8t-bottom"></div>
+      </div>
+
+      <span class="p8-num">08</span>
+
+      <h2 class="p8-title">
+        <span>Что делаю</span>
+        <span>и как помогаю<em>.</em></span>
+      </h2>
+
+      <p class="p8-lead">Собираю ваши мысли, опыт<br>
+        и задачи в систему контента.</p>
+
+      <!-- Карточка 1 — распаковка / интервью -->
+      <div class="p8-card-group g1">
+        <div class="frag p8-paper p8-card-1" aria-hidden="true"></div>
+        <h3 class="p8-ctitle c1"><span>Распаковка</span><span>интервью</span></h3>
+        <p class="p8-cdesc c1">Достаю темы, смыслы<br>и ваш настоящий голос.</p>
+      </div>
+
+      <!-- Карточка 2 — контент-стратегия -->
+      <div class="p8-card-group g2">
+        <div class="frag p8-paper p8-card-2" aria-hidden="true"></div>
+        <h3 class="p8-ctitle c2"><span>Контент-</span><span>стратегия</span></h3>
+        <p class="p8-cdesc c2">Связываю темы<br>в понятную систему.</p>
+      </div>
+
+      <!-- Карточка 3 — тексты и материалы -->
+      <div class="p8-card-group g3">
+        <div class="frag p8-paper p8-card-3" aria-hidden="true"></div>
+        <h3 class="p8-ctitle c3"><span>Тексты</span><span>и материалы</span></h3>
+        <p class="p8-cdesc c3">Пишу в вашем голосе<br>и под вашу задачу.</p>
+      </div>
+
+      <!-- Карточка 4 — корректировка и развитие -->
+      <div class="p8-card-group g4">
+        <div class="frag p8-paper p8-card-4" aria-hidden="true"></div>
+        <h3 class="p8-ctitle c4"><span>Корректировка</span><span>и развитие</span></h3>
+        <p class="p8-cdesc c4">Смотрю на реакцию<br>и развиваю то,<br>что работает.</p>
+      </div>
+    </div>
+
+    <!-- Мобильная раскладка экрана 08 (<=700px). Четыре карточки идут
+         сверху вниз, коллаж с маркером и рукописные пометки —
+         фрагменты images/what-i-do-bg.webp. Контактный блок ниже
+         общий с десктопом. -->
+    <div class="m-screen m-whatido">
+      <div class="m-sec-head">
+        <span class="m-sec-num">08</span>
+      </div>
+      <h2 class="m-sec-title">
+        <span>Что делаю</span>
+        <span>и как помогаю<em>.</em></span>
+      </h2>
+
+      <p class="m-lead">Собираю ваши мысли, опыт
+        и задачи в систему контента.</p>
+
+      <div class="m-hand m-hand-08a" aria-hidden="true"></div>
+      <div class="m-collage m-collage-08" aria-hidden="true"></div>
+
+      <ul class="m-do">
+        <li class="m-do-item">
+          <span class="m-do-ico m-do-ico-1" aria-hidden="true"></span>
+          <div class="m-do-body">
+            <h3 class="m-do-title">Распаковка интервью</h3>
+            <p class="m-do-desc">Достаю темы, смыслы и ваш настоящий голос.</p>
+          </div>
+        </li>
+        <li class="m-do-item">
+          <span class="m-do-ico m-do-ico-2" aria-hidden="true"></span>
+          <div class="m-do-body">
+            <h3 class="m-do-title">Контент-стратегия</h3>
+            <p class="m-do-desc">Связываю темы в понятную систему.</p>
+          </div>
+        </li>
+        <li class="m-do-item">
+          <span class="m-do-ico m-do-ico-3" aria-hidden="true"></span>
+          <div class="m-do-body">
+            <h3 class="m-do-title">Тексты и материалы</h3>
+            <p class="m-do-desc">Пишу в вашем голосе и под вашу задачу.</p>
+          </div>
+        </li>
+        <li class="m-do-item">
+          <span class="m-do-ico m-do-ico-4" aria-hidden="true"></span>
+          <div class="m-do-body">
+            <h3 class="m-do-title">Корректировка и развитие</h3>
+            <p class="m-do-desc">Смотрю на реакцию и развиваю то, что работает.</p>
+          </div>
+        </li>
+      </ul>
+
+      <div class="m-hand m-hand-08b" aria-hidden="true"></div>
+    </div>
+
+    <!-- ============ Контактный блок (низ экрана 08) ============ -->
+    <div class="p8-contact" id="contact">
+      <p class="p8-contact-text">Есть задача, но пока непонятно, с чего начать?<br>
+        Расскажите, что у вас уже есть. Посмотрим, чего не хватает<br>
+        и что имеет смысл делать дальше.</p>
+
+      <a class="p8-contact-btn" href="https://t.me/neuro_julia11" target="_blank" rel="noopener noreferrer">
+        Написать в Telegram
+        <svg class="p8-contact-btn-arrow" viewBox="0 0 34 16" aria-hidden="true">
+          <path d="M1 8h28M23 2l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <ul class="p8-contact-list">
+        <li>Телефон: <a href="tel:+79120369815">8-912-036-98-15</a></li>
+        <li>E-mail: <a href="mailto:sedstylus06@mail.ru">sedstylus06@mail.ru</a></li>
+        <li>Telegram: <a href="https://t.me/neuro_julia11" target="_blank" rel="noopener noreferrer">@neuro_julia11</a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<script src="js/main.js"></script>
+<script src="motion.js"></script>
+</body>
+</html>
