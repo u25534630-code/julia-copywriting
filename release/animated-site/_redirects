@@ -1,0 +1,3 @@
+# Старый адрес Netlify -> основной домен. Правило срабатывает только для этого хоста,
+# поэтому slovobunt.ru и www.slovobunt.ru оно не затрагивает (без циклов).
+https://sparkling-liger-3a1ee1.netlify.app/*  https://slovobunt.ru/:splat  301!
